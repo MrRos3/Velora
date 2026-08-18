@@ -1,38 +1,43 @@
-# Velora — Encore 🥀
+# Velora — Pulse 🥀
 
-Velora v0.8.9 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
+Velora v0.9.0 **Pulse** is a rounded Roblox piano workstation with a responsive glowing interface, Lucide icons, complete arrangements, and reliable public loading.
 
-## Run the cache-breaking release
+## Run Velora
 
 ```lua
 loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-089.lua?boot=089",
-    true
+    "https://raw.githubusercontent.com/MrRos3/Velora/594c95190ae9ae13f02f4d7c1ed0642902e77c70/loader.lua"
 ))()
 ```
 
-## Encore 0.8.9
+If GitHub is blocked by an executor, use the CDN launcher:
 
-- Clean Builder Sans typography across the entire interface, with larger navigation labels
-- New additions are placed first so they are visible without scrolling
+```lua
+loadstring(game:HttpGet(
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@594c95190ae9ae13f02f4d7c1ed0642902e77c70/loader.lua"
+))()
+```
+
+## Pulse 0.9.0
+
+- Rounded multicolor accent border with no thick shadow or sharp wedges
+- Palette colors now update the window, header, border glow, cards, controls, and icons together
+- Faster 0.12-second interaction motion with stale tween cancellation
+- Clicks and selections render immediately
+- Playback progress is capped at a smooth 30 FPS to reduce unnecessary UI work
+- Defensive Lucide icon loading so one unavailable asset cannot stop the GUI
+- Compatibility loader with GitHub and jsDelivr release fallbacks
+- Clear in-game error notifications instead of silent launcher failures
 - 21 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
-- The complete 21-song registry is embedded as an offline fallback, preventing missing cards when a registry request is cached
-- New: Anlatamam (Kara Sevda OST), converted from the complete owner-supplied MIDI
-- Erika is also included from its complete owner-supplied MIDI
-- Kamado Tanjiro no Uta remains the library’s longest owner-supplied arrangement at roughly 6:14
-- Ievan Polkka is also included from the complete owner-supplied MIDI
-- Love Story by Indila is also included from the owner-supplied MIDI
-- Long-form additions include In the Hall of the Mountain King, Eine kleine Nachtmusik, and Dies Irae
-- Clean rounded selection border, `SELECTED` label, and Lucide check icon—with no cyan side rail
-- Picking another song never interrupts the song currently playing
-- The picked song becomes ready after Stop or after the current song ends, but never autoplays
-- Static play button with no per-note pulse animation
-- Lucide icons throughout; 🥀 remains the only interface emoji
-- Draggable progress, BPM adjustment, RGB and HEX theming
-- Stops at each song’s ending unless Loop is enabled
+- Clear selected-song highlight without a side rail
+- Picking another song never interrupts the song already playing
+- A completed song stops unless Loop is enabled
+- Draggable progress, BPM controls, and RGB/HEX palette customization
+- 🥀 remains the only interface emoji
 
 ## Music sources
 
-Arrangements are generated from credited Mutopia MIDI editions. The source URL and edition license are stored inside every song file. The three classical Encore additions use public-domain editions. Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, and Anlatamam were converted from MIDIs supplied by the repository owner; their filenames and SHA-256 hashes are recorded in their song files. Canon per 3 Violini e Basso is credited to typesetter Michael Fischer v. Mollard and distributed under CC BY 4.0.
+Arrangements are generated from credited MIDI editions. Source and licensing details are stored inside each song file. Owner-supplied MIDI conversions include Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, and Anlatamam.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
+
