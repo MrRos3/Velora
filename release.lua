@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.0 "Nova"
+    Velora v0.10.1 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.0",
+    Version = "0.10.1",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -604,7 +604,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.0")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.1")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -1190,18 +1190,6 @@ local function glowEdge(o,color,haloTransparency,rimTransparency,haloWidth)
     local rim=make("UIStroke",{Name="GlowRim",Color=color or Color3.fromRGB(143,108,255),Transparency=rimTransparency or .24,Thickness=1.25,ApplyStrokeMode=Enum.ApplyStrokeMode.Border},o)
     return halo,rim
 end
-local function ambientOrb(parent,position,size,color)
-    local orb=radius(make("Frame",{Position=position,Size=UDim2.fromOffset(size,size),BackgroundColor3=color,BackgroundTransparency=.68,BorderSizePixel=0,ZIndex=1},parent),size)
-    make("UIGradient",{
-        Transparency=NumberSequence.new({
-            NumberSequenceKeypoint.new(0,.18),
-            NumberSequenceKeypoint.new(.55,.62),
-            NumberSequenceKeypoint.new(1,1),
-        }),
-        Rotation=35,
-    },orb)
-    return orb
-end
 local function padding(o,l,r,t,b) make("UIPadding",{PaddingLeft=UDim.new(0,l or 0),PaddingRight=UDim.new(0,r or l or 0),PaddingTop=UDim.new(0,t or 0),PaddingBottom=UDim.new(0,b or t or 0)},o) end
 local function gradient(o,a,b,rotation)
     make("UIGradient",{Color=ColorSequence.new(a,b),Rotation=rotation or 0},o)
@@ -1240,8 +1228,6 @@ local windowBorder=window:FindFirstChildOfClass("UIStroke")
 local header=radius(edge(gradient(make("Frame",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,64),BackgroundColor3=P.Surface,BorderSizePixel=0},window),Color3.fromRGB(59,42,92),Color3.fromRGB(29,28,49),10),Color3.fromRGB(143,119,207),.48),18)
 local headerBorder=header:FindFirstChildOfClass("UIStroke")
 local headerGlow,headerRim=glowEdge(header,P.Violet,.88,.48,3.5)
-header.ClipsDescendants=true
-nova.headerSheen=radius(gradient(make("Frame",{Position=UDim2.fromOffset(18,1),Size=UDim2.new(1,-36,0,2),BackgroundColor3=P.Violet,BackgroundTransparency=.22,BorderSizePixel=0,ZIndex=2},header),P.Cyan,P.Pink,0),2)
 local logo=radius(gradient(make("Frame",{Position=UDim2.fromOffset(12,10),Size=UDim2.fromOffset(44,44),BackgroundColor3=P.Violet,BorderSizePixel=0},header),P.Violet,P.Pink,45),14)
 local logoGlow,logoRim=glowEdge(logo,P.Violet,.78,.12,5)
 local logoText=label(logo,"🥀",UDim2.fromScale(0,0),UDim2.fromScale(1,1),Enum.Font.BuilderSans,21,P.Text);logoText.TextXAlignment=Enum.TextXAlignment.Center
@@ -1290,12 +1276,6 @@ local browserGlow,browserRim=glowEdge(browser,P.Violet,.91,.57,3)
 local playerCard=radius(edge(make("Frame",{Position=UDim2.fromOffset(494,0),Size=UDim2.fromOffset(238,336),BackgroundColor3=P.Surface,BackgroundTransparency=.04,BorderSizePixel=0},body),Color3.fromRGB(106,88,153),.5),18)
 local playerBorder=playerCard:FindFirstChildOfClass("UIStroke")
 local playerGlow,playerRim=glowEdge(playerCard,P.Violet,.86,.38,4)
-nav.ClipsDescendants=true
-browser.ClipsDescendants=true
-playerCard.ClipsDescendants=true
-nova.navOrb=ambientOrb(nav,UDim2.fromOffset(-84,214),176,P.Violet)
-nova.browserOrb=ambientOrb(browser,UDim2.fromOffset(224,-92),190,P.Cyan)
-nova.playerOrb=ambientOrb(playerCard,UDim2.fromOffset(126,-72),176,P.Pink)
 
 label(nav,"DISCOVER",UDim2.fromOffset(16,16),UDim2.fromOffset(116,14),Enum.Font.BuilderSansBold,9,P.Muted)
 local navList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,42),Size=UDim2.fromOffset(128,215),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},nav)
@@ -1432,7 +1412,6 @@ local accentGradients={
     apply=applyColorButton:FindFirstChildOfClass("UIGradient"),
     window=window:FindFirstChildOfClass("UIGradient"),
     header=header:FindFirstChildOfClass("UIGradient"),
-    sheen=nova.headerSheen:FindFirstChildOfClass("UIGradient"),
     library=libraryCount:FindFirstChildOfClass("UIGradient"),
 }
 local themedStrokes={
@@ -1471,11 +1450,6 @@ local function applyAccent(color)
     loop.BackgroundColor3=state.Loop and color:Lerp(P.Ink,.45) or P.Card
     libraryCount.BackgroundColor3=P.Card
     resetBpm.BackgroundColor3=deep:Lerp(P.Card,.45)
-    nova.navOrb.BackgroundColor3=color
-    nova.browserOrb.BackgroundColor3=secondary
-    nova.playerOrb.BackgroundColor3=secondary
-    nova.headerSheen.BackgroundColor3=color
-
     recolorIcon(settingsIcon,P.Sub);recolorIcon(closeIcon,P.Sub);recolorIcon(searchIcon,P.Muted)
     recolorIcon(artIcon,P.Text);recolorIcon(stopIcon,P.Sub);recolorIcon(playIcon,P.Text);recolorIcon(pauseIcon,P.Text)
     recolorIcon(bpmDownIcon,P.Sub);recolorIcon(bpmUpIcon,P.Sub);recolorIcon(resetIcon,P.Sub);recolorIcon(paletteCloseIcon,P.Sub)
