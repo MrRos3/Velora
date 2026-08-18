@@ -1,27 +1,29 @@
-# Velora — Aurora ✦
+# Velora — Rose 🥀
 
-Velora v0.4.0 **Aurora** is a rounded, floating-card Roblox piano workstation with nine original, extended songs.
+Velora v0.5.0 **Rose** is an advanced rounded Roblox piano workstation.
 
 ## Run the cache-breaking release
 
 ```lua
 loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-040.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-050.lua",
     true
 ))()
 ```
 
-Press **Right Shift** to hide or restore the interface.
+## Rose highlights
 
-## Aurora highlights
+- Thin, restrained outer shadow with no heavy edge bleed
+- 🥀 title icon and fully rounded floating-card interface
+- Settings palette with presets and synchronized RGB/HEX color controls
+- Draggable song-progress scrubber
+- BPM text editing plus rounded decrease/increase arrows
+- Advanced uppercase and shifted-symbol mappings for black piano keys
+- Eight longer public-domain arrangements popular in short-form videos
+- Search, favorites, recent songs, categories, Loop, and live playback feedback
+- Stops on the final note instead of advancing to another song
 
-- Fully rounded window, floating panels, controls, cards, progress bars, and artwork
-- Violet/pink glass gradients, animated song tiles, and playback pulse feedback
-- Nine original extended arrangements across chill, synth, ambient, cinematic, jazz, and bright styles
-- Songs stop on their final note; they never advance automatically
-- Loop remains available when intentional repetition is wanted
-- Roblox virtual input with executor-key fallback
-- Search, favorites, recent songs, category filters, BPM editing, and live progress
+The visible Roblox Input badge was removed. Automatic piano output remains internal so playback continues to work.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
 
