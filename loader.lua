@@ -1,6 +1,5 @@
-local source = game:HttpGet("https://raw.githubusercontent.com/MrRos3/Velora/main/latest.lua?velora=0.3.2")
-local chunk, compileError = loadstring(source)
+-- Stable loader. The release filename changes when a cache-breaking update is required.
+local source = game:HttpGet("https://raw.githubusercontent.com/MrRos3/Velora/main/release-032.lua", true)
+local chunk, compileError = loadstring(source, "Velora 0.3.2")
 assert(chunk, "Velora failed to compile: " .. tostring(compileError))
-local result = chunk()
-assert(type(result) == "table", "Velora did not return its API table")
-return result
+return chunk()
