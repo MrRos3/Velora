@@ -1,22 +1,23 @@
 # Velora — Encore 🥀
 
-Velora v0.8.7 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
+Velora v0.8.8 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
 
 ## Run the cache-breaking release
 
 ```lua
 loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-087.lua?boot=087",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-088.lua?boot=088",
     true
 ))()
 ```
 
-## Encore 0.8.7
+## Encore 0.8.8
 
 - Clean Builder Sans typography across the entire interface, with larger navigation labels
-- 20 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
-- The complete 20-song registry is now embedded as an offline fallback, preventing missing cards when a registry request is cached
-- New: Erika, a roughly 3:40 arrangement converted from the complete owner-supplied MIDI
+- 21 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
+- The complete 21-song registry is embedded as an offline fallback, preventing missing cards when a registry request is cached
+- New: Anlatamam (Kara Sevda OST), converted from the complete owner-supplied MIDI
+- Erika is also included from its complete owner-supplied MIDI
 - Kamado Tanjiro no Uta remains the library’s longest owner-supplied arrangement at roughly 6:14
 - Ievan Polkka is also included from the complete owner-supplied MIDI
 - Love Story by Indila is also included from the owner-supplied MIDI
@@ -31,6 +32,6 @@ loadstring(game:HttpGet(
 
 ## Music sources
 
-Arrangements are generated from credited Mutopia MIDI editions. The source URL and edition license are stored inside every song file. The three classical Encore additions use public-domain editions. Love Story, Ievan Polkka, Kamado Tanjiro no Uta, and Erika were converted from MIDIs supplied by the repository owner; their filenames and SHA-256 hashes are recorded in their song files. Canon per 3 Violini e Basso is credited to typesetter Michael Fischer v. Mollard and distributed under CC BY 4.0.
+Arrangements are generated from credited Mutopia MIDI editions. The source URL and edition license are stored inside every song file. The three classical Encore additions use public-domain editions. Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, and Anlatamam were converted from MIDIs supplied by the repository owner; their filenames and SHA-256 hashes are recorded in their song files. Canon per 3 Violini e Basso is credited to typesetter Michael Fischer v. Mollard and distributed under CC BY 4.0.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
