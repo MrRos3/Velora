@@ -30,7 +30,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.3.0",
+    Version = "0.3.1",
     Codename = "Nocturne",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -416,70 +416,87 @@ local function keyToEnum(note)
 end
 
 local InputBackend = {
-    Name = "Preview",
+    Name = "Preview Only",
     Available = false,
     Send = nil,
 }
 
 local keypressFn = findGlobal("keypress")
 local keyreleaseFn = findGlobal("keyrelease")
+local keytapFn = findGlobal("keytap")
+local virtualInput = nil
 
-if type(keypressFn) == "function" and type(keyreleaseFn) == "function" then
-    InputBackend.Name = "Executor Input"
-    InputBackend.Available = true
-    InputBackend.Send = function(note)
-        local vk, needsShift = keyToVk(note)
-        if not vk then
-            return false
+pcall(function()
+    virtualInput = game:GetService("VirtualInputManager")
+end)
+
+local function sendExecutorKey(note)
+    local vk, needsShift = keyToVk(note)
+    if not vk then
+        return false
+    end
+
+    if type(keytapFn) == "function" then
+        return pcall(keytapFn, vk)
+    end
+
+    if type(keypressFn) ~= "function" or type(keyreleaseFn) ~= "function" then
+        return false
+    end
+
+    local ok = pcall(function()
+        if needsShift then
+            keypressFn(0x10)
         end
-
-        local ok = pcall(function()
+        keypressFn(vk)
+        task.delay(CONFIG.InputHold, function()
+            pcall(keyreleaseFn, vk)
             if needsShift then
-                keypressFn(0x10)
+                pcall(keyreleaseFn, 0x10)
             end
-            keypressFn(vk)
-            task.delay(CONFIG.InputHold, function()
-                pcall(keyreleaseFn, vk)
+        end)
+    end)
+    return ok
+end
+
+local function sendVirtualKey(note)
+    if not virtualInput then
+        return false
+    end
+
+    local keyCode, needsShift = keyToEnum(note)
+    if not keyCode then
+        return false
+    end
+
+    local ok = pcall(function()
+        if needsShift then
+            virtualInput:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
+        end
+        virtualInput:SendKeyEvent(true, keyCode, false, game)
+        task.delay(CONFIG.InputHold, function()
+            pcall(function()
+                virtualInput:SendKeyEvent(false, keyCode, false, game)
                 if needsShift then
-                    pcall(keyreleaseFn, 0x10)
+                    virtualInput:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game)
                 end
             end)
         end)
-
-        return ok
-    end
-else
-    local vim = nil
-    pcall(function()
-        vim = game:GetService("VirtualInputManager")
     end)
+    return ok
+end
 
-    if vim then
-        InputBackend.Name = "Virtual Input"
-        InputBackend.Available = true
-        InputBackend.Send = function(note)
-            local keyCode, needsShift = keyToEnum(note)
-            if not keyCode then
-                return false
-            end
+local hasExecutorInput = type(keytapFn) == "function"
+    or (type(keypressFn) == "function" and type(keyreleaseFn) == "function")
 
-             local ok = pcall(function()
-                if needsShift then
-                    vim:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
-                end
-                vim:SendKeyEvent(true, keyCode, false, game)
-                task.delay(CONFIG.InputHold, function()
-                    pcall(function()
-                        vim:SendKeyEvent(false, keyCode, false, game)
-                        if needsShift then
-                            vim:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game)
-                        end
-                    end)
-                end)
-            end)
-
-            return ok
+if hasExecutorInput or virtualInput then
+    InputBackend.Name = hasExecutorInput and "Keyboard Input" or "Virtual Input"
+    InputBackend.Available = true
+    InputBackend.Send = function(note)
+        if hasExecutorInput and sendExecutorKey(note) then
+            return true
         end
+        return sendVirtualKey(note)
     end
 end
 
@@ -644,7 +661,16 @@ local function noteOutput(note)
     end
 
     if state.AutoInput and InputBackend.Available and InputBackend.Send then
-        return InputBackend.Send(note)
+        local sent = InputBackend.Send(note)
+        if not sent then
+            stopConnection()
+            state.Playing = false
+            state.Paused = false
+            state.AutoInput = false
+            emit("input-error")
+            warn("[Velora] Piano output rejected a key; playback stopped instead of continuing silently")
+        end
+        return sent
     end
 
     return false
@@ -752,7 +778,16 @@ end
 
 function API:Play()
     if not state.Timeline or #state.Timeline.Events == 0 then
-        return false
+        return false, "No playable notes are loaded"
+    end
+
+    local _, connected = self:GetInputMode()
+    if not connected then
+        state.Playing = false
+        state.Paused = false
+        emit("input-required")
+        warn("[Velora] Playback needs keyboard input support or Velora:BindPiano(callback)")
+        return false, "No piano output is connected"
     end
 
     if state.Position >= state.Timeline.Duration then
