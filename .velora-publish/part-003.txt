@@ -1,0 +1,125 @@
+.Name = "VeloraUISound"
+        sound.SoundId = id
+        sound.Volume = volume or 0.12
+        sound.Parent = SoundService
+        sound:Play()
+        sound.Ended:Connect(function()
+            if sound.Parent then
+                sound:Destroy()
+            end
+        end)
+        task.delay(3, function()
+            if sound.Parent then
+                sound:Destroy()
+            end
+        end)
+    end)
+end
+
+local function uiClick()
+    playUiSound(CONFIG.ClickSound, 0.22)
+end
+
+local function uiHover()
+    playUiSound(CONFIG.HoverSound, 0.07)
+end
+
+local function formatTime(seconds)
+    seconds = math.max(0, tonumber(seconds) or 0)
+    return string.format("%d:%02d", math.floor(seconds / 60), math.floor(seconds % 60))
+end
+
+local function truncate(value, maximum)
+    value = tostring(value or "")
+    maximum = maximum or 24
+    if #value <= maximum then
+        return value
+    end
+    return value:sub(1, maximum - 1) .. "…"
+end
+
+local function contains(haystack, needle)
+    return string.find(string.lower(tostring(haystack or "")), string.lower(tostring(needle or "")), 1, true) ~= nil
+end
+
+-- =========================================================
+-- Song parser
+-- =========================================================
+
+local function parseChord(token)
+    local body = token:sub(2, -2)
+    local notes = {}
+
+    if body:find(",", 1, true) or body:find(" ", 1, true) then
+        for note in body:gmatch("[^,%s]+") do
+            if note ~= "" then
+                table.insert(notes, note)
+            end
+        end
+    else
+        for index = 1, #body do
+            table.insert(notes, body:sub(index, index))
+        end
+    end
+
+    return notes
+end
+
+local function parseSheet(sheet, bpm, stepsPerBeat)
+    bpm = math.clamp(tonumber(bpm) or 120, 30, 300)
+    stepsPerBeat = math.clamp(tonumber(stepsPerBeat) or 2, 1, 16)
+
+    local stepDuration = (60 / bpm) / stepsPerBeat
+    local events = {}
+    local cursor = 0
+
+    for token in tostring(sheet or ""):gmatch("%S+") do
+        if token == "|" then
+            -- visual separator only
+        elseif token == "-" or token == "_" then
+            cursor += stepDuration
+        else
+            local notes
+            if token:sub(1, 1) == "[" and token:sub(-1) == "]" then
+                notes = parseChord(token)
+            else
+                notes = { token }
+            end
+
+            if #notes > 0 then
+                table.insert(events, {
+                    Time = cursor,
+                    Notes = notes,
+                    Token = token,
+                    Index = #events + 1,
+                })
+            end
+
+            cursor += stepDuration
+        end
+    end
+
+    return {
+        BPM = bpm,
+        StepsPerBeat = stepsPerBeat,
+        StepDuration = stepDuration,
+        Events = events,
+        Duration = cursor,
+    }
+end
+
+-- =========================================================
+-- Optional keyboard input backend
+-- =========================================================
+
+local VK_PUNCT = {
+    [";"] = 0xBA,
+    ["="] = 0xBB,
+    [","] = 0xBC,
+    ["-"] = 0xBD,
+    ["."] = 0xBE,
+    ["/"] = 0xBF,
+    ["`"] = 0xC0,
+    ["["] = 0xDB,
+    ["\\"] = 0xDC,
+    [
