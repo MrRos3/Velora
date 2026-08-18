@@ -1,0 +1,148 @@
+imeline.Events[state.NextEvent].Time < state.Position do
+        state.NextEvent += 1
+    end
+
+    emit("seek")
+    return true
+end
+
+function API:SetSpeed(value)
+    state.Speed = math.clamp(tonumber(value) or 1, 0.5, 2)
+    emit("speed")
+    return state.Speed
+end
+
+function API:SetBPM(value)
+    if not state.CurrentSong then
+        return nil
+    end
+
+    local bpm = math.clamp(tonumber(value) or state.CurrentBPM or 120, 30, 300)
+    local progress = 0
+    if state.Timeline and state.Timeline.Duration > 0 then
+        progress = math.clamp(state.Position / state.Timeline.Duration, 0, 1)
+    end
+
+    local playing = state.Playing and not state.Paused
+    local paused = state.Paused
+
+    stopConnection()
+    state.Timeline = parseSheet(state.CurrentSong.Notes or "", bpm, state.CurrentSong.StepsPerBeat)
+    state.CurrentBPM = bpm
+    self:Seek(progress)
+
+    state.Playing = false
+    state.Paused = false
+
+    if playing then
+        self:Play()
+    elseif paused then
+        self:Play()
+        self:Pause()
+    end
+
+    emit("bpm")
+    return bpm
+end
+
+function API:SetLoop(enabled)
+    state.Loop = enabled == true
+    emit("loop")
+    return state.Loop
+end
+
+function API:SetShuffle(enabled)
+    state.Shuffle = enabled == true
+    emit("shuffle")
+    return state.Shuffle
+end
+
+function API:SetAutoInput(enabled)
+    state.AutoInput = enabled == true and InputBackend.Available
+    emit("input")
+    return state.AutoInput
+end
+
+function API:BindPiano(callback)
+    assert(type(callback) == "function", "Velora:BindPiano expects a function")
+    state.BoundCallback = callback
+    emit("input")
+end
+
+function API:UnbindPiano()
+    state.BoundCallback = nil
+    emit("input")
+end
+
+function API:GetInputMode()
+    if state.BoundCallback then
+        return "Bound Piano", true
+    elseif state.AutoInput and InputBackend.Available then
+        return InputBackend.Name, true
+    end
+    return "Preview Only", false
+end
+
+function API:IsFavorite(id)
+    return state.Favorites[id] == true
+end
+
+function API:ToggleFavorite(id)
+    if not getEntry(id) then
+        return false
+    end
+    state.Favorites[id] = not state.Favorites[id]
+    emit("favorites")
+    return state.Favorites[id]
+end
+
+function API:AddToQueue(id)
+    if not getEntry(id) then
+        return false
+    end
+    table.insert(state.Queue, id)
+    emit("queue")
+    return true
+end
+
+function API:RemoveFromQueue(index)
+    if state.Queue[index] then
+        table.remove(state.Queue, index)
+        emit("queue")
+        return true
+    end
+    return false
+end
+
+function API:ClearQueue()
+    table.clear(state.Queue)
+    emit("queue")
+end
+
+function API:GetQueue()
+    local output = {}
+    for index, id in ipairs(state.Queue) do
+        output[index] = id
+    end
+    return output
+end
+
+function API:GetRecent()
+    local output = {}
+    for index, id in ipairs(state.Recent) do
+        output[index] = id
+    end
+    return output
+end
+
+function API:GetSnapshot()
+    local progress = 0
+    local duration = state.Timeline and state.Timeline.Duration or 0
+    if duration > 0 then
+        progress = math.clamp(state.Position / duration, 0, 1)
+    end
+
+    local mode, connected = self:GetInputMode()
+
+    return {
+    
