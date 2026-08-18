@@ -6,7 +6,7 @@ Velora v0.9.0 **Pulse** is a rounded Roblox piano workstation with a responsive 
 
 ```lua
 loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/MrRos3/Velora/594c95190ae9ae13f02f4d7c1ed0642902e77c70/loader.lua"
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/loader.lua"
 ))()
 ```
 
@@ -14,7 +14,7 @@ If GitHub is blocked by an executor, use the CDN launcher:
 
 ```lua
 loadstring(game:HttpGet(
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@594c95190ae9ae13f02f4d7c1ed0642902e77c70/loader.lua"
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/loader.lua"
 ))()
 ```
 
