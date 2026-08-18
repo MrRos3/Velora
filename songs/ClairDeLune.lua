@@ -1,17 +1,132 @@
+-- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Source: https://www.mutopiaproject.org/ftp/DebussyC/L75/debussy_Ste_Bergamesq_Clair/debussy_Ste_Bergamesq_Clair.mid
 return {
- Id="clair-de-lune",Name="Clair de Lune",Artist="Claude Debussy",BPM=68,StepsPerBeat=3,Categories={"TikTok Classics","Classical","Dreamy","Advanced"},
- Notes=[[
-q - e | t - y | [qu] - e | [ty] - -
-w - r | y - u | [wi] - r | [yu] - -
-[qa] e t | [ws] r y | [ed] t u | [rf] y i
-[qa] E t | [ws] R y | [eD] T u | [rf] y i
-a - d | f - h | [aj] - d | [fh] - -
-s - f | h - j | [sk] - f | [hj] - -
-q e t | y u y | t e q | [qu] - -
-w r y | u i u | y r w | [wi] - -
-[Q!] E t | [W@] R y | [eD] T u | [rF] Y i
-a d f | h j h | f d a | [aj] - -
-q - e | t - y | [qu] - [ey] | [wt] - -
-[qa] - [eD] | [tf] - [yh] | [qj] - - | q - -
- ]],
+    Id="clair-de-lune",
+    Name="Clair de Lune",
+    Artist="Claude Debussy",
+    BPM=68,
+    StepsPerBeat=12,
+    Categories={"TikTok Classics","Classical","Dreamy","Advanced"},
+    Notes=[=[
+- - - - | - - [iO] - | - - - - | [gH] - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | [Sg] - - - | - - - - | - - - -
+- - - - | - - [Ip] - | - - - - | [sD] - - -
+- - [Sg] - | - - - - | [sD] - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | - - - - | [iO] - - -
+- - [PS] - | - - - - | [sD] - - - | - - [PS] -
+- - - - | - - - g | - - - - | - - - -
+- - - - | - - - - | - S - - | - - - -
+- - [YI] - | - - - - | [Os] - - - | - - [PS] -
+- - - - | [Os] - - - | - - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | [TYI] - - - | - - P -
+- - - - | s - - - | - - P - | - - - -
+D - - - | - - P - | - - - - | [tYIO] - - -
+- - P - | - - - - | O - - - | - - [ETY] -
+- - - - | I - - - | - - O - | - - - -
+I - - - | - - - - | - - - - | - - - -
+- - [etYi] - | - - - - | - - - - | - - - -
+- - - - | [WET] - - - | - - i - | - - - -
+I - - - | - - i - | - - - - | P - - -
+- - i - | - - - - | [QY] - - - | - - i -
+- - - - | Y - - - | - - [qWE] - | - - - -
+T - - - | - - Y - | - - - - | T - - -
+- - - - | - - - - | - - - - | - - [(QWt] -
+- - - - | - - - % | - - - - | - - - -
+! - - - | - - [qW] - | - - - - | [iO] - - -
+- - [gH] - | - - - - | - - - - | - - - -
+- - - - | [Sg] - - - | - - - - | - - - -
+- - - - | - - [$*] - | - - - - | [QETIPD] - - -
+- - g - | - - - - | D - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | - - - - | [4*] - - -
+- - [qWTOS] - | - - - - | [YD] - - - | - - [TiOSH] -
+- - - - | - - - - | - - - - | - - - -
+[WTiSg] - - - | - - - - | - - - - | - - - -
+- - [$*] - | - - - - | [QETIPD] - - - | - - g -
+- - - - | D - - - | - - - - | - - - -
+- - - - | - - S - | - - - - | - - - -
+- - - - | - - - - | % - - - | - - [qrTOS] -
+- - - - | [YD] - - - | - - [rTiPgJ] - | - - - -
+- - - [OH] | - - - - | - - - - | - - - -
+- - - - | - i - - | - - - - | - - [^g] -
+- - - - | [qEYiPD] - - - | - - g - | - - - -
+D - - - | - - - - | - [TS] - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | @ - - - | - - - - | - [iIPgJc] - -
+- - - - | - - - - | - - - - | [YIPDJZ] - - -
+- - [YIPDJZ] - | - - - - | [YIPDJZ] - - - | - - [TIPSJL] -
+- - - - | [TIPSJL] - - - | - - [TIPSJL] - | - - - -
+[tIPGJl] - - - | - - [tIPGJl] - | - - - - | [tIPGJl] - - -
+- - - - | - [TIPSJL] - - | - - - - | - - [ETIPGJ] -
+- - - - | - - - - | - - - - | - - - -
+[@^] - - - | - - - - | - [iIPgJc] - - | - - - -
+- - - - | - - - - | [IPDGJC] - - - | - - [iIPgJc] -
+- - - - | [YIPDJZ] - - - | - - [iIPgJc] - | - - - -
+[YIPDJZ] - - - | - - [TIPSJL] - | - - - - | [YIPDJZ] - - -
+- - [TIPSJL] - | - - - - | [tIPJl] - - - | - - - Z
+- [TIPSJL] - - | - - - - | - - [EYIPGJ] - | - - - -
+- - - - | - - - - | - - - - | % - - -
+- - - - | - [QIG] - - | - - - - | - - [WtYODH] -
+- - - - | - - - [sl] | - - - - | - - - -
+[EYIPGJ] - - - | - - - - | - [QIG] - - | - - - -
+- - 6 - | - - - - | [QtYsDG] - - - | - - [QtYsDG] -
+- - - - | [QtYsDG] - - - | - - [QtYsDG] - | - - - -
+[WtYsDH] - - - | - - [QtYsDG] - | - - - - | - - - -
+- - - - | - - - - | ^ - - - | - - - -
+- [QETISG] - - | - - - - | - - [WOH] - | - - - -
+- - - [TSL] | - - - - | - - - - | [ETIPGJ] - - -
+- - - - | - [QI] - - | - - - - | - - % -
+- - - - | [QEYPDG] - - - | - - [QEYPDG] - | - - - -
+[QEYPDG] - - - | - - [QEYPDG] - | - - - - | [WtisgH] - - -
+- - [QEYPDG] - | - - - - | - - - - | - - - -
+- - - - | [!*] - - - | - - - - | - [QETPSG] - -
+- - - - | - - [WOH] - | - - - - | - - - [YDZ]
+- - - - | - - - - | [TIPGJL] - - - | - - - -
+- [EP] - - | - - - - | - - [@(] - | - - - -
+[ETIPGJ] - - - | - - [ETIPGJ] - | - - - - | [ETIPGJ] - - -
+- - [ETIPGJ] - | - - - - | [tYOsHl] - - - | - - [ETIPGJ] -
+- - - - | [TIPSJL] - - - | - - [YIPDJZ] - | - - - -
+[iOSHLV] - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | [uOPHLV] - - - | - - - - | - - - -
+- - - - | - - [YIOHLV] - | - - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | - - [WYIsDH] - | - - - -
+- - - - | - - - - | - - - - | [!iO] - - %
+- - * - | - q - - | W - - T | - - 4 -
+- 8 - - | q - - W | - - t - | - - - -
+[%Oa] - - 0 | - - W - | - r - - | [uS] - - O
+- - [!iO] - | - % - - | * - - q | - - W -
+- T - - | 4 - - 8 | - - q - | - W - -
+t - - - | - - [%Oa] - | - 0 - - | W - - r
+- - O - | - u - - | [!iS] - - % | - - * -
+- q - - | [WOD] - - T | - - [iSg] - | - O - -
+i - - T | - - W - | - q - - | [WiS] - - q
+- - * - | - % - - | [*Sg] - - % | - - [@Dh] -
+- ^ - - | [(Sg] - - w | - - [EPS] - | - Y - -
+[oPS] - - Y | - - [Ei] - | - w - - | [(T] - - ^
+- - [@T] - | - ^ - - | ( - - [wE] | - - ( -
+- ^ - - | [%P] - - ( | - - Q - | - E - -
+t - - I | - - $ - | - * - - | Q - - E
+- - T - | - I - - | [4s] - - 8 | - - q -
+- W - - | [tOg] - - i | - - [%P] - | - ( - -
+Q - - E | - - t - | - I - - | $ - - *
+- - Q - | - E - - | T - - I | - - [4s] -
+- 8 - - | q - - W | - - [tOg] - | - i - -
+[@G] - - ^ | - - ( - | - Q - - | E - - Y
+- - I - | - I - - | P - - [ig] | - - I -
+- P - - | [yd] - - I | - - P - | - [YD] - -
+I - - P | - - [yJ] - | - I - - | P - - P
+- - G - | - - - - | Y - - I | - - P -
+- P - - | G - - - | - - [WtH] - | - u - -
+O - - s | - - f - | - - - - | [*gH] - - W
+- - T - | - i - - | O - - S | - - [qW] -
+- t - - | i - - O | - - s - | - - - -
+[WrHk] - - u | - - O - | - a - - | [fL] - - H
+- - [*gH] - | - W - - | T - - i | - - O -
+- S - - | [qW] - - t | - - i - | - O
+]=],
 }
