@@ -1,0 +1,94 @@
+olor3 = C.Raised,
+            BackgroundTransparency = name == state.Category and 0.12 or 1,
+            BorderSizePixel = 0,
+            Text = "",
+            AutoButtonColor = false,
+            LayoutOrder = order,
+        }, categoryList)
+        corner(button, 9)
+
+        local indicator = create("Frame", {
+            Position = UDim2.fromOffset(0, 7),
+            Size = UDim2.fromOffset(2, 20),
+            BackgroundColor3 = CONFIG.Accent,
+            BorderSizePixel = 0,
+            Visible = name == state.Category,
+        }, button)
+        corner(indicator, 2)
+
+        local mapping = categoryIcons[name] or { "disc-3", "•" }
+        local holder = icon(button, mapping[1], 13, name == state.Category and CONFIG.Accent or C.Muted, mapping[2])
+        holder.AnchorPoint = Vector2.new(0, 0.5)
+        holder.Position = UDim2.new(0, 11, 0.5, 0)
+
+        local label = text(button, name, 9, name == state.Category and C.Text or C.Sub, Enum.Font.GothamMedium)
+        label.Position = UDim2.fromOffset(34, 0)
+        label.Size = UDim2.new(1, -42, 1, 0)
+
+        ui.CategoryButtons[name] = {
+            Button = button,
+            Icon = holder,
+            Label = label,
+            Indicator = indicator,
+        }
+
+        connect(button.MouseEnter, function()
+            uiHover()
+            if state.Category ~= name then
+                tween(button, 0.12, { BackgroundTransparency = 0.58 })
+            end
+        end)
+
+        connect(button.MouseLeave, function()
+            if state.Category ~= name then
+                tween(button, 0.12, { BackgroundTransparency = 1 })
+            end
+        end)
+
+        connect(button.MouseButton1Click, function()
+            uiClick()
+            selectCategory(name)
+        end)
+    end
+end
+
+local function makeSongCard(entry, order)
+    local selected = state.CurrentEntry and state.CurrentEntry.Id == entry.Id
+
+    local card = create("TextButton", {
+        Name = "Song_" .. entry.Id,
+        Size = UDim2.new(1, 0, 0, 66),
+        BackgroundColor3 = selected and C.Raised or C.Panel,
+        BackgroundTransparency = selected and 0.08 or 0.40,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+        LayoutOrder = order,
+    }, songList)
+    corner(card, 12)
+    local cardStroke = stroke(card, selected and 0.62 or 0.88)
+
+    local selectedLine = create("Frame", {
+        Position = UDim2.fromOffset(0, 10),
+        Size = UDim2.fromOffset(2, 46),
+        BackgroundColor3 = CONFIG.Accent,
+        BorderSizePixel = 0,
+        Visible = selected,
+    }, card)
+    corner(selectedLine, 2)
+
+    local songGlyph = create("Frame", {
+        Position = UDim2.fromOffset(10, 11),
+        Size = UDim2.fromOffset(44, 44),
+        BackgroundColor3 = CONFIG.Accent,
+        BackgroundTransparency = selected and 0.74 or 0.88,
+        BorderSizePixel = 0,
+    }, card)
+    corner(songGlyph, 11)
+    stroke(songGlyph, selected and 0.60 or 0.82, 1, CONFIG.Accent)
+
+    local glyphIcon = icon(songGlyph, "music-2", 16, CONFIG.Accent, "♪")
+    glyphIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+    glyphIcon.Position = UDim2.fromScale(0.5, 0.5)
+
+    local name = text(card, truncate(entry.Name, 25), 1
