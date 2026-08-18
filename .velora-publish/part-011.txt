@@ -1,0 +1,99 @@
+ UDim2.fromOffset(8, 38),
+    Size = UDim2.new(1, -16, 1, -126),
+    CanvasSize = UDim2.new(),
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    ScrollBarThickness = 2,
+    ScrollBarImageColor3 = C.Muted,
+    ScrollBarImageTransparency = 0.55,
+}, sidebar)
+ui.CategoryList = categoryList
+
+local categoryLayout = create("UIListLayout", {
+    Padding = UDim.new(0, 4),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+}, categoryList)
+ui.CategoryLayout = categoryLayout
+
+local libraryStats = create("Frame", {
+    AnchorPoint = Vector2.new(0, 1),
+    Position = UDim2.new(0, 8, 1, -8),
+    Size = UDim2.new(1, -16, 0, 72),
+    BackgroundColor3 = C.Panel,
+    BackgroundTransparency = 0.42,
+    BorderSizePixel = 0,
+}, sidebar)
+corner(libraryStats, 12)
+stroke(libraryStats, 0.88)
+ui.LibraryStats = libraryStats
+
+local statTitle = text(libraryStats, "VELORA LIBRARY", 8, C.Muted, Enum.Font.GothamBold)
+statTitle.Position = UDim2.fromOffset(11, 8)
+statTitle.Size = UDim2.new(1, -22, 0, 14)
+
+local statSongs = text(libraryStats, tostring(#state.Registry) .. " songs", 11, C.Text, Enum.Font.GothamSemibold)
+statSongs.Position = UDim2.fromOffset(11, 26)
+statSongs.Size = UDim2.new(1, -22, 0, 18)
+ui.StatSongs = statSongs
+
+local statHint = text(libraryStats, "GitHub-backed registry", 8, C.Muted, Enum.Font.Gotham)
+statHint.Position = UDim2.fromOffset(11, 46)
+statHint.Size = UDim2.new(1, -22, 0, 14)
+
+local browser = create("Frame", {
+    Name = "Browser",
+    BackgroundColor3 = C.Window2,
+    BackgroundTransparency = 0.56,
+    BorderSizePixel = 0,
+    Position = UDim2.fromOffset(194, 14),
+    Size = UDim2.new(0, 352, 1, -28),
+}, body)
+corner(browser, 15)
+stroke(browser, 0.86)
+ui.Browser = browser
+
+local browserTitle = text(browser, "All Songs", 15, C.Text, Enum.Font.GothamBold)
+browserTitle.Position = UDim2.fromOffset(14, 10)
+browserTitle.Size = UDim2.new(1, -28, 0, 24)
+ui.BrowserTitle = browserTitle
+
+local browserCount = text(browser, "0 tracks", 8, C.Muted, Enum.Font.GothamMedium)
+browserCount.Position = UDim2.fromOffset(14, 31)
+browserCount.Size = UDim2.new(1, -28, 0, 14)
+ui.BrowserCount = browserCount
+
+local searchShell = create("Frame", {
+    Position = UDim2.fromOffset(12, 54),
+    Size = UDim2.new(1, -64, 0, 38),
+    BackgroundColor3 = C.Panel,
+    BackgroundTransparency = 0.28,
+    BorderSizePixel = 0,
+}, browser)
+corner(searchShell, 11)
+local searchStroke = stroke(searchShell, 0.78)
+ui.SearchShell = searchShell
+ui.SearchStroke = searchStroke
+
+local searchIcon = icon(searchShell, "search", 14, C.Muted, "⌕")
+searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+searchIcon.Position = UDim2.new(0, 11, 0.5, 0)
+ui.SearchIcon = searchIcon
+
+local searchBox = create("TextBox", {
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Position = UDim2.fromOffset(34, 0),
+    Size = UDim2.new(1, -42, 1, 0),
+    ClearTextOnFocus = false,
+    Font = Enum.Font.GothamMedium,
+    PlaceholderText = "Search songs, artists, tags...",
+    PlaceholderColor3 = C.Muted,
+    Text = "",
+    TextColor3 = C.Text,
+    TextSize = 9,
+    TextXAlignment = Enum.TextXAlignment.Left,
+}, searchShell)
+ui.SearchBox = searchBox
+
+local randomButton = create("TextButton", {
+    AnchorPoint = Vector2.new(1, 0),
+  
