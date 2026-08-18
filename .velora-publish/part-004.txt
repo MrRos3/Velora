@@ -1,0 +1,133 @@
+"]"] = 0xDD,
+    ["'"] = 0xDE,
+}
+
+local ENUM_DIGITS = {
+    ["0"] = Enum.KeyCode.Zero,
+    ["1"] = Enum.KeyCode.One,
+    ["2"] = Enum.KeyCode.Two,
+    ["3"] = Enum.KeyCode.Three,
+    ["4"] = Enum.KeyCode.Four,
+    ["5"] = Enum.KeyCode.Five,
+    ["6"] = Enum.KeyCode.Six,
+    ["7"] = Enum.KeyCode.Seven,
+    ["8"] = Enum.KeyCode.Eight,
+    ["9"] = Enum.KeyCode.Nine,
+}
+
+local ENUM_PUNCT = {
+    [";"] = Enum.KeyCode.Semicolon,
+    ["="] = Enum.KeyCode.Equals,
+    [","] = Enum.KeyCode.Comma,
+    ["-"] = Enum.KeyCode.Minus,
+    ["."] = Enum.KeyCode.Period,
+    ["/"] = Enum.KeyCode.Slash,
+    ["`"] = Enum.KeyCode.Backquote,
+    ["["] = Enum.KeyCode.LeftBracket,
+    ["\\"] = Enum.KeyCode.BackSlash,
+    ["]"] = Enum.KeyCode.RightBracket,
+    ["'"] = Enum.KeyCode.Quote,
+}
+
+local function findGlobal(name)
+    local value = rawget(_G, name)
+    if value ~= nil then
+        return value
+    end
+
+    if type(getgenv) == "function" then
+        local ok, env = pcall(getgenv)
+        if ok and type(env) == "table" then
+            return rawget(env, name)
+        end
+    end
+
+    return nil
+end
+
+local function keyToVk(note)
+    note = tostring(note or "")
+    if #note ~= 1 then
+        return nil, false
+    end
+
+    local shift = note:match("%u") ~= nil
+    local lower = string.lower(note)
+
+    if lower:match("%a") then
+        return string.byte(string.upper(lower)), shift
+    elseif lower:match("%d") then
+        return string.byte(lower), false
+    end
+
+    return VK_PUNCT[lower], false
+end
+
+local function keyToEnum(note)
+    note = tostring(note or "")
+    if #note ~= 1 then
+        return nil, false
+    end
+
+    local shift = note:match("%u") ~= nil
+    local lower = string.lower(note)
+
+    if lower:match("%a") then
+        local enumName = string.upper(lower)
+        return Enum.KeyCode[enumName], shift
+    elseif ENUM_DIGITS[lower] then
+        return ENUM_DIGITS[lower], false
+    end
+
+    return ENUM_PUNCT[lower], false
+end
+
+local InputBackend = {
+    Name = "Preview",
+    Available = false,
+    Send = nil,
+}
+
+local keypressFn = findGlobal("keypress")
+local keyreleaseFn = findGlobal("keyrelease")
+
+if type(keypressFn) == "function" and type(keyreleaseFn) == "function" then
+    InputBackend.Name = "Executor Input"
+    InputBackend.Available = true
+    InputBackend.Send = function(note)
+        local vk, needsShift = keyToVk(note)
+        if not vk then
+            return false
+        end
+
+        local ok = pcall(function()
+            if needsShift then
+                keypressFn(0x10)
+            end
+            keypressFn(vk)
+            task.delay(CONFIG.InputHold, function()
+                pcall(keyreleaseFn, vk)
+                if needsShift then
+                    pcall(keyreleaseFn, 0x10)
+                end
+            end)
+        end)
+
+        return ok
+    end
+else
+    local vim = nil
+    pcall(function()
+        vim = game:GetService("VirtualInputManager")
+    end)
+
+    if vim then
+        InputBackend.Name = "Virtual Input"
+        InputBackend.Available = true
+        InputBackend.Send = function(note)
+            local keyCode, needsShift = keyToEnum(note)
+            if not keyCode then
+                return false
+            end
+
+  
