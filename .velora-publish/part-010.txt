@@ -1,0 +1,106 @@
+dIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+brandIcon.Position = UDim2.fromScale(0.5, 0.5)
+ui.BrandIcon = brandIcon
+
+local title = text(topbar, "VELORA", 18, C.Text, Enum.Font.GothamBold)
+title.Position = UDim2.fromOffset(66, 12)
+title.Size = UDim2.fromOffset(170, 22)
+
+local subtitle = text(topbar, "NOCTURNE  •  PIANO WORKSTATION", 8, CONFIG.Accent, Enum.Font.GothamBold)
+subtitle.Position = UDim2.fromOffset(67, 34)
+subtitle.Size = UDim2.fromOffset(250, 16)
+
+local statusPill = create("Frame", {
+    AnchorPoint = Vector2.new(1, 0.5),
+    Position = UDim2.new(1, -94, 0.5, 0),
+    Size = UDim2.fromOffset(144, 32),
+    BackgroundColor3 = C.Raised,
+    BackgroundTransparency = 0.42,
+    BorderSizePixel = 0,
+}, topbar)
+corner(statusPill, 10)
+stroke(statusPill, 0.76)
+ui.StatusPill = statusPill
+
+local statusDot = create("Frame", {
+    AnchorPoint = Vector2.new(0, 0.5),
+    Position = UDim2.new(0, 10, 0.5, 0),
+    Size = UDim2.fromOffset(6, 6),
+    BackgroundColor3 = C.Warning,
+    BorderSizePixel = 0,
+}, statusPill)
+corner(statusDot, 6)
+ui.StatusDot = statusDot
+
+local statusText = text(statusPill, "PREVIEW ONLY", 8, C.Sub, Enum.Font.GothamBold)
+statusText.Position = UDim2.fromOffset(24, 0)
+statusText.Size = UDim2.new(1, -30, 1, 0)
+ui.StatusText = statusText
+
+local function topButton(x, iconName, fallback)
+    local button = create("TextButton", {
+        AnchorPoint = Vector2.new(1, 0.5),
+        Position = UDim2.new(1, x, 0.5, 0),
+        Size = UDim2.fromOffset(30, 30),
+        BackgroundColor3 = C.Raised,
+        BackgroundTransparency = 0.44,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+    }, topbar)
+    corner(button, 9)
+    stroke(button, 0.80)
+
+    local holder = icon(button, iconName, 14, C.Sub, fallback)
+    holder.AnchorPoint = Vector2.new(0.5, 0.5)
+    holder.Position = UDim2.fromScale(0.5, 0.5)
+
+    connect(button.MouseEnter, function()
+        uiHover()
+        tween(button, 0.12, { BackgroundTransparency = 0.24 })
+        recolorIcon(holder, C.Text)
+    end)
+
+    connect(button.MouseLeave, function()
+        tween(button, 0.12, { BackgroundTransparency = 0.44 })
+        recolorIcon(holder, C.Sub)
+    end)
+
+    return button
+end
+
+local minimizeButton = topButton(-48, "minus", "−")
+local closeButton = topButton(-12, "x", "×")
+ui.MinimizeButton = minimizeButton
+ui.CloseButton = closeButton
+
+local body = create("Frame", {
+    Name = "Body",
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Position = UDim2.fromOffset(0, 64),
+    Size = UDim2.new(1, 0, 1, -64),
+}, window)
+ui.Body = body
+
+local sidebar = create("Frame", {
+    Name = "Sidebar",
+    BackgroundColor3 = C.Window2,
+    BackgroundTransparency = 0.48,
+    BorderSizePixel = 0,
+    Position = UDim2.fromOffset(14, 14),
+    Size = UDim2.new(0, 170, 1, -28),
+}, body)
+corner(sidebar, 15)
+stroke(sidebar, 0.86)
+ui.Sidebar = sidebar
+
+local libraryLabel = text(sidebar, "LIBRARY", 9, C.Muted, Enum.Font.GothamBold)
+libraryLabel.Position = UDim2.fromOffset(14, 12)
+libraryLabel.Size = UDim2.new(1, -28, 0, 18)
+
+local categoryList = create("ScrollingFrame", {
+    Name = "Categories",
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Position =
