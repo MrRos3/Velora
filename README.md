@@ -16,6 +16,15 @@ Velora v0.2 is an original, modular Roblox piano player for experiences you own.
 
 Velora does not copy TALENTLESS source code and does not use executor-only file or input APIs.
 
+## Fastest way to run it
+
+1. Open `Standalone.client.lua` and copy the entire file.
+2. In Roblox Studio, open `StarterPlayer > StarterPlayerScripts`.
+3. Insert a **LocalScript**, rename it `Velora`, and paste the file into it.
+4. Press **Play**. The full v0.2 interface appears in `PlayerGui`.
+
+`Standalone.client.lua` bundles the UI, engine, registry, and included songs into one Studio-ready script. Do not run `Test.lua` to launch the GUI; it only checks the playback engine.
+
 ## Studio setup
 
 Create this hierarchy in `StarterPlayer > StarterPlayerScripts`:
