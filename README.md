@@ -1,31 +1,67 @@
 # Velora 🥀🎹
 
-A modular Roblox piano player and GitHub-powered song library.
+Velora v0.2 is an original, modular Roblox piano player for experiences you own. It combines a dense TALENTLESS-style browsing workflow with Velora's own purple glass design and safe Studio architecture.
 
-## v0.1
+## What's new in v0.2
 
-Velora v0.1 establishes the core architecture:
+- Full three-panel GUI: categories, searchable song browser, and now-playing controls
+- Responsive desktop/mobile scaling, mouse/touch dragging, minimize/restore, and `RightShift` toggle
+- Live search across title, artist, and categories
+- Category filters and session favorites
+- Random song selection
+- Play, pause/resume, stop, loop, speed, editable BPM, progress, and click-to-seek
+- Playback status and clear preview/connected-piano state
+- Safer adapter errors and a more capable parser/player core
+- Two original demo songs so filters and favorites can be tested immediately
 
-- `Main.lua` — controller / entrypoint
-- `Songs.lua` — central song registry
-- `src/Parser.lua` — converts compact sheets into timed note events
-- `src/Player.lua` — playback, pause, stop, speed, loop, and progress
-- `src/PianoAdapter.lua` — isolated bridge to a piano implementation
-- `src/UI.lua` — minimal v0.1 interface shell
-- `songs/` — individual song modules
+Velora does not copy TALENTLESS source code and does not use executor-only file or input APIs.
 
-## Song format
+## Studio setup
 
-Create a new file inside `songs/`:
+Create this hierarchy in `StarterPlayer > StarterPlayerScripts`:
+
+```text
+Velora (Folder)
+├── Main (LocalScript)             <- Main.lua
+├── Songs (ModuleScript)           <- Songs.lua
+├── src (Folder)
+│   ├── Parser (ModuleScript)
+│   ├── PianoAdapter (ModuleScript)
+│   ├── Player (ModuleScript)
+│   └── UI (ModuleScript)
+└── songs (Folder)
+    ├── MoonlitKeys (ModuleScript)
+    └── VeloraDemo (ModuleScript)
+```
+
+Press **Play** in Studio. `Main` creates the full interface in `PlayerGui`. `Test.lua` is only the engine test harness; it is not the GUI launcher.
+
+If you use [Rojo](https://rojo.space/), `default.project.json` maps the repository into the correct hierarchy automatically.
+
+## Connect your own piano
+
+Velora starts in preview mode until your game binds a note callback. In `Main.lua`, after the controller is created, bind your own piano system:
+
+```lua
+controller:BindPiano(function(note)
+    MyPiano:PlayNote(note)
+end)
+```
+
+The callback is the only game-specific part. Keep validation and any authoritative gameplay on the server.
+
+## Add your own song
+
+1. Create a ModuleScript in `songs/`, for example `MySong.lua`:
 
 ```lua
 return {
     Id = "my-song",
     Name = "My Song",
-    Artist = "Artist",
+    Artist = "MrRos3",
     BPM = 120,
     StepsPerBeat = 2,
-    Categories = { "Chill" },
+    Categories = { "Original", "Chill" },
 
     Notes = [[
         a s d f | g h j k |
@@ -34,15 +70,15 @@ return {
 }
 ```
 
-Then add it to `Songs.lua`:
+2. Add its card metadata to `Songs.lua`:
 
 ```lua
 {
     Id = "my-song",
     Name = "My Song",
-    Artist = "Artist",
+    Artist = "MrRos3",
     BPM = 120,
-    Categories = { "Chill" },
+    Categories = { "Original", "Chill" },
     File = "songs/MySong.lua",
 },
 ```
@@ -50,29 +86,23 @@ Then add it to `Songs.lua`:
 ### Sheet syntax
 
 - `a s d f` — sequential notes
-- `[ad]` — chord; notes fire together
-- `-` — one timing-step rest
+- `[ad]` or `[a,d]` — chord; notes fire together
+- `-` or `_` — one timing-step rest
 - `|` — visual bar separator; ignored by playback
-- `BPM` + `StepsPerBeat` control note timing
+- `BPM` + `StepsPerBeat` — timing controls
 
-## Piano adapter
+## Files
 
-Velora deliberately keeps piano-specific behavior outside the playback engine.
-
-Bind the adapter to a piano system in an experience you control:
-
-```lua
-adapter:Bind(function(note)
-    MyPiano:PlayNote(note)
-end)
-```
-
-That means the parser, song library, UI, timing engine, and future features can stay unchanged when the piano implementation changes.
+- `Main.lua` — controller and public API
+- `Songs.lua` — searchable song registry
+- `src/UI.lua` — complete v0.2 interface
+- `src/Parser.lua` — sheet parser
+- `src/Player.lua` — playback state engine
+- `src/PianoAdapter.lua` — safe piano bridge
+- `songs/` — individual song modules
+- `Test.lua` — Studio engine checks
 
 ## Roadmap
 
-- v0.2 — full glass UI, searchable song browser, categories, favorites
-- v0.3 — GitHub-backed song manifest / remote library workflow
-- v0.4 — playlists, shuffle, recently played, transpose controls
-
-Velora is being built as an original modular project rather than a copy of another piano script.
+- v0.3 — optional remote manifest for a GitHub-backed library
+- v0.4 — playlists, shuffle queue, recents, and transpose

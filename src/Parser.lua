@@ -1,55 +1,70 @@
--- Velora v0.1
--- Converts a compact text sheet into timed playback events.
+-- Velora v0.2
+-- Converts compact piano sheets into a validated playback timeline.
 
 local Parser = {}
 
-local function cleanToken(token)
-    return token:gsub("^%s+", ""):gsub("%s+$", "")
+local function clampNumber(value, fallback, minimum, maximum)
+    value = tonumber(value) or fallback
+    return math.clamp(value, minimum, maximum)
+end
+
+local function parseChord(token)
+    local notes = {}
+    local body = token:sub(2, -2)
+
+    for note in body:gmatch("[^,%s]+") do
+        if #note == 1 then
+            table.insert(notes, note)
+        else
+            for index = 1, #note do
+                table.insert(notes, note:sub(index, index))
+            end
+        end
+    end
+
+    return notes
 end
 
 function Parser.parse(sheet, bpm, stepsPerBeat)
     assert(type(sheet) == "string", "Velora Parser: sheet must be a string")
 
-    bpm = tonumber(bpm) or 120
-    stepsPerBeat = tonumber(stepsPerBeat) or 2
+    bpm = clampNumber(bpm, 120, 30, 300)
+    stepsPerBeat = clampNumber(stepsPerBeat, 2, 1, 16)
 
-    local secondsPerStep = (60 / bpm) / stepsPerBeat
+    local stepDuration = (60 / bpm) / stepsPerBeat
     local events = {}
     local cursor = 0
 
     for token in sheet:gmatch("%S+") do
-        token = cleanToken(token)
-
         if token == "|" then
-            -- visual bar separator only
-        elseif token == "-" then
-            cursor += secondsPerStep
+            -- Visual bar separator; it does not consume time.
+        elseif token == "-" or token == "_" then
+            cursor += stepDuration
         else
-            local notes = {}
-
+            local notes
             if token:sub(1, 1) == "[" and token:sub(-1) == "]" then
-                local chord = token:sub(2, -2)
-                for i = 1, #chord do
-                    table.insert(notes, chord:sub(i, i))
-                end
+                notes = parseChord(token)
             else
-                table.insert(notes, token)
+                notes = { token }
             end
 
-            table.insert(events, {
-                Time = cursor,
-                Notes = notes,
-                Token = token,
-            })
+            if #notes > 0 then
+                table.insert(events, {
+                    Time = cursor,
+                    Notes = notes,
+                    Token = token,
+                    Index = #events + 1,
+                })
+            end
 
-            cursor += secondsPerStep
+            cursor += stepDuration
         end
     end
 
     return {
         BPM = bpm,
         StepsPerBeat = stepsPerBeat,
-        StepDuration = secondsPerStep,
+        StepDuration = stepDuration,
         Duration = cursor,
         Events = events,
     }

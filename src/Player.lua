@@ -1,5 +1,5 @@
--- Velora v0.1
--- Timeline-based playback engine.
+-- Velora v0.2
+-- Timeline playback with pause, seek, speed, looping, and state callbacks.
 
 local RunService = game:GetService("RunService")
 
@@ -17,9 +17,16 @@ function Player.new(adapter)
         Position = 0,
         Speed = 1,
         Loop = false,
+        OnStateChanged = nil,
         _connection = nil,
         _nextEvent = 1,
     }, Player)
+end
+
+function Player:_emit(reason)
+    if self.OnStateChanged then
+        self.OnStateChanged(reason, self)
+    end
 end
 
 function Player:Load(timeline)
@@ -27,23 +34,53 @@ function Player:Load(timeline)
     self.Timeline = timeline
     self.Position = 0
     self._nextEvent = 1
+    self:_emit("loaded")
 end
 
 function Player:SetSpeed(speed)
-    self.Speed = math.clamp(tonumber(speed) or 1, 0.25, 4)
+    self.Speed = math.clamp(tonumber(speed) or 1, 0.5, 2)
+    self:_emit("speed")
+    return self.Speed
 end
 
 function Player:SetLoop(enabled)
     self.Loop = enabled == true
+    self:_emit("loop")
+end
+
+function Player:Seek(progress)
+    if not self.Timeline then
+        return
+    end
+
+    progress = math.clamp(tonumber(progress) or 0, 0, 1)
+    self.Position = self.Timeline.Duration * progress
+    self._nextEvent = 1
+
+    while self._nextEvent <= #self.Timeline.Events
+        and self.Timeline.Events[self._nextEvent].Time < self.Position do
+        self._nextEvent += 1
+    end
+
+    self:_emit("seek")
 end
 
 function Player:Play()
-    if not self.Timeline or self.Playing then
-        return
+    if not self.Timeline or #self.Timeline.Events == 0 then
+        return false
+    end
+
+    if self.Playing then
+        if self.Paused then
+            self.Paused = false
+            self:_emit("resumed")
+        end
+        return true
     end
 
     self.Playing = true
     self.Paused = false
+    self:_emit("playing")
 
     self._connection = RunService.Heartbeat:Connect(function(dt)
         if self.Paused then
@@ -65,16 +102,21 @@ function Player:Play()
             if self.Loop then
                 self.Position = 0
                 self._nextEvent = 1
+                self:_emit("looped")
             else
                 self:Stop()
+                self:_emit("finished")
             end
         end
     end)
+
+    return true
 end
 
 function Player:Pause()
     if self.Playing then
         self.Paused = not self.Paused
+        self:_emit(self.Paused and "paused" or "resumed")
     end
 end
 
@@ -84,10 +126,15 @@ function Player:Stop()
         self._connection = nil
     end
 
+    local changed = self.Playing or self.Paused or self.Position > 0
     self.Playing = false
     self.Paused = false
     self.Position = 0
     self._nextEvent = 1
+
+    if changed then
+        self:_emit("stopped")
+    end
 end
 
 function Player:GetProgress()
@@ -95,6 +142,15 @@ function Player:GetProgress()
         return 0
     end
     return math.clamp(self.Position / self.Timeline.Duration, 0, 1)
+end
+
+function Player:GetState()
+    if self.Paused then
+        return "Paused"
+    elseif self.Playing then
+        return "Playing"
+    end
+    return "Ready"
 end
 
 return Player
