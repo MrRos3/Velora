@@ -1,7 +1,7 @@
--- Velora public compatibility loader.
+-- Velora 0.9.0 Pulse public compatibility loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/588b972d48ef133dbe112daa261b22ecdab7ee67/release-089.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@588b972d48ef133dbe112daa261b22ecdab7ee67/release-089.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/c2688bdd5e290a4e962b11b39fcdffc70e2e4478/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@c2688bdd5e290a4e962b11b39fcdffc70e2e4478/release.lua",
 }
 
 local function fail(reason)
@@ -48,4 +48,3 @@ if not started then
 end
 
 return result
-
