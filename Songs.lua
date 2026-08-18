@@ -1,4 +1,4 @@
--- Velora 0.8.0 Encore — complete MIDI-derived arrangements.
+-- Velora 0.8.1 Encore — complete MIDI-derived arrangements.
 return {
     {Id="mountain-king",Name="In the Hall of the Mountain King",Artist="Edvard Grieg",BPM=138,Categories={"Famous","TikTok Classics","Classical","Dramatic","Complete"},File="songs/MountainKing.lua"},
     {Id="eine-kleine-nachtmusik",Name="Eine kleine Nachtmusik — Allegro",Artist="W. A. Mozart",BPM=144,Categories={"Famous","TikTok Classics","Classical","Upbeat","Complete"},File="songs/EineKleineNachtmusik.lua"},
