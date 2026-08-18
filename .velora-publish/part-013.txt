@@ -1,0 +1,97 @@
+ui.Keyboard = keyboard
+
+local keyLayout = create("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal,
+    HorizontalAlignment = Enum.HorizontalAlignment.Center,
+    VerticalAlignment = Enum.VerticalAlignment.Bottom,
+    Padding = UDim.new(0, 3),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+}, keyboard)
+ui.KeyLayout = keyLayout
+
+local visualKeys = { "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'" }
+for index, keyName in ipairs(visualKeys) do
+    local key = create("Frame", {
+        Name = "Key_" .. keyName,
+        Size = UDim2.new(1 / #visualKeys, -3, 1, 0),
+        BackgroundColor3 = C.Text,
+        BackgroundTransparency = 0.06,
+        BorderSizePixel = 0,
+        LayoutOrder = index,
+    }, keyboard)
+    corner(key, 5)
+
+    local keyLabel = text(key, string.upper(keyName), 7, C.Window, Enum.Font.GothamBold, Enum.TextXAlignment.Center)
+    keyLabel.AnchorPoint = Vector2.new(0.5, 1)
+    keyLabel.Position = UDim2.new(0.5, 0, 1, -4)
+    keyLabel.Size = UDim2.new(1, 0, 0, 12)
+
+    ui.PianoKeys[string.lower(keyName)] = key
+end
+
+local trackName = text(playerPanel, "Nothing selected", 16, C.Text, Enum.Font.GothamBold)
+trackName.Position = UDim2.fromOffset(16, 168)
+trackName.Size = UDim2.new(1, -32, 0, 24)
+ui.TrackName = trackName
+
+local trackMeta = text(playerPanel, "Choose a song from the library", 9, C.Muted, Enum.Font.GothamMedium)
+trackMeta.Position = UDim2.fromOffset(16, 192)
+trackMeta.Size = UDim2.new(1, -32, 0, 18)
+ui.TrackMeta = trackMeta
+
+local progressHit = create("TextButton", {
+    Position = UDim2.fromOffset(16, 222),
+    Size = UDim2.new(1, -32, 0, 22),
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Text = "",
+    AutoButtonColor = false,
+}, playerPanel)
+ui.ProgressHit = progressHit
+
+local progressBack = create("Frame", {
+    AnchorPoint = Vector2.new(0, 0.5),
+    Position = UDim2.new(0, 0, 0.5, 0),
+    Size = UDim2.new(1, 0, 0, 4),
+    BackgroundColor3 = C.Raised,
+    BackgroundTransparency = 0.08,
+    BorderSizePixel = 0,
+}, progressHit)
+corner(progressBack, 4)
+ui.ProgressBack = progressBack
+
+local progressFill = create("Frame", {
+    Size = UDim2.new(0, 0, 1, 0),
+    BackgroundColor3 = CONFIG.Accent,
+    BorderSizePixel = 0,
+}, progressBack)
+corner(progressFill, 4)
+ui.ProgressFill = progressFill
+
+local progressThumb = create("Frame", {
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.new(0, 0, 0.5, 0),
+    Size = UDim2.fromOffset(9, 9),
+    BackgroundColor3 = C.Text,
+    BorderSizePixel = 0,
+}, progressBack)
+corner(progressThumb, 7)
+ui.ProgressThumb = progressThumb
+
+local timeLeft = text(playerPanel, "0:00", 8, C.Muted, Enum.Font.GothamMedium)
+timeLeft.Position = UDim2.fromOffset(16, 244)
+timeLeft.Size = UDim2.fromOffset(50, 14)
+ui.TimeLeft = timeLeft
+
+local timeRight = text(playerPanel, "0:00", 8, C.Muted, Enum.Font.GothamMedium, Enum.TextXAlignment.Right)
+timeRight.AnchorPoint = Vector2.new(1, 0)
+timeRight.Position = UDim2.new(1, -16, 0, 244)
+timeRight.Size = UDim2.fromOffset(50, 14)
+ui.TimeRight = timeRight
+
+local controls = create("Frame", {
+    Position = UDim2.fromOffset(16, 268),
+    Size = UDim2.new(1, -32, 0, 52),
+    BackgroundTransparency = 1,
+}, playerPanel)
+ui.Controls
