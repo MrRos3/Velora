@@ -1,19 +1,20 @@
 # Velora — Encore 🥀
 
-Velora v0.8.8 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
+Velora v0.8.9 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
 
 ## Run the cache-breaking release
 
 ```lua
 loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-088.lua?boot=088",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-089.lua?boot=089",
     true
 ))()
 ```
 
-## Encore 0.8.8
+## Encore 0.8.9
 
 - Clean Builder Sans typography across the entire interface, with larger navigation labels
+- New additions are placed first so they are visible without scrolling
 - 21 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
 - The complete 21-song registry is embedded as an offline fallback, preventing missing cards when a registry request is cached
 - New: Anlatamam (Kara Sevda OST), converted from the complete owner-supplied MIDI
