@@ -5,7 +5,7 @@ Velora v0.3.2 **Nocturne** is a compact standalone Roblox piano workstation with
 ## Run
 
 ```lua
-loadstring(game:HttpGet("https://raw.githubusercontent.com/MrRos3/Velora/main/loader.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/MrRos3/Velora/main/boot-032.lua"))()
 ```
 
 Press **Right Shift** to hide or restore the interface.
@@ -29,6 +29,11 @@ Velora:BindPiano(function(note)
 end)
 ```
 
-The release files are intentionally small: `latest.lua`, `loader.lua`, `Songs.lua`, and `songs/`.
+The release files are intentionally small: `latest.lua`, `boot-032.lua`, `Songs.lua`, and `songs/`.
 
 Velora is independently implemented and contains no TALENTLESS source or assets.
+
+
+## Cached executors
+
+Version 0.3.2 uses unique release filenames so executors cannot reuse the former dashboard from `latest.lua`.
