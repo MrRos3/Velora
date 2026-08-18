@@ -1,12 +1,16 @@
--- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
 -- Source: https://www.mutopiaproject.org/ftp/BeethovenLv/O27/moonlight-guitar-duo/moonlight-guitar-duo.mid
+-- Edition license: Public Domain
 return {
     Id="moonlight-sonata",
-    Name="Moonlight Sonata",
+    Name="Moonlight Sonata — Adagio",
     Artist="L. van Beethoven",
-    BPM=74,
+    BPM=60,
     StepsPerBeat=12,
-    Categories={"TikTok Classics","Classical","Dark","Advanced"},
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/BeethovenLv/O27/moonlight-guitar-duo/moonlight-guitar-duo.mid",
+    SourceLicense="Public Domain",
+    Categories={"Famous","Classical","Dark","Complete"},
     Notes=[=[
 [9e] - - - | y - - - | i - - - | e - - -
 y - - - | i - - - | e - - - | y - - -
@@ -127,6 +131,91 @@ e - - - | w - - - | ( - - - | w - - -
 E - - - | 9 - - - | w - - - | E - - -
 [6*] - - - | w - - - | e - - - | E - - -
 e - - - | w - - - | [^9] - - - | q - - -
-y - - - | 9 - - - | q - - - | y
+y - - - | 9 - - - | q - - - | y - - -
+[50] - - - | E - - - | y - - - | 0 - - -
+E - - - | y - - - | [60] - - - | e - - -
+T - - - | 0 - - - | e - - - | T - - -
+[2q] - - - | e - - - | y - - - | e - - -
+y - - - | i - - - | e - - - | y - - -
+i - - - | [9e] - - - | y - - - | i e - -
+[*e] - - - | u - - - | o - - - | e - - -
+u - - - | o - - - | e - - - | u - - -
+o - - - | [*e] - - - | u - - - | o e - -
+[2e] - - - | y - - - | i - - - | e - - -
+y - - - | i - - - | [5E] - - - | y - - -
+o - - - | E - - - | y - - - | o - - -
+[8e] - - - | t - - - | i - - - | e - - -
+t - - - | i - - - | [8w] - - - | E - - -
+u - - - | [0t] - - - | u - - - | P - - -
+[4qt] - - - | i - - - | p - - - | t - - -
+i - - - | p - - - | t - - - | i - - -
+p - - - | [qt] - - - | i - - - | p t - -
+[0t] - - - | o - - - | P - - - | t - - -
+o - - - | P - - - | t - - - | o - - -
+P - - - | [0t] - - - | o - - - | P t - -
+[qt] - - - | i - - - | p - - - | t - - -
+i - - - | p - - - | [0T] - - - | o - - -
+p - - - | [9y] - - - | i - - - | p - - -
+[*u] - - - | o - - - | p - - - | u - - -
+o - - - | p - - - | [9i] - - - | p - - -
+d - - - | i - - - | p - - - | d - - -
+[5Y] - - - | o - - - | P - - - | Y - - -
+o - - - | P - - - | [6T] - - - | o - - -
+p - - - | T - - - | o - - - | p - - -
+[2y] - - - | i - - - | p - - - | y - - -
+i - - - | p - - - | y - - - | I - - -
+p - - - | [9y] - - - | I - - - | p - - -
+[9Y] - - - | o - - - | P - - - | [wY] - - -
+o - - - | P - - - | [EY] - - - | o - - -
+P - - - | [wT] - - - | o - - - | P - - -
+[2y] - - - | I - - - | p - - - | y - - -
+I - - - | p - - - | y - - - | I - - -
+p - - - | [9y] - - - | I - - - | p - - -
+[9Y] - - - | o - - - | P - - - | [wY] - - -
+o - - - | P - - - | [EY] - - - | o - - -
+P - - - | [wT] - - - | o - - - | P - - -
+[9y] - - - | I - - - | p - - - | y - - -
+I - - - | p - - - | [5y] - - - | o - - -
+P - - - | y - - - | o - - - | P - - -
+[0t] - - - | o - - - | P - - - | t - - -
+o - - - | P - - - | t - - - | o - - -
+P - - - | [qt] - - - | i - - - | p - - -
+[9E] - - - | i - - - | p - - - | [0E] - - -
+u - - - | o - - - | [*e] - - - | u - - -
+o - - - | [9e] - - - | y - - - | i - - -
+[^w] - - - | y - - - | u - - - | w - - -
+y - - - | u - - - | [6e] - - - | y - - -
+u - - - | [5E] - - - | y - - - | u - - -
+[6e] - - - | y - - - | i - - - | e - - -
+y - - - | i - - - | [6we] - - - | T - - -
+u - - - | w - - - | T - - - | u - - -
+[29q] - - - | e - - - | y - - - | e - - -
+y - - - | i - - - | e - - - | y - - -
+i - - - | [6e] - - - | y - - - | i 6 - -
+[6*e] - - - | u - - - | o - - - | e - - -
+u - - - | o - - - | e - - - | u - - -
+o - - - | [6e] - - - | u - - - | o 6 - -
+[26e] - - - | i - - - | y - - - | p - - -
+i - - - | d - - - | p - - - | g - - -
+d - - - | [6j] - - - | g - - - | d 6 - -
+[6S] - - - | f - - - | P - - - | S - - -
+o - - - | P - - - | u - - - | o - - -
+E - - - | [6T] - - - | e - - - | w 6 - -
+[26e] - - - | i - - - | y - - - | p - - -
+i - - - | d - - - | p - - - | g - - -
+d - - - | [6j] - - - | g - - - | d 6 - -
+[6S] - - - | f - - - | P - - - | S - - -
+o - - - | P - - - | u - - - | o - - -
+E - - - | [6T] - - - | e - - - | w 6 - -
+[2qy] - - - | e - - - | y - - - | i - - -
+y - - - | e - - - | 9 - - - | q - - -
+e - - - | y - - - | e - - - | q - - -
+6 - - - | 9 - - - | q - - - | e - - -
+q - - - | 9 - - - | 6 - - - | 9 - - -
+6 - - - | 4 - - - | 6 - - - | 4 - - -
+2 - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | [269qey] - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+[269qey]
 ]=],
 }
