@@ -1,5 +1,5 @@
--- Velora v0.2 song registry.
--- Add one entry here for every ModuleScript inside songs/.
+-- Velora v0.3.1 song registry.
+-- Add one entry for every standalone song file in songs/.
 
 return {
     {
