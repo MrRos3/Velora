@@ -1,0 +1,106 @@
+kness, color)
+    return create("UIStroke", {
+        Color = color or C.Edge,
+        Transparency = transparency == nil and 0.82 or transparency,
+        Thickness = thickness or 1,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+    }, parent)
+end
+
+local function gradient(parent, first, second, rotation)
+    return create("UIGradient", {
+        Color = ColorSequence.new(first, second),
+        Rotation = rotation or 0,
+    }, parent)
+end
+
+local function padding(parent, left, right, top, bottom)
+    return create("UIPadding", {
+        PaddingLeft = UDim.new(0, left or 0),
+        PaddingRight = UDim.new(0, right or left or 0),
+        PaddingTop = UDim.new(0, top or 0),
+        PaddingBottom = UDim.new(0, bottom or top or 0),
+    }, parent)
+end
+
+local function tween(target, duration, properties, style, direction)
+    if not target or not target.Parent then
+        return nil
+    end
+    local motion = TweenService:Create(
+        target,
+        TweenInfo.new(
+            duration or 0.14,
+            style or Enum.EasingStyle.Quint,
+            direction or Enum.EasingDirection.Out
+        ),
+        properties
+    )
+    motion:Play()
+    return motion
+end
+
+local function text(parent, value, size, color, font, alignment)
+    return create("TextLabel", {
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        Text = value or "",
+        TextColor3 = color or C.Text,
+        TextSize = size or 12,
+        Font = font or Enum.Font.Gotham,
+        TextXAlignment = alignment or Enum.TextXAlignment.Left,
+        TextYAlignment = Enum.TextYAlignment.Center,
+    }, parent)
+end
+
+local function icon(parent, name, size, color, fallback)
+    local holder = create("Frame", {
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        Size = UDim2.fromOffset(size, size),
+    }, parent)
+
+    local asset = Icons[name]
+    if asset then
+        local image = create("ImageLabel", {
+            BackgroundTransparency = 1,
+            BorderSizePixel = 0,
+            Size = UDim2.fromScale(1, 1),
+            Image = asset,
+            ImageColor3 = color or C.Text,
+            ScaleType = Enum.ScaleType.Fit,
+        }, holder)
+        image:SetAttribute("LucideName", name)
+        holder:SetAttribute("IconType", "image")
+        holder:SetAttribute("IconName", name)
+        return holder, image
+    end
+
+    local label = text(holder, fallback or "•", math.max(10, size - 1), color or C.Text, Enum.Font.GothamBold, Enum.TextXAlignment.Center)
+    label.Size = UDim2.fromScale(1, 1)
+    holder:SetAttribute("IconType", "text")
+    holder:SetAttribute("IconName", name)
+    return holder, label
+end
+
+local function recolorIcon(holder, color)
+    if not holder then
+        return
+    end
+    local child = holder:FindFirstChildWhichIsA("ImageLabel") or holder:FindFirstChildWhichIsA("TextLabel")
+    if child then
+        if child:IsA("ImageLabel") then
+            child.ImageColor3 = color
+        else
+            child.TextColor3 = color
+        end
+    end
+end
+
+local function playUiSound(id, volume)
+    if not CONFIG.UiSounds then
+        return
+    end
+    pcall(function()
+        local sound = Instance.new("Sound")
+        sound
