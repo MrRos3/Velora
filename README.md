@@ -1,6 +1,6 @@
 # Velora — Pulse 🥀
 
-Velora v0.9.0 **Pulse** is a rounded Roblox piano workstation with a responsive glowing interface, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.9.1 **Pulse** is a rounded Roblox piano workstation with a responsive glowing interface, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,10 +18,14 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Pulse 0.9.0
+## Pulse 0.9.1
 
-- Rounded multicolor accent border with no thick shadow or sharp wedges
-- Palette colors now update the window, header, border glow, cards, controls, and icons together
+- The outer window glow is removed and replaced by soft luminous borders on internal panels and controls
+- Selected and currently playing songs have distinct palette-aware glows
+- Search, artwork, play, and Reset BPM controls brighten on focus or hover
+- Brighter secondary text, larger labels, and clearer font weights improve readability
+- The panel beneath the tempo arrows is now a one-click Reset BPM control
+- Palette colors update the window, internal glows, cards, controls, and icons together
 - Faster 0.12-second interaction motion with stale tween cancellation
 - Clicks and selections render immediately
 - Playback progress is capped at a smooth 30 FPS to reduce unnecessary UI work
