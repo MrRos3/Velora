@@ -15,5 +15,5 @@ return {
     {Id="fantaisie-impromptu",Name="Fantaisie-Impromptu",Artist="Frédéric Chopin",BPM=168,Categories={"Famous","Classical","Virtuoso","Complete"},File="songs/FantaisieImpromptu.lua"},
     {Id="pathetique-adagio",Name="Pathétique — Adagio Cantabile",Artist="L. van Beethoven",BPM=36,Categories={"Famous","Classical","Emotional","Complete"},File="songs/PathetiqueAdagio.lua"},
     {Id="mozart-k545-allegro",Name="Piano Sonata K.545 — Allegro",Artist="W. A. Mozart",BPM=132,Categories={"Famous","Classical","Upbeat","Complete"},File="songs/MozartSonataK545.lua"},
-    {Id="ode-to-joy",Name="Ode to Joy",Artist="L. van Beethoven",BPM=100,Categories={"Famous","Classical","Starter","Complete"},
+    {Id="ode-to-joy",Name="Ode to Joy",Artist="L. van Beethoven",BPM=100,Categories={"Famous","Classical","Starter","Complete"},File="songs/OdeToJoy.lua"}
 }
