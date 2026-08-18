@@ -1,0 +1,185 @@
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
+-- Source: https://www.mutopiaproject.org/ftp/PachelbelJ/Canon_per_3_Violini_e_Basso/Canon_per_3_Violini_e_Basso-mids.zip
+-- Edition license: CC BY 4.0 — typeset by Michael Fischer v. Mollard
+return {
+    Id="canon-in-d",
+    Name="Canon in D",
+    Artist="Johann Pachelbel",
+    BPM=55,
+    StepsPerBeat=12,
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/PachelbelJ/Canon_per_3_Violini_e_Basso/Canon_per_3_Violini_e_Basso-mids.zip",
+    SourceLicense="CC BY 4.0 — typeset by Michael Fischer v. Mollard",
+    Categories={"Famous","Classical","Wedding","Complete"},
+    Notes=[=[
+9 - - - | - - - - | - - - - | 6 - - -
+- - - - | - - - - | 7 - - - | - - - -
+- - - - | $ - - - | - - - - | - - - -
+5 - - - | - - - - | - - - - | 2 - - -
+- - - - | - - - - | 5 - - - | - - - -
+- - - - | 6 - - - | - - - - | - - - -
+[9G] - - - | - - - - | - - - - | [6f] - - -
+- - - - | - - - - | [7d] - - - | - - - -
+- - - - | [$S] - - - | - - - - | - - - -
+[5a] - - - | - - - - | - - - - | [2p] - - -
+- - - - | - - - - | [5a] - - - | - - - -
+- - - - | [6S] - - - | - - - - | - - - -
+[9dG] - - - | - - - - | - - - - | [6Sf] - - -
+- - - - | - - - - | [7ad] - - - | - - - -
+- - - - | [$pS] - - - | - - - - | - - - -
+[5oa] - - - | - - - - | - - - - | [2Ip] - - -
+- - - - | - - - - | [5oa] - - - | - - - -
+- - - - | [6uS] - - - | - - - - | - - - -
+[9ydG] - - - | - - I - | - - - - | [6pSf] - - -
+- - o - | - - - - | [7Iad] - - - | - - y -
+- - - - | [$IpS] - - - | - - u - | - - - -
+[5yoa] - - - | - - r - | - - - - | [2yIp] - - -
+- - p - | - - - - | [5oa] - - - | - - a -
+- - - - | [6upS] - - - | - - o - | - - - -
+[9yId] - - - | - - [yI] - | - - - - | [6upS] - - -
+- - [oS] - | - - - - | [7Iad] - - - | - - [yG] -
+- - - - | [$Ipj] - - - | - - [up] - | - - - -
+[5yoa] - - - | - - [ro] - | - - - - | [2yIp] - - -
+- - [Ip] - | - - - - | [5yo] - - - | - - [ad] -
+- - - - | [6upd] - - - | - - o - | - S - -
+[9yId] - - S | - - [yId] - | - y - - | [6Tup] - - p
+- - [uoS] - | - I - - | [7yId] - - d | - - [ySG] -
+- a - - | [$ISj] - - G | - - [upj] - | - k - -
+[5yah] - - G | - - [rof] - | - h - - | [2ypG] - - f
+- - [Ipd] - | - S - - | [5yoa] - - p | - - [oad] -
+- I - - | [6upd] - - o | - - [Io] - | - [uS] - -
+[9yId] - - [uS] | - - [yId] - | - [yo] - - | [6Tup] - - [up]
+- - [upS] - | - [Io] - - | [7yId] - - [ad] | - - [pSG] -
+- [oa] - - | [$pSj] - - [oG] | - - [Ipj] - | - [uk] - -
+[5yah] - - [rG] | - - [oaf] - | - [Sh] - - | [2pdG] - - [Sf]
+- - [Iad] - | - [pS] - - | [5yoa] - - [Ip] | - - [uod] -
+- [Ia] - - | [6upd] - - [oa] | - - [Ip] - | - [uoS] - -
+[9yId] - - [uS] | - - [IdG] - | - [yo] - - | [6Tpf] - - [up]
+- - [up] - | - [Io] - - | [7yI] - - [ad] | - - [pSd] -
+- [oa] - - | [$pSG] - - [oG] | - - [Ij] - | - [uk] - -
+[5yhk] - - [rG] | - - [af] - | - [Sh] - - | [2dGj] - - [Sf]
+- - [ad] - | - [pS] - - | [5oak] - - [Ip] | - - [uo] -
+- [Ia] - - | [6upL] - - [oa] | - - [Ip] - | - [uo] - -
+[9yIz] - - u | - - [IdG] - | - o - - | [6pSf] - - u
+- - p - | - o - - | [7I] - - a | - - [pad] -
+- o - - | [$pdG] - - o | - - I - | - u - -
+[5ydk] - - r | - - a - | - S - - | [2dj] - - S
+- - [ad] - | - p - - | [5odk] - - I | - - [uh] -
+- a - - | [6pfL] - - a | - - [pj] - | - o - -
+[9Ijz] - - G | h - [dGj] - | - G h - | [6Sfj] - p a
+S - d - | f G h - | [7G] - - d | f - [adG] -
+- I o - | [$pdG] - a p | o - p - | I o p -
+[5odk] - - a | p - o - | - I u - | [2Ij] - u y
+u - [Id] - | o p a - | [5odk] - - a | p - [ah] -
+- S d - | [6pfL] - a S | d - [fj] - | G h j -
+[9Gjz] - - [dG] | [fh] - [dGj] - | - [fG] [dh] - | [6Sfj] - [pS] [ad]
+[Sf] - [dG] - | f [dG] [Sh] - | [7dG] - - [ad] | [Sf] - [adG] -
+- [yI] [uo] - | [$Ipd] - [oa] [Ip] | [uo] - [Ip] - | [Id] [oS] [pd] -
+[5oad] - - [ad] | [pS] - [oa] - | - [Ip] [uo] - | [2Ip] - [uo] [yI]
+[uo] - [Ipd] - | [oa] [pS] [ad] - | [5oad] - - [ad] | [pS] - [adh] -
+- S [ad] - | [6pSf] - [ad] [Sf] | d - [Sfj] - | [dG] [ah] [Sj] -
+[9dGj] - - [dG] | [fh] - [Gj] - | - [fG] [dh] - | [6Sfj] - [pS] [ad]
+[Sf] - [dG] - | f [dG] [Sh] - | [7adG] - - [ad] | [Sf] - [dG] -
+- [yI] [uo] - | [$Ipd] - [oa] [Ip] | [uo] - [Ip] - | [Id] [oS] [pd] -
+[5yoa] - - [ad] | [pS] - [oa] - | - [Ip] [uo] - | [2yIp] - [uo] [yI]
+[uo] - [Ip] - | [oa] [pS] [ad] - | [5yoa] - - [ad] | [pS] - [ad] -
+- S [ad] - | [6upS] - [ad] [Sf] | d - [Sf] - | [dG] [ah] [Sj] -
+[9dG] - - d | f - [pG] - | - f d - | [6Sf] - S d
+f - [pG] - | f d S - | [7ad] - - a | S - [Id] -
+- y u - | [$Id] - o I | u - [Ip] - | d S d -
+[5ya] - - d | S - [oa] - | - p o - | [2yp] - o I
+o - [Ip] - | a S d - | [5ya] - - d | S - [od] -
+- S a - | [6uS] - d f | d - [Sf] - | d a S -
+[9dG] - - I | - - [op] - | - I - - | [6uS] - - f
+- - [pG] - | - f - - | [7ad] - - I | - - [yI] -
+- a - - | [$pd] - - e | - - [wp] - | - e - -
+[5ry] - - a | - - [oS] - | - a - - | [2yp] - - e
+- - [wI] - | - e - - | [5ry] - - a | - - [op] -
+- a - - | [6uS] - - T | - - [rf] - | - T - -
+[9yG] - - [Id] | - - [opf] - | - [Id] - - | [6uS] - - [Tf]
+- - [ypG] - | - [Tf] - - | [7rd] - - [Ia] | - - [yIp] -
+- a - - | [$pS] - - [eT] | - - [wIp] - | - [eu] - -
+[5ry] - - [ad] | - - [oSf] - | - [ah] - - | [2pG] - - [eI]
+- - [wIp] - | - [eG] - - | [5rd] - - [ah] | - - [opG] -
+- [ah] - - | [6Sf] - - [Tp] | - - [rof] - | - [Tp] - -
+[9yIG] - - [Ipd] | - - [opf] - | - [Ipd] - - | [6upS] - - [Tpf]
+- - [ypG] - | - [Tpf] - - | [7rId] - - [Ia] | - - [yIp] -
+- [Ia] - - | [$IpS] - - [eTI] | - - [wIp] - | - [eup] - -
+[5ryo] - - [oad] | - - [oSf] - | - [adh] - - | [2pdG] - - [eId]
+- - [wpd] - | - [edG] - - | [5rd] - - [adh] | - - [paG] -
+- [ah] - - | [6pSf] - - [Tp] | - - [rof] - | - [TpS] - -
+[9yIp] - - [pdG] | - - [pfG] - | - [pdG] - - | [6pSf] - - [Tpf]
+- - [ypf] - | - [Tpf] - - | [7rId] - - [Iad] | - - [Ipd] -
+- [Iad] - - | [$ISj] - - [TIj] | - - [Ipj] - | - [upj] - -
+[5yok] - - [odk] | - - [ofk] - | - [dhk] - - | [2dGj] - - [Idj]
+- - [pdj] - | - [dGj] - - | [5dk] - - [dhk] | - - [aGk] -
+- [ahk] - - | [6pfL] - - [pS] | - - [oSf] - | - [pS] - -
+[9Ipd] - - [ypG] | u - [IpG] - | - [ypG] - - | [6Tpf] - - [pSf]
+d - [pf] - | - [pSf] - - | [7Iad] - - [rId] | T - [yId] -
+- [rId] - - | [$TIj] - - [Ipj] | o - [Ipj] - | - [upj] - -
+[5yok] - - [ok] | I - [uok] - | - [odk] - - | [2Idj] - - [ydj]
+u - [Idj] - | - [pdj] - - | [5odk] - - [adk] | p - [oak] -
+- [Iak] - - | [6upL] - - [pS] | o - [ISf] - | - [uS] - -
+[9Ipd] - - [ydG] | [uS] - [IdG] - | - [yIG] - - | [6Tpf] - - [pSf]
+[ad] - [Sf] - | - [pSf] - - | [7Iad] - - [rd] | [Tf] - [ydG] -
+- [rd] - - | [$TGj] - - [pGj] | [of] - [Idj] - | - [uSj] - -
+[5yak] - - [oak] | [Ip] - [uak] - | - [oSk] - - | [2Idj] - - [yGj]
+[uf] - [Idj] - | - [pGj] - - | [5ohk] - - [adk] | [pS] - [oak] -
+- [Iak] - - | [6upL] - - [upS] | o - [IpS] - | - [upS] - -
+[9Ipd] - - [yd] | [uS] - [Id] - | - [yI] - - | [6Tp] - - [pS]
+[ad] - [pSf] - | - [pS] - - | [7yIa] - - [rd] | [Tf] - [yG] -
+- [rd] - - | [$TG] - - [pG] | [of] - [Ipd] - | - [uS] - -
+[5yoa] - - [oa] | [Ip] - [ua] - | - [oS] - - | [2Ipd] - - [yG]
+[uf] - [Id] - | - [pG] - - | [5oh] - - [ad] | [pS] - [yoa] -
+- [Ia] - - | [6yup] - - [up] | o - [Ip] - | - [Tup] - -
+[9yIp] - - d | S - d - | - I - - | [6pS] - - p
+a - [pS] - | - p - - | [7yIa] - - d | f - G -
+- d - - | [$pG] - - G | f - [pd] - | - S - -
+[5yoa] - - a | p - a - | - [uS] - - | [2Ipd] - - G
+f - d - | - G - - | [5oah] - - d | S - [ya] -
+- a - - | [6yup] - - u | - - p - | - [Tup] - -
+[9yIp] - - - | - - d - | - G - - | [6SG] - - h
+- - [pG] - | - f - - | [7yad] - - - | - - - -
+- d - - | [$pd] - - f | - - [pd] - | - S - -
+[5yoa] - - - | - - - - | - u - - | [2Ipd] - - -
+- - - - | - - - - | [5oad] - - s | - - [ya] -
+- s - - | [6yup] - - - | - - - - | - [Tup] - -
+[9yIp] - - - | - - d - | - [Gj] - - | [6SGj] - - [hk]
+- - [Gj] - | - [fh] - - | [7adG] - - - | - - - -
+- [dG] - - | [$pdG] - - [fh] | - - [dG] - | - [Sf] - -
+[5yad] - - s | - - a - | - [us] - - | [2Ipd] - - -
+- - - - | - p - - | [5oad] - - s | - - [ad] -
+- s - - | [6upS] - - - | - - - - | - [upS] - -
+[9Ipd] - - - | - - d - | - [Gj] - - | [6Gj] - - [hk]
+- - [SGj] - | - [fh] - - | [7dG] - - - | - - a -
+- [dG] - - | [$dG] - - [fh] | - - [pdG] - | - [Sf] - -
+[5ad] - - s | - - [oa] - | - s - - | [2pd] - - -
+- - I - | - p - - | [5od] - - s | - - [ad] -
+- [us] - - | [6upS] - - - | - - - - | - [pS] - -
+[9Ipd] - - - | - - [dG] - | - j - - | [6j] - - k
+- - [Sfj] - | - h - - | [7dG] - - - | - - [az] -
+- G - - | [$G] - - h | - - [pGl] - | - f - -
+[5dk] - - s | - - [oa] - | - s - - | [2pz] - - -
+- - [Ij] - | - p - - | [5ok] - - - | - - d -
+- u - - | [6uSj] - - - | - - - - | - S - -
+[9Idj] - - - | - - [dG] - | - - - - | [6p] - - -
+- - [Sf] - | - o - - | [7Id] - - - | - - [az] -
+- - - - | [$G] - - - | - - [pl] - | - f - -
+[5dk] - - - | - - o - | - - - - | [2z] - - -
+- - [Idj] - | - - - - | [5dk] - - - | - - - -
+- u - - | [6uSj] - - - | - - - - | - - - -
+[9Idj] - - - | - - [yG] - | - - - - | [6Tp] - - -
+- - [Sf] - | - o - - | [7Iad] - - - | - - [rz] -
+- - - - | [$eG] - - - | - - [pl] - | - f - -
+[5odk] - - - | - - h - | - - - - | [2Gz] - - -
+- - [Idj] - | - - - - | [5udk] - - - | - - a -
+- - - - | [6uSj] - - - | - - f - | - - - -
+[9dGj] - - - | - - [yI] - | - - - - | [6Tup] - - -
+- - [Sf] - | - o - - | [7Iad] - - - | - - [ry] -
+- - - - | [$eTG] - - - | - - [pS] - | - f - -
+[5oad] - - - | - - [hk] - | - - - - | [2Gj] - - -
+- - [Ipd] - | - - - - | [5uod] - - - | - - a -
+- f - - | [6upS] - - - | - - [pf] - | - - - -
+[9pdG]
+]=],
+}
