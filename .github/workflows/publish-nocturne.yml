@@ -1,0 +1,54 @@
+name: Publish Velora Nocturne
+
+on:
+  push:
+    paths:
+      - '.github/workflows/publish-nocturne.yml'
+      - '.velora-publish/**'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Assemble Nocturne
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          parts=(.velora-publish/part-*.txt)
+
+          if [ "${#parts[@]}" -eq 0 ]; then
+            echo "No staging parts; nothing to do."
+            exit 0
+          fi
+
+          if [ "${#parts[@]}" -ne 22 ]; then
+            echo "Expected 22 parts, got ${#parts[@]}"
+            exit 1
+          fi
+
+          cat "${parts[@]}" > latest.lua
+          grep -q 'Velora v0.3.0 "Nocturne"' latest.lua
+          grep -q 'return API' latest.lua
+          rm -rf .velora-publish
+
+      - name: Commit published build
+        shell: bash
+        run: |
+          if git diff --quiet -- latest.lua .velora-publish; then
+            echo "Nothing to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A latest.lua .velora-publish
+          git commit -m "Publish Velora v0.3.0 Nocturne"
+          git push
