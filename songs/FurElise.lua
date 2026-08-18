@@ -1,12 +1,16 @@
--- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
 -- Source: https://www.mutopiaproject.org/ftp/BeethovenLv/WoO59/fur_Elise_WoO59/fur_Elise_WoO59.mid
+-- Edition license: Public Domain
 return {
     Id="fur-elise",
     Name="Für Elise",
     Artist="L. van Beethoven",
-    BPM=128,
+    BPM=72,
     StepsPerBeat=12,
-    Categories={"TikTok Classics","Classical","Advanced"},
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/BeethovenLv/WoO59/fur_Elise_WoO59/fur_Elise_WoO59.mid",
+    SourceLicense="Public Domain",
+    Categories={"Famous","Classical","Romantic","Complete"},
     Notes=[=[
 f - - D | - - f - | - D - - | f - - a
 - - d - | - s - - | [6p] - - 0 | - - e -
