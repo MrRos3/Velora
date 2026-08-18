@@ -1,67 +1,79 @@
 # Velora 🥀🎹
 
-Velora v0.2 is an original, modular Roblox piano player for experiences you own. It combines a dense TALENTLESS-style browsing workflow with Velora's own purple glass design and safe Studio architecture.
+**Velora v0.3.0 "Nocturne"** is an original Roblox piano workstation built around a polished song-library workflow, smooth playback controls, and a GitHub-backed song registry.
 
-## What's new in v0.2
+Velora is independently implemented. The TALENTLESS repository is source-available for study only and forbids derivative works, so Velora does **not** reuse or adapt TALENTLESS source code. We keep the broad product idea, then build Velora's own UI, engine, and identity.
 
-- Full three-panel GUI: categories, searchable song browser, and now-playing controls
-- Responsive desktop/mobile scaling, mouse/touch dragging, minimize/restore, and `RightShift` toggle
-- Live search across title, artist, and categories
-- Category filters and session favorites
-- Random song selection
-- Play, pause/resume, stop, loop, speed, editable BPM, progress, and click-to-seek
-- Playback status and clear preview/connected-piano state
-- Safer adapter errors and a more capable parser/player core
-- Two original demo songs so filters and favorites can be tested immediately
+## ✨ Nocturne UI
 
-Velora does not copy TALENTLESS source code and does not use executor-only file or input APIs.
+The new `latest.lua` is the premium standalone build:
 
-## Fastest way to run it
+- Three-zone interface: library navigation, searchable song browser, and now-playing workstation
+- Favorites, recents, queue, categories, live search, and random song selection
+- Smooth glass transitions with thin white borders and Velora violet/pink accents
+- Live piano-key visualizer that reacts to every played note
+- Play / pause / stop, seek, loop, shuffle, queue autoplay, speed, and editable BPM
+- Compact mini-player and `RightShift` hide/restore
+- Mouse + touch dragging and responsive viewport scaling
+- Lucide icons loaded from `MrRos3/Icons` with graceful text fallbacks
+- No decorative blobs/orbs
 
-1. Open `Standalone.client.lua` and copy the entire file.
-2. In Roblox Studio, open `StarterPlayer > StarterPlayerScripts`.
-3. Insert a **LocalScript**, rename it `Velora`, and paste the file into it.
-4. Press **Play**. The full v0.2 interface appears in `PlayerGui`.
-
-`Standalone.client.lua` bundles the UI, engine, registry, and included songs into one Studio-ready script. Do not run `Test.lua` to launch the GUI; it only checks the playback engine.
-
-## Studio setup
-
-Create this hierarchy in `StarterPlayer > StarterPlayerScripts`:
-
-```text
-Velora (Folder)
-├── Main (LocalScript)             <- Main.lua
-├── Songs (ModuleScript)           <- Songs.lua
-├── src (Folder)
-│   ├── Parser (ModuleScript)
-│   ├── PianoAdapter (ModuleScript)
-│   ├── Player (ModuleScript)
-│   └── UI (ModuleScript)
-└── songs (Folder)
-    ├── MoonlitKeys (ModuleScript)
-    └── VeloraDemo (ModuleScript)
-```
-
-Press **Play** in Studio. `Main` creates the full interface in `PlayerGui`. `Test.lua` is only the engine test harness; it is not the GUI launcher.
-
-If you use [Rojo](https://rojo.space/), `default.project.json` maps the repository into the correct hierarchy automatically.
-
-## Connect your own piano
-
-Velora starts in preview mode until your game binds a note callback. In `Main.lua`, after the controller is created, bind your own piano system:
+## 🚀 Execute the standalone build
 
 ```lua
-controller:BindPiano(function(note)
+loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/latest.lua"
+))()
+```
+
+Or use the guarded loader:
+
+```lua
+loadstring(game:HttpGet(
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/loader.lua"
+))()
+```
+
+After loading, the public API is available as:
+
+```lua
+local Velora = _G.Velora
+```
+
+and, where supported:
+
+```lua
+local Velora = getgenv().Velora
+```
+
+## 🎹 Piano output modes
+
+Velora chooses the best available client mode automatically:
+
+1. A callback supplied with `Velora:BindPiano(...)`
+2. Executor keyboard input when `keypress` / `keyrelease` are available
+3. Virtual input when available
+4. Preview mode when no input backend can be used
+
+To connect Velora to a piano system you own:
+
+```lua
+Velora:BindPiano(function(note)
     MyPiano:PlayNote(note)
 end)
 ```
 
-The callback is the only game-specific part. Keep validation and any authoritative gameplay on the server.
+You can toggle automatic keyboard input with:
 
-## Add your own song
+```lua
+Velora:SetAutoInput(true)
+```
 
-1. Create a ModuleScript in `songs/`, for example `MySong.lua`:
+## 🎼 Add songs from GitHub
+
+Each song remains its own Lua file under `songs/`.
+
+Example `songs/MySong.lua`:
 
 ```lua
 return {
@@ -79,7 +91,7 @@ return {
 }
 ```
 
-2. Add its card metadata to `Songs.lua`:
+Then add its metadata to `Songs.lua`:
 
 ```lua
 {
@@ -92,26 +104,73 @@ return {
 },
 ```
 
+The standalone build downloads the registry at startup and fetches a song file only when you select it, so adding songs does not require rebuilding `latest.lua`.
+
 ### Sheet syntax
 
-- `a s d f` — sequential notes
-- `[ad]` or `[a,d]` — chord; notes fire together
-- `-` or `_` — one timing-step rest
-- `|` — visual bar separator; ignored by playback
-- `BPM` + `StepsPerBeat` — timing controls
+- `a s d f` → sequential notes
+- `[ad]` → chord
+- `[a,d]` → chord with explicit separators
+- `-` or `_` → one timing-step rest
+- `|` → visual bar separator
+- uppercase letters are preserved for input backends that use shifted/high piano notes
+- `BPM` + `StepsPerBeat` control timing
 
-## Files
+## 🧩 Public API
 
-- `Main.lua` — controller and public API
-- `Songs.lua` — searchable song registry
-- `src/UI.lua` — complete v0.2 interface
-- `src/Parser.lua` — sheet parser
-- `src/Player.lua` — playback state engine
-- `src/PianoAdapter.lua` — safe piano bridge
-- `songs/` — individual song modules
-- `Test.lua` — Studio engine checks
+Useful methods include:
+
+```lua
+Velora:LoadSong("velora-demo", true)
+Velora:Play()
+Velora:Pause()
+Velora:Stop()
+Velora:Seek(0.5)
+Velora:SetSpeed(1.25)
+Velora:SetBPM(110)
+Velora:SetLoop(true)
+Velora:SetShuffle(true)
+Velora:ToggleFavorite("velora-demo")
+Velora:AddToQueue("moonlit-keys")
+Velora:RefreshLibrary()
+Velora:Show()
+Velora:Hide()
+Velora:Destroy()
+```
+
+You can also add a temporary song during a session:
+
+```lua
+Velora:AddRuntimeSong({
+    Id = "runtime-demo",
+    Name = "Runtime Demo",
+    Artist = "Velora",
+    BPM = 120,
+    Categories = { "Runtime" },
+}, {
+    BPM = 120,
+    StepsPerBeat = 2,
+    Notes = "a s d f | g h j k",
+})
+```
+
+## 🧱 Studio modular source
+
+The older modular Studio architecture is still kept in the repository:
+
+- `Main.lua`
+- `Songs.lua`
+- `src/Parser.lua`
+- `src/Player.lua`
+- `src/PianoAdapter.lua`
+- `src/UI.lua`
+- `songs/`
+- `Standalone.client.lua`
+
+`latest.lua` is the new v0.3 Nocturne standalone entrypoint. The modular source can be upgraded to the same UI in a later release without disturbing the standalone build.
 
 ## Roadmap
 
-- v0.3 — optional remote manifest for a GitHub-backed library
-- v0.4 — playlists, shuffle queue, recents, and transpose
+- v0.3.x: playlists, persistent favorites, import panel, transpose, and better mobile layout
+- v0.4: remote manifests, update channels, per-song artwork/themes, and plugin adapters
+- future: optional SaltyGlass integration and shared key/config infrastructure
