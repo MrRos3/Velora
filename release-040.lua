@@ -1243,7 +1243,7 @@ local function render()
     if snap.Entry then
         nowTitle.Text=snap.Entry.Name or "Untitled"
         nowMeta.Text=(snap.Entry.Artist or "Velora").."  •  "..tostring(math.floor(snap.BPM or 120)).." BPM"
-        bpm.Text=tostring(math.floor(snap.BPM or 120))
+        if not bpm:IsFocused() then bpm.Text=tostring(math.floor(snap.BPM or 120)) end
         favorite.Text=API:IsFavorite(snap.Entry.Id) and "♥" or "♡"
     end
     fill.Size=UDim2.new(snap.Progress,0,1,0)
