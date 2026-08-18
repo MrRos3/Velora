@@ -1,17 +1,132 @@
+-- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Source: https://www.mutopiaproject.org/ftp/BeethovenLv/O27/moonlight-guitar-duo/moonlight-guitar-duo.mid
 return {
- Id="moonlight-sonata",Name="Moonlight Sonata",Artist="L. van Beethoven",BPM=74,StepsPerBeat=3,Categories={"TikTok Classics","Classical","Dark","Advanced"},
- Notes=[[
-[qa] e t | [qa] e t | [ws] r y | [ws] r y
-[ed] t u | [ed] t u | [wf] r y | [wf] r y
-[qa] E t | [qa] E t | [ws] R y | [ws] R y
-[ed] T u | [ed] T u | [qg] e t | [qg] e t
-[ah] d f | [ah] d f | [sj] f g | [sj] f g
-[dk] g h | [dk] g h | [sl] f g | [sl] f g
-[qa] e T | [qa] e T | [wS] r Y | [wS] r Y
-[eD] t U | [eD] t U | [qF] e T | [qF] e T
-[Q!] E t | [Q!] E t | [W@] R y | [W@] R y
-[eD] t u | [eD] t u | [wf] r y | [wf] r y
-[qa] e t | [qa] e t | [ws] r y | [ws] r y
-[ed] T u | [ed] T u | [qa] e t | [qa] - -
- ]],
+    Id="moonlight-sonata",
+    Name="Moonlight Sonata",
+    Artist="L. van Beethoven",
+    BPM=74,
+    StepsPerBeat=12,
+    Categories={"TikTok Classics","Classical","Dark","Advanced"},
+    Notes=[=[
+[9e] - - - | y - - - | i - - - | e - - -
+y - - - | i - - - | e - - - | y - - -
+i - - - | e - - - | y - - - | i - - -
+[8e] - - - | y - - - | i - - - | e - - -
+y - - - | i - - - | e - - - | y - - -
+i - - - | e - - - | y - - - | i - - -
+[^E] - - - | y - - - | i - - - | E - - -
+y - - - | i - - - | [5E] - - - | Y - - -
+o - - - | E - - - | Y - - - | o - - -
+[6e] - - - | T - - - | o - - - | e - - -
+y - - - | i - - - | [6e] - - - | y - - -
+u - - - | w - - - | T - - - | u - - -
+[2q] - - - | e - - - | y - - - | e - - -
+y - - - | i - - - | e - - - | y - - -
+i - - - | [9e] - - - | y - - - | i e - -
+[*e] - - - | u - - - | o - - - | e - - -
+u - - - | o - - - | e - - - | u - - -
+o - - - | [*e] - - - | u - - - | o e - -
+[2e] - - - | y - - - | i - - - | e - - -
+y - - - | i - - - | [5E] - - - | y - - -
+o - - - | E - - - | y - - - | o - - -
+[8e] - - - | t - - - | i - - - | e - - -
+t - - - | i - - - | [8w] - - - | E - - -
+u - - - | [0Et] - - - | u - - - | o - - -
+[4qe] - - - | t - - - | i - - - | e - - -
+t - - - | i - - - | e - - - | t - - -
+i - - - | e - - - | t - - - | i - - -
+[4W] - - - | t - - - | i - - - | W - - -
+t - - - | i - - - | W - - - | t - - -
+i - - - | [qW] - - - | t - - - | i W - -
+[(W] - - - | t - - - | I - - - | W - - -
+t - - - | I - - - | W - - - | t - - -
+I - - - | [(W] - - - | t - - - | I W - -
+[*W] - - - | T - - - | i - - - | [8W] - - -
+t - - - | i - - - | [7W] - - - | y - - -
+i - - - | [7w] - - - | y - - - | i - - -
+[8w] - - - | t - - - | Y - - - | w - - -
+t - - - | Y - - - | [4W] - - - | t - - -
+y - - - | [%q] - - - | t - - - | y - - -
+[5w] - - - | t - - - | Y - - - | w - - -
+t - - - | Y - - - | [5w] - - - | r - - -
+y - - - | w - - - | r - - - | y - - -
+[8t] - - - | Y - - - | o - - - | t - - -
+Y - - - | o - - - | t - - - | u - - -
+o - - - | [8t] - - - | u - - - | o - - -
+[8T] - - - | i - - - | O - - - | [qT] - - -
+i - - - | O - - - | [WT] - - - | i - - -
+O - - - | [qr] - - - | i - - - | O - - -
+[8t] - - - | u - - - | o - - - | t - - -
+u - - - | o - - - | t - - - | u - - -
+o - - - | [8t] - - - | u - - - | o - - -
+[8T] - - - | i - - - | O - - - | [qT] - - -
+i - - - | O - - - | [WT] - - - | i - - -
+O - - - | [qr] - - - | i - - - | O - - -
+[8t] - - - | u - - - | o - - - | t - - -
+u - - - | o - - - | [6t] - - - | Y - - -
+I - - - | t - - - | Y - - - | I - - -
+[$t] - - - | y - - - | p - - - | t - - -
+y - - - | p - - - | [5E] - - - | y - - -
+o - - - | E - - - | y - - - | o - - -
+[8W] - - - | t - - - | Y - - - | W - - -
+t - - - | Y - - - | [*w] - - - | E - - -
+u - - - | w - - - | E - - - | u - - -
+[29] - - - | w - - - | E - - - | 9 - - -
+w - - - | E - - - | [29] - - - | w - - -
+e - - - | 9 - - - | Q - - - | e - - -
+[5w] - - - | E - - - | y - - - | E - - -
+y - - - | o - - - | y - - - | o - - -
+P - - - | [wy] - - - | o - - - | P y - -
+[Qy] - - - | p - - - | s - - - | y - - -
+p - - - | s - - - | y - - - | p - - -
+s - - - | [Qy] - - - | p - - - | s y - -
+[wy] - - - | o - - - | P - - - | y - - -
+o - - - | P - - - | [0T] - - - | o - - -
+P - - - | [9y] - - - | o - - - | P - - -
+[*u] - - - | o - - - | p - - - | u - - -
+o - - - | p - - - | u - - - | o - - -
+p - - - | [*u] - - - | o - - - | p - - -
+[9i] - - - | p - - - | d - - - | i - - -
+p - - - | d - - - | [5u] - - - | o - - -
+P - - - | [%y] - - - | i - - - | a - - -
+[6TS] - - - | T - - - | u - - - | p - - -
+T - - - | u - - - | P - - - | T - - -
+u - - - | o - - - | T - - - | u - - -
+6 - - - | T - - - | u - - - | e - - -
+T - - - | u - - - | E - - - | T - - -
+u - - - | w - - - | T - - - | u - - -
+6 - - - | i - - - | p - - - | d - - -
+i - - - | p - - - | g - - - | i - - -
+p - - - | d - - - | i - - - | p - - -
+6 - - - | q - - - | e - - - | y - - -
+q - - - | e - - - | i - - - | q - - -
+e - - - | y - - - | q - - - | e - - -
+[60] - - - | E - - - | w - - - | T - - -
+E - - - | u - - - | [6T] - - - | o - - -
+u - - - | P - - - | o - - - | S - - -
+[6q] - - - | y - - - | e - - - | i - - -
+y - - - | p - - - | [6i] - - - | d - - -
+p - - - | g - - - | d - - - | p - - -
+[6y] - - - | O - - - | i - - - | a - - -
+O - - - | d - - - | [6a] - - - | g - - -
+d - - - | H - - - | g - - - | k - - -
+[6w] - - - | T - - - | E - - - | u - - -
+T - - - | o - - - | [6u] - - - | P - - -
+o - - - | S - - - | P - - - | f - - -
+S - - - | o - - - | P - - - | u - - -
+o - - - | T - - - | u - - - | E - - -
+T - - - | w - - - | E - - - | 0 - - -
+w - - - | * - - - | 0 - - - | ^ - - -
+* - - - | 5 - - - | ^ - - - | 0 - - -
+w - - - | 9 - - - | w - - - | E - - -
+[6*] - - - | w - - - | e - - - | E - - -
+e - - - | w - - - | 0 - - - | w - - -
+E - - - | 9 - - - | w - - - | E - - -
+[6*] - - - | w - - - | e - - - | E - - -
+e - - - | w - - - | ( - - - | w - - -
+E - - - | 9 - - - | w - - - | E - - -
+[6*] - - - | w - - - | e - - - | E - - -
+e - - - | w - - - | [^9] - - - | q - - -
+y - - - | 9 - - - | q - - - | y
+]=],
 }
