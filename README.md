@@ -1,19 +1,20 @@
 # Velora — Encore 🥀
 
-Velora v0.8.5 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
+Velora v0.8.6 **Encore** is a rounded Roblox piano workstation with Lucide icons, static playback controls, full-song arrangements, and a clear selected-song state.
 
 ## Run the cache-breaking release
 
 ```lua
 loadstring(game:HttpGet(
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-085.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/boot-086.lua?boot=086",
     true
 ))()
 ```
 
-## Encore 0.8.5
+## Encore 0.8.6
 
 - 20 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
+- The complete 20-song registry is now embedded as an offline fallback, preventing missing cards when a registry request is cached
 - New: Erika, a roughly 3:40 arrangement converted from the complete owner-supplied MIDI
 - Kamado Tanjiro no Uta remains the library’s longest owner-supplied arrangement at roughly 6:14
 - Ievan Polkka is also included from the complete owner-supplied MIDI
