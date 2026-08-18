@@ -1,0 +1,94 @@
+ = controls
+
+local controlLayout = create("UIListLayout", {
+    FillDirection = Enum.FillDirection.Horizontal,
+    HorizontalAlignment = Enum.HorizontalAlignment.Center,
+    VerticalAlignment = Enum.VerticalAlignment.Center,
+    Padding = UDim.new(0, 8),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+}, controls)
+ui.ControlLayout = controlLayout
+
+local function controlButton(name, iconName, fallback, large, order)
+    local button = create("TextButton", {
+        Name = name,
+        Size = UDim2.fromOffset(large and 48 or 38, large and 48 or 38),
+        BackgroundColor3 = large and CONFIG.Accent or C.Raised,
+        BackgroundTransparency = large and 0.08 or 0.26,
+        BorderSizePixel = 0,
+        Text = "",
+        AutoButtonColor = false,
+        LayoutOrder = order,
+    }, controls)
+    corner(button, large and 15 or 12)
+    stroke(button, large and 0.54 or 0.78)
+
+    local holder = icon(button, iconName, large and 18 or 15, large and C.Text or C.Sub, fallback)
+    holder.AnchorPoint = Vector2.new(0.5, 0.5)
+    holder.Position = UDim2.fromScale(0.5, 0.5)
+
+    connect(button.MouseEnter, function()
+        uiHover()
+        tween(button, 0.12, {
+            BackgroundTransparency = large and 0 or 0.12,
+        })
+        recolorIcon(holder, C.Text)
+    end)
+
+    connect(button.MouseLeave, function()
+        tween(button, 0.12, {
+            BackgroundTransparency = large and 0.08 or 0.26,
+        })
+        recolorIcon(holder, large and C.Text or C.Sub)
+    end)
+
+    return button, holder
+end
+
+local shuffleButton, shuffleIcon = controlButton("Shuffle", "shuffle", "↝", false, 1)
+local previousButton, previousIcon = controlButton("Previous", "skip-back", "|◀", false, 2)
+local playButton, playIcon = controlButton("Play", "play", "▶", true, 3)
+local stopButton, stopIcon = controlButton("Stop", "square", "■", false, 4)
+local loopButton, loopIcon = controlButton("Loop", "repeat-2", "↻", false, 5)
+ui.ShuffleButton = shuffleButton
+ui.ShuffleIcon = shuffleIcon
+ui.PreviousButton = previousButton
+ui.PlayButton = playButton
+ui.PlayIcon = playIcon
+ui.StopButton = stopButton
+ui.LoopButton = loopButton
+ui.LoopIcon = loopIcon
+
+local tweakPanel = create("Frame", {
+    Position = UDim2.fromOffset(16, 314),
+    Size = UDim2.new(1, -32, 0, 96),
+    BackgroundColor3 = C.Panel,
+    BackgroundTransparency = 0.34,
+    BorderSizePixel = 0,
+}, playerPanel)
+corner(tweakPanel, 13)
+stroke(tweakPanel, 0.84)
+ui.TweakPanel = tweakPanel
+
+local function tweakRow(y, labelText, valueText)
+    local row = create("Frame", {
+        Position = UDim2.fromOffset(0, y),
+        Size = UDim2.new(1, 0, 0, 43),
+        BackgroundTransparency = 1,
+    }, tweakPanel)
+
+    local label = text(row, labelText, 9, C.Sub, Enum.Font.GothamMedium)
+    label.Position = UDim2.fromOffset(12, 0)
+    label.Size = UDim2.fromOffset(100, 43)
+
+    local minus = create("TextButton", {
+        AnchorPoint = Vector2.new(1, 0.5),
+        Position = UDim2.new(1, -100, 0.5, 0),
+        Size = UDim2.fromOffset(28, 28),
+        BackgroundColor3 = C.Raised,
+        BackgroundTransparency = 0.34,
+        BorderSizePixel = 0,
+        Text = "−",
+        TextColor3 = C.Sub,
+        TextSize = 15,
+        Font = En
