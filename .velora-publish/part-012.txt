@@ -1,0 +1,101 @@
+   Position = UDim2.new(1, -12, 0, 54),
+    Size = UDim2.fromOffset(40, 38),
+    BackgroundColor3 = C.Panel,
+    BackgroundTransparency = 0.28,
+    BorderSizePixel = 0,
+    Text = "",
+    AutoButtonColor = false,
+}, browser)
+corner(randomButton, 11)
+stroke(randomButton, 0.78)
+local randomIcon = icon(randomButton, "shuffle", 15, C.Sub, "↝")
+randomIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+randomIcon.Position = UDim2.fromScale(0.5, 0.5)
+ui.RandomButton = randomButton
+ui.RandomIcon = randomIcon
+
+local songList = create("ScrollingFrame", {
+    Name = "SongList",
+    BackgroundTransparency = 1,
+    BorderSizePixel = 0,
+    Position = UDim2.fromOffset(8, 104),
+    Size = UDim2.new(1, -16, 1, -112),
+    CanvasSize = UDim2.new(),
+    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+    ScrollBarThickness = 2,
+    ScrollBarImageColor3 = C.Muted,
+    ScrollBarImageTransparency = 0.55,
+}, browser)
+ui.SongList = songList
+
+local songLayout = create("UIListLayout", {
+    Padding = UDim.new(0, 6),
+    SortOrder = Enum.SortOrder.LayoutOrder,
+}, songList)
+ui.SongLayout = songLayout
+padding(songList, 4, 4, 0, 4)
+
+local playerPanel = create("Frame", {
+    Name = "NowPlaying",
+    BackgroundColor3 = C.Window2,
+    BackgroundTransparency = 0.46,
+    BorderSizePixel = 0,
+    Position = UDim2.fromOffset(556, 14),
+    Size = UDim2.new(1, -570, 1, -28),
+}, body)
+corner(playerPanel, 15)
+stroke(playerPanel, 0.82)
+ui.PlayerPanel = playerPanel
+
+local nowHeader = text(playerPanel, "NOW PLAYING", 9, C.Muted, Enum.Font.GothamBold)
+nowHeader.Position = UDim2.fromOffset(16, 12)
+nowHeader.Size = UDim2.new(1, -32, 0, 18)
+
+local trackVisual = create("Frame", {
+    Position = UDim2.fromOffset(16, 40),
+    Size = UDim2.new(1, -32, 0, 116),
+    BackgroundColor3 = C.Panel,
+    BackgroundTransparency = 0.24,
+    BorderSizePixel = 0,
+}, playerPanel)
+corner(trackVisual, 15)
+stroke(trackVisual, 0.78)
+ui.TrackVisual = trackVisual
+
+local visualHeader = create("Frame", {
+    Position = UDim2.fromOffset(12, 12),
+    Size = UDim2.new(1, -24, 0, 32),
+    BackgroundTransparency = 1,
+}, trackVisual)
+ui.VisualHeader = visualHeader
+
+local trackGlyph = create("Frame", {
+    Size = UDim2.fromOffset(32, 32),
+    BackgroundColor3 = CONFIG.Accent,
+    BackgroundTransparency = 0.82,
+    BorderSizePixel = 0,
+}, visualHeader)
+corner(trackGlyph, 10)
+stroke(trackGlyph, 0.68, 1, CONFIG.Accent)
+local trackIcon = icon(trackGlyph, "music", 15, CONFIG.Accent, "♪")
+trackIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+trackIcon.Position = UDim2.fromScale(0.5, 0.5)
+ui.TrackGlyph = trackGlyph
+ui.TrackIcon = trackIcon
+
+local visualTitle = text(visualHeader, "Select a song", 12, C.Text, Enum.Font.GothamBold)
+visualTitle.Position = UDim2.fromOffset(42, 0)
+visualTitle.Size = UDim2.new(1, -42, 0, 17)
+ui.VisualTitle = visualTitle
+
+local visualArtist = text(visualHeader, "Velora Library", 8, C.Muted, Enum.Font.GothamMedium)
+visualArtist.Position = UDim2.fromOffset(42, 16)
+visualArtist.Size = UDim2.new(1, -42, 0, 15)
+ui.VisualArtist = visualArtist
+
+local keyboard = create("Frame", {
+    Name = "PianoVisualizer",
+    Position = UDim2.fromOffset(12, 56),
+    Size = UDim2.new(1, -24, 0, 48),
+    BackgroundTransparency = 1,
+}, trackVisual)
