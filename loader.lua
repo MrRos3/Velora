@@ -1,7 +1,7 @@
--- Velora 0.10.3 Nova visual polish loader.
+-- Velora 0.10.4 Nova interaction polish loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/4726587f7c1536b15a9eac244f617c301d038b76/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@4726587f7c1536b15a9eac244f617c301d038b76/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/28f79a72e94a20de323b48c0431992e6a6cba3e9/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@28f79a72e94a20de323b48c0431992e6a6cba3e9/release.lua",
 }
 
 local function fail(reason)
