@@ -1243,6 +1243,10 @@ local function applyAccent(color)
     P.Lift=color:Lerp(Color3.fromRGB(48,42,67),.72)
 
     preview.BackgroundColor3=color
+    for _,object in ipairs({nav,browser,playerCard,palette}) do object.BackgroundColor3=P.Surface end
+    for _,object in ipairs({search,stop,favorite,bpmPill,loop,libraryCount,paletteClose,close}) do object.BackgroundColor3=P.Card end
+    for _,object in ipairs(rgbInputs) do object.BackgroundColor3=P.Card end
+    hexInput.BackgroundColor3=P.Card
     songList.ScrollBarImageColor3=color
     navList.ScrollBarImageColor3=color
     scrubber.UIStroke.Color=color
