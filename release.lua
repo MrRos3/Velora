@@ -1,5 +1,5 @@
 --[[
-    Velora v0.9.0 "Pulse"
+    Velora v0.9.1 "Pulse"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.9.0",
+    Version = "0.9.1",
     Codename = "Pulse",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -604,7 +604,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.9.0")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.9.1")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -1185,6 +1185,11 @@ local function make(className,props,parent)
 end
 local function radius(o,r) make("UICorner",{CornerRadius=UDim.new(0,r or 14)},o);return o end
 local function edge(o,color,t,width) make("UIStroke",{Color=color or Color3.fromRGB(101,92,145),Transparency=t or .45,Thickness=width or 1},o);return o end
+local function glowEdge(o,color,haloTransparency,rimTransparency,haloWidth)
+    local halo=make("UIStroke",{Name="GlowHalo",Color=color or Color3.fromRGB(143,108,255),Transparency=haloTransparency or .84,Thickness=haloWidth or 4,ApplyStrokeMode=Enum.ApplyStrokeMode.Border},o)
+    local rim=make("UIStroke",{Name="GlowRim",Color=color or Color3.fromRGB(143,108,255),Transparency=rimTransparency or .24,Thickness=1.25,ApplyStrokeMode=Enum.ApplyStrokeMode.Border},o)
+    return halo,rim
+end
 local function padding(o,l,r,t,b) make("UIPadding",{PaddingLeft=UDim.new(0,l or 0),PaddingRight=UDim.new(0,r or l or 0),PaddingTop=UDim.new(0,t or 0),PaddingBottom=UDim.new(0,b or t or 0)},o) end
 local function gradient(o,a,b,rotation)
     make("UIGradient",{Color=ColorSequence.new(a,b),Rotation=rotation or 0},o)
@@ -1209,35 +1214,24 @@ end
 
 local P={
     Ink=Color3.fromRGB(14,12,24),Surface=Color3.fromRGB(25,22,39),Card=Color3.fromRGB(34,30,51),
-    Lift=Color3.fromRGB(45,39,66),Text=Color3.fromRGB(250,248,255),Sub=Color3.fromRGB(170,164,190),
-    Muted=Color3.fromRGB(112,106,136),Violet=Color3.fromRGB(143,108,255),Pink=Color3.fromRGB(255,102,188),
+    Lift=Color3.fromRGB(45,39,66),Text=Color3.fromRGB(255,254,255),Sub=Color3.fromRGB(205,199,220),
+    Muted=Color3.fromRGB(154,147,177),Violet=Color3.fromRGB(143,108,255),Pink=Color3.fromRGB(255,102,188),
     Cyan=Color3.fromRGB(96,220,238),Green=Color3.fromRGB(105,235,171),
 }
 
 local gui=make("ScreenGui",{Name="Velora",ResetOnSpawn=false,IgnoreGuiInset=true,DisplayOrder=78,ZIndexBehavior=Enum.ZIndexBehavior.Sibling},PlayerGui)
 local shadow=radius(make("Frame",{Visible=false,AnchorPoint=Vector2.new(.5,.5),Position=UDim2.new(.5,0,.5,0),Size=UDim2.fromOffset(760,440),BackgroundTransparency=1,BorderSizePixel=0},gui),24)
-local window=radius(edge(gradient(make("Frame",{Name="Aurora",AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.5),Size=UDim2.fromOffset(760,440),BackgroundColor3=P.Ink,BorderSizePixel=0,ClipsDescendants=true},gui),Color3.fromRGB(29,23,49),Color3.fromRGB(11,13,24),25),Color3.fromRGB(133,112,204),.38,1.2),24)
+local window=radius(edge(gradient(make("Frame",{Name="Aurora",AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.5),Size=UDim2.fromOffset(760,440),BackgroundColor3=P.Ink,BorderSizePixel=0,ClipsDescendants=true},gui),Color3.fromRGB(29,23,49),Color3.fromRGB(11,13,24),25),Color3.fromRGB(80,75,96),.76,1),24)
 local windowBorder=window:FindFirstChildOfClass("UIStroke")
-local glowStroke=make("UIStroke",{Color=P.Violet,Transparency=.32,Thickness=3.2,ApplyStrokeMode=Enum.ApplyStrokeMode.Border},window)
-local glowGradient=make("UIGradient",{
-    Color=ColorSequence.new({
-        ColorSequenceKeypoint.new(0,P.Violet),
-        ColorSequenceKeypoint.new(.42,P.Pink),
-        ColorSequenceKeypoint.new(.72,P.Cyan),
-        ColorSequenceKeypoint.new(1,P.Violet),
-    }),
-    Rotation=18,
-},glowStroke)
-local innerRim=radius(make("Frame",{Position=UDim2.fromOffset(5,5),Size=UDim2.new(1,-10,1,-10),BackgroundTransparency=1,BorderSizePixel=0},window),20)
-local innerRimStroke=make("UIStroke",{Color=P.Violet:Lerp(Color3.new(1,1,1),.35),Transparency=.72,Thickness=1,ApplyStrokeMode=Enum.ApplyStrokeMode.Border},innerRim)
-
--- The glow is made from rounded strokes only: no shadow layer or sharp corner wedges.
 
 local header=radius(edge(gradient(make("Frame",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,64),BackgroundColor3=P.Surface,BorderSizePixel=0},window),Color3.fromRGB(59,42,92),Color3.fromRGB(29,28,49),10),Color3.fromRGB(143,119,207),.48),18)
+local headerBorder=header:FindFirstChildOfClass("UIStroke")
+local headerGlow,headerRim=glowEdge(header,P.Violet,.88,.48,3.5)
 local logo=radius(gradient(make("Frame",{Position=UDim2.fromOffset(12,10),Size=UDim2.fromOffset(44,44),BackgroundColor3=P.Violet,BorderSizePixel=0},header),P.Violet,P.Pink,45),14)
+local logoGlow,logoRim=glowEdge(logo,P.Violet,.78,.12,5)
 local logoText=label(logo,"🥀",UDim2.fromScale(0,0),UDim2.fromScale(1,1),Enum.Font.BuilderSans,21,P.Text);logoText.TextXAlignment=Enum.TextXAlignment.Center
 label(header,"VELORA",UDim2.fromOffset(68,10),UDim2.fromOffset(190,24),Enum.Font.BuilderSansExtraBold,20,P.Text)
-label(header,"AURORA  •  PIANO STUDIO",UDim2.fromOffset(69,35),UDim2.fromOffset(210,14),Enum.Font.BuilderSansBold,8,Color3.fromRGB(192,174,255))
+label(header,"AURORA  •  PIANO STUDIO",UDim2.fromOffset(69,35),UDim2.fromOffset(210,14),Enum.Font.BuilderSansBold,9,Color3.fromRGB(220,211,244))
 
 local settingsButton=radius(edge(make("TextButton",{Position=UDim2.new(1,-98,0,14),Size=UDim2.fromOffset(36,36),BackgroundColor3=Color3.fromRGB(49,42,65),BorderSizePixel=0,AutoButtonColor=false,Text=""},header),Color3.fromRGB(105,94,143),.55),12)
 local settingsIcon=icon(settingsButton,"settings",17,P.Sub,"");settingsIcon.AnchorPoint=Vector2.new(.5,.5);settingsIcon.Position=UDim2.fromScale(.5,.5)
@@ -1267,10 +1261,16 @@ end
 
 local body=make("Frame",{Position=UDim2.fromOffset(14,90),Size=UDim2.new(1,-28,1,-104),BackgroundTransparency=1},window)
 local nav=radius(edge(make("Frame",{Size=UDim2.fromOffset(148,336),BackgroundColor3=P.Surface,BackgroundTransparency=.08,BorderSizePixel=0},body),Color3.fromRGB(88,81,119),.58),18)
+local navBorder=nav:FindFirstChildOfClass("UIStroke")
+local navGlow,navRim=glowEdge(nav,P.Violet,.91,.57,3)
 local browser=radius(edge(make("Frame",{Position=UDim2.fromOffset(158,0),Size=UDim2.fromOffset(326,336),BackgroundColor3=P.Surface,BackgroundTransparency=.08,BorderSizePixel=0},body),Color3.fromRGB(88,81,119),.58),18)
+local browserBorder=browser:FindFirstChildOfClass("UIStroke")
+local browserGlow,browserRim=glowEdge(browser,P.Violet,.91,.57,3)
 local playerCard=radius(edge(make("Frame",{Position=UDim2.fromOffset(494,0),Size=UDim2.fromOffset(238,336),BackgroundColor3=P.Surface,BackgroundTransparency=.04,BorderSizePixel=0},body),Color3.fromRGB(106,88,153),.5),18)
+local playerBorder=playerCard:FindFirstChildOfClass("UIStroke")
+local playerGlow,playerRim=glowEdge(playerCard,P.Violet,.86,.38,4)
 
-label(nav,"DISCOVER",UDim2.fromOffset(16,16),UDim2.fromOffset(116,14),Enum.Font.BuilderSansBold,8,P.Muted)
+label(nav,"DISCOVER",UDim2.fromOffset(16,16),UDim2.fromOffset(116,14),Enum.Font.BuilderSansBold,9,P.Muted)
 local navList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,42),Size=UDim2.fromOffset(128,215),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},nav)
 make("UIListLayout",{Padding=UDim.new(0,7),SortOrder=Enum.SortOrder.LayoutOrder},navList)
 padding(navList,0,4,0,4)
@@ -1279,31 +1279,38 @@ local searchQuery=""
 local navButtons={}
 local refreshList
 
-local search=radius(edge(make("TextBox",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,38),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,PlaceholderText="Search the library",PlaceholderColor3=P.Muted,Text="",TextSize=10,TextColor3=P.Text,Font=Enum.Font.BuilderSans,TextXAlignment=Enum.TextXAlignment.Left},browser),Color3.fromRGB(87,78,119),.55),12)
+local search=radius(edge(make("TextBox",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,38),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,PlaceholderText="Search the library",PlaceholderColor3=P.Sub,Text="",TextSize=11,TextColor3=P.Text,Font=Enum.Font.BuilderSansMedium,TextXAlignment=Enum.TextXAlignment.Left},browser),Color3.fromRGB(87,78,119),.55),12)
+local searchBorder=search:FindFirstChildOfClass("UIStroke")
+local searchGlow,searchRim=glowEdge(search,P.Violet,.93,.62,3)
 padding(search,39,13,0,0)
 local searchIcon=icon(browser,"search",15,P.Muted,"");searchIcon.Position=UDim2.fromOffset(27,26)
+search.Focused:Connect(function() animate(searchGlow,{Transparency=.72});animate(searchRim,{Transparency=.10}) end)
+search.FocusLost:Connect(function() animate(searchGlow,{Transparency=.93});animate(searchRim,{Transparency=.62}) end)
 local resultTitle=label(browser,"ALL SONGS",UDim2.fromOffset(16,62),UDim2.fromOffset(200,20),Enum.Font.BuilderSansExtraBold,12,P.Text)
 local songList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,88),Size=UDim2.new(1,-20,1,-98),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},browser)
 make("UIListLayout",{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder},songList)
 padding(songList,2,5,0,5)
 
-label(playerCard,"NOW PLAYING",UDim2.fromOffset(16,14),UDim2.fromOffset(160,14),Enum.Font.BuilderSansBold,8,P.Muted)
+label(playerCard,"NOW PLAYING",UDim2.fromOffset(16,14),UDim2.fromOffset(160,14),Enum.Font.BuilderSansBold,9,P.Muted)
 local art=radius(gradient(make("Frame",{Position=UDim2.fromOffset(16,39),Size=UDim2.fromOffset(72,72),BackgroundColor3=P.Violet,BorderSizePixel=0},playerCard),P.Violet,P.Pink,45),18)
+local artBorderGlow,artBorderRim=glowEdge(art,P.Violet,.75,.12,5)
 local artGlow=radius(make("Frame",{AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.5),Size=UDim2.fromOffset(44,44),BackgroundColor3=Color3.new(1,1,1),BackgroundTransparency=.86,BorderSizePixel=0},art),22)
 local artIcon=icon(artGlow,"music-2",23,P.Text,"");artIcon.AnchorPoint=Vector2.new(.5,.5);artIcon.Position=UDim2.fromScale(.5,.5)
 local nowTitle=label(playerCard,"Choose a song",UDim2.fromOffset(101,45),UDim2.fromOffset(122,38),Enum.Font.BuilderSansExtraBold,14,P.Text);nowTitle.TextWrapped=true;nowTitle.TextYAlignment=Enum.TextYAlignment.Top
-local nowMeta=label(playerCard,"Ready when you are",UDim2.fromOffset(101,86),UDim2.fromOffset(122,18),Enum.Font.BuilderSans,8,P.Sub)
+local nowMeta=label(playerCard,"Ready when you are",UDim2.fromOffset(101,86),UDim2.fromOffset(122,18),Enum.Font.BuilderSansMedium,9,P.Sub)
 
 local progress=radius(make("Frame",{Position=UDim2.fromOffset(16,127),Size=UDim2.fromOffset(206,8),BackgroundColor3=Color3.fromRGB(54,48,72),BorderSizePixel=0},playerCard),4)
 local fill=radius(gradient(make("Frame",{Size=UDim2.new(0,0,1,0),BackgroundColor3=P.Violet,BorderSizePixel=0},progress),P.Cyan,P.Pink,0),4)
 local scrubber=radius(edge(make("Frame",{AnchorPoint=Vector2.new(.5,.5),Position=UDim2.new(0,0,.5,0),Size=UDim2.fromOffset(15,15),BackgroundColor3=P.Text,BorderSizePixel=0,ZIndex=4},progress),P.Violet,.15),8)
 local seekHit=make("TextButton",{Position=UDim2.fromOffset(16,119),Size=UDim2.fromOffset(206,24),BackgroundTransparency=1,BorderSizePixel=0,Text="",ZIndex=5},playerCard)
-local timeLeft=label(playerCard,"0:00",UDim2.fromOffset(16,139),UDim2.fromOffset(70,13),Enum.Font.BuilderSansMedium,7,P.Muted)
-local timeRight=label(playerCard,"0:00",UDim2.fromOffset(152,139),UDim2.fromOffset(70,13),Enum.Font.BuilderSansMedium,7,P.Muted);timeRight.TextXAlignment=Enum.TextXAlignment.Right
+local timeLeft=label(playerCard,"0:00",UDim2.fromOffset(16,139),UDim2.fromOffset(70,13),Enum.Font.BuilderSansMedium,8,P.Sub)
+local timeRight=label(playerCard,"0:00",UDim2.fromOffset(152,139),UDim2.fromOffset(70,13),Enum.Font.BuilderSansMedium,8,P.Sub);timeRight.TextXAlignment=Enum.TextXAlignment.Right
 
 local stop=radius(make("TextButton",{Position=UDim2.fromOffset(16,165),Size=UDim2.fromOffset(50,46),BackgroundColor3=P.Card,BorderSizePixel=0,AutoButtonColor=false,Text=""},playerCard),15)
 local stopIcon=icon(stop,"square",17,P.Sub,"");stopIcon.AnchorPoint=Vector2.new(.5,.5);stopIcon.Position=UDim2.fromScale(.5,.5)
 local play=radius(edge(gradient(make("TextButton",{Position=UDim2.fromOffset(76,157),Size=UDim2.fromOffset(86,62),BackgroundColor3=P.Violet,BorderSizePixel=0,AutoButtonColor=false,Text=""},playerCard),P.Violet,P.Pink,35),Color3.new(1,1,1),.7),20)
+local playBorder=play:FindFirstChildOfClass("UIStroke")
+local playGlow,playRim=glowEdge(play,P.Violet,.72,.06,6)
 local playIcon=icon(play,"play",25,P.Text,"");playIcon.AnchorPoint=Vector2.new(.5,.5);playIcon.Position=UDim2.fromScale(.5,.5)
 local pauseIcon=icon(play,"pause",25,P.Text,"");pauseIcon.AnchorPoint=Vector2.new(.5,.5);pauseIcon.Position=UDim2.fromScale(.5,.5);pauseIcon.Visible=false
 local favorite=radius(make("TextButton",{Position=UDim2.fromOffset(172,165),Size=UDim2.fromOffset(50,46),BackgroundColor3=P.Card,BorderSizePixel=0,AutoButtonColor=false,Text=""},playerCard),15)
@@ -1317,11 +1324,20 @@ local bpmUp=radius(make("TextButton",{Position=UDim2.fromOffset(94,4),Size=UDim2
 local bpmUpIcon=icon(bpmUp,"chevron-right",16,P.Sub,"");bpmUpIcon.AnchorPoint=Vector2.new(.5,.5);bpmUpIcon.Position=UDim2.fromScale(.5,.5)
 local loop=radius(make("TextButton",{Position=UDim2.fromOffset(154,232),Size=UDim2.fromOffset(68,38),BackgroundColor3=P.Card,BorderSizePixel=0,AutoButtonColor=false,Text=""},playerCard),13)
 local loopIcon=icon(loop,"repeat-2",18,P.Sub,"");loopIcon.AnchorPoint=Vector2.new(.5,.5);loopIcon.Position=UDim2.fromScale(.5,.5)
-local feedback=radius(make("TextLabel",{Position=UDim2.fromOffset(16,283),Size=UDim2.fromOffset(206,37),BackgroundColor3=Color3.fromRGB(31,29,46),BorderSizePixel=0,Font=Enum.Font.BuilderSansMedium,Text="Pick a song and make some magic.",TextWrapped=true,TextSize=8,TextColor3=P.Sub},playerCard),12)
-padding(feedback,9,9,4,4)
+local resetBpm=radius(edge(make("TextButton",{Position=UDim2.fromOffset(16,283),Size=UDim2.fromOffset(206,37),BackgroundColor3=Color3.fromRGB(31,29,46),BorderSizePixel=0,AutoButtonColor=false,Text=""},playerCard),P.Violet,.58,1),12)
+local resetBorder=resetBpm:FindFirstChildOfClass("UIStroke")
+local resetGlow,resetRim=glowEdge(resetBpm,P.Violet,.88,.38,3.5)
+local resetIcon=icon(resetBpm,"rotate-ccw",15,P.Sub,"");resetIcon.AnchorPoint=Vector2.new(.5,.5);resetIcon.Position=UDim2.fromOffset(19,18)
+label(resetBpm,"RESET BPM",UDim2.fromOffset(35,4),UDim2.fromOffset(158,14),Enum.Font.BuilderSansExtraBold,10,P.Text)
+local feedback=label(resetBpm,"Restore the song's original tempo",UDim2.fromOffset(35,18),UDim2.fromOffset(158,13),Enum.Font.BuilderSansMedium,8,P.Sub)
+feedback.TextTruncate=Enum.TextTruncate.AtEnd
+play.MouseEnter:Connect(function() animate(playGlow,{Transparency=.56});animate(playRim,{Transparency=0}) end)
+play.MouseLeave:Connect(function() animate(playGlow,{Transparency=.72});animate(playRim,{Transparency=.06}) end)
+resetBpm.MouseEnter:Connect(function() animate(resetGlow,{Transparency=.70});animate(resetRim,{Transparency=.10}) end)
+resetBpm.MouseLeave:Connect(function() animate(resetGlow,{Transparency=.88});animate(resetRim,{Transparency=.38}) end)
 
 local libraryCount=radius(make("Frame",{Position=UDim2.fromOffset(10,273),Size=UDim2.fromOffset(128,51),BackgroundColor3=P.Card,BorderSizePixel=0},nav),14)
-label(libraryCount,"AURORA LIBRARY",UDim2.fromOffset(11,8),UDim2.fromOffset(106,12),Enum.Font.BuilderSansBold,7,P.Muted)
+label(libraryCount,"AURORA LIBRARY",UDim2.fromOffset(11,8),UDim2.fromOffset(106,12),Enum.Font.BuilderSansBold,8,P.Muted)
 local countText=label(libraryCount,tostring(#state.Registry).." SONGS",UDim2.fromOffset(11,24),UDim2.fromOffset(106,16),Enum.Font.BuilderSansExtraBold,10,P.Text)
 
 local paletteDim=radius(make("TextButton",{Visible=false,Position=UDim2.fromOffset(0,0),Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=.38,BorderSizePixel=0,Text="",AutoButtonColor=false,ZIndex=40},window),24)
@@ -1361,12 +1377,13 @@ local accentGradients={
     apply=applyColorButton:FindFirstChildOfClass("UIGradient"),
     window=window:FindFirstChildOfClass("UIGradient"),
     header=header:FindFirstChildOfClass("UIGradient"),
-    glow=glowGradient,
 }
 local themedStrokes={
-    windowBorder,glowStroke,innerRimStroke,header:FindFirstChildOfClass("UIStroke"),
-    nav:FindFirstChildOfClass("UIStroke"),browser:FindFirstChildOfClass("UIStroke"),
-    playerCard:FindFirstChildOfClass("UIStroke"),palette:FindFirstChildOfClass("UIStroke"),
+    headerBorder,headerGlow,headerRim,logoGlow,logoRim,
+    navBorder,navGlow,navRim,browserBorder,browserGlow,browserRim,
+    playerBorder,playerGlow,playerRim,searchBorder,searchGlow,searchRim,
+    artBorderGlow,artBorderRim,playBorder,playGlow,playRim,
+    resetBorder,resetGlow,resetRim,palette:FindFirstChildOfClass("UIStroke"),
 }
 local function applyAccent(color)
     local h,s,v=color:ToHSV()
@@ -1381,7 +1398,7 @@ local function applyAccent(color)
 
     preview.BackgroundColor3=color
     for _,object in ipairs({nav,browser,playerCard,palette}) do object.BackgroundColor3=P.Surface end
-    for _,object in ipairs({search,stop,favorite,bpmPill,loop,libraryCount,paletteClose,close}) do object.BackgroundColor3=P.Card end
+    for _,object in ipairs({search,stop,favorite,bpmPill,loop,resetBpm,libraryCount,paletteClose,close}) do object.BackgroundColor3=P.Card end
     for _,object in ipairs(rgbInputs) do object.BackgroundColor3=P.Card end
     hexInput.BackgroundColor3=P.Card
     songList.ScrollBarImageColor3=color
@@ -1394,11 +1411,11 @@ local function applyAccent(color)
     bpmUp.BackgroundColor3=P.Lift
     loop.BackgroundColor3=state.Loop and color:Lerp(P.Ink,.45) or P.Card
     libraryCount.BackgroundColor3=P.Card
-    feedback.BackgroundColor3=deep:Lerp(P.Card,.45)
+    resetBpm.BackgroundColor3=deep:Lerp(P.Card,.45)
 
     recolorIcon(settingsIcon,P.Sub);recolorIcon(closeIcon,P.Sub);recolorIcon(searchIcon,P.Muted)
     recolorIcon(artIcon,P.Text);recolorIcon(stopIcon,P.Sub);recolorIcon(playIcon,P.Text);recolorIcon(pauseIcon,P.Text)
-    recolorIcon(bpmDownIcon,P.Sub);recolorIcon(bpmUpIcon,P.Sub);recolorIcon(paletteCloseIcon,P.Sub)
+    recolorIcon(bpmDownIcon,P.Sub);recolorIcon(bpmUpIcon,P.Sub);recolorIcon(resetIcon,P.Sub);recolorIcon(paletteCloseIcon,P.Sub)
     recolorIcon(favoriteIcon,state.CurrentEntry and API:IsFavorite(state.CurrentEntry.Id) and secondary or P.Sub)
     recolorIcon(loopIcon,state.Loop and P.Text or P.Sub)
 
@@ -1409,13 +1426,6 @@ local function applyAccent(color)
                 g.Color=ColorSequence.new(color:Lerp(P.Ink,.78),Color3.fromRGB(11,13,24))
             elseif name=="header" then
                 g.Color=ColorSequence.new(color:Lerp(P.Ink,.58),color:Lerp(P.Surface,.72))
-            elseif name=="glow" then
-                g.Color=ColorSequence.new({
-                    ColorSequenceKeypoint.new(0,color),
-                    ColorSequenceKeypoint.new(.42,secondary),
-                    ColorSequenceKeypoint.new(.72,P.Cyan),
-                    ColorSequenceKeypoint.new(1,color),
-                })
             else
                 g.Color=ColorSequence.new(color,secondary)
             end
@@ -1480,7 +1490,7 @@ local function chooseFilter(name)
 end
 
 for index,name in ipairs(categories) do
-    local button=radius(make("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=Color3.fromRGB(73,57,111),BackgroundTransparency=index==1 and 0 or 1,BorderSizePixel=0,AutoButtonColor=false,Font=Enum.Font.BuilderSansMedium,Text="   "..name,TextSize=10,TextColor3=index==1 and P.Text or P.Sub,TextXAlignment=Enum.TextXAlignment.Left},navList),11)
+    local button=radius(make("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=Color3.fromRGB(73,57,111),BackgroundTransparency=index==1 and 0 or 1,BorderSizePixel=0,AutoButtonColor=false,Font=Enum.Font.BuilderSansMedium,Text="   "..name,TextSize=11,TextColor3=index==1 and P.Text or P.Sub,TextXAlignment=Enum.TextXAlignment.Left},navList),11)
     navButtons[name]=button
     button.MouseEnter:Connect(function() if activeFilter~=name then animate(button,{BackgroundTransparency=.55}) end end)
     button.MouseLeave:Connect(function() if activeFilter~=name then animate(button,{BackgroundTransparency=1}) end end)
@@ -1528,6 +1538,11 @@ refreshList=function()
                 Text="",
             },songList),15)
             edge(card,selected and P.Violet or Color3.fromRGB(86,77,117),selected and .08 or .58,selected and 1.6 or 1)
+            if selected then
+                glowEdge(card,P.Violet,.70,.04,5.5)
+            elseif playingCurrent then
+                glowEdge(card,P.Green,.78,.12,4.5)
+            end
 
             local palette=songPalette(index)
             local tile=radius(gradient(make("Frame",{
@@ -1544,10 +1559,10 @@ refreshList=function()
             cardMusicIcon.AnchorPoint=Vector2.new(.5,.5)
             cardMusicIcon.Position=UDim2.fromScale(.5,.5)
 
-            label(card,entry.Name or "Untitled",UDim2.fromOffset(68,10),UDim2.new(1,-112,0,18),Enum.Font.BuilderSansBold,10,P.Text)
+            label(card,entry.Name or "Untitled",UDim2.fromOffset(68,9),UDim2.new(1,-112,0,19),Enum.Font.BuilderSansBold,11,P.Text)
 
             local statusText=selected and "  •  SELECTED" or (playingCurrent and "  •  PLAYING" or "")
-            local meta=label(card,(entry.Artist or "Velora").."  •  "..tostring(entry.BPM or 120).." BPM"..statusText,UDim2.fromOffset(68,32),UDim2.new(1,-112,0,14),Enum.Font.BuilderSans,8,selected and P.Cyan or (playingCurrent and P.Green or P.Sub))
+            local meta=label(card,(entry.Artist or "Velora").."  •  "..tostring(entry.BPM or 120).." BPM"..statusText,UDim2.fromOffset(68,32),UDim2.new(1,-112,0,15),Enum.Font.BuilderSansMedium,9,selected and P.Cyan or (playingCurrent and P.Green or P.Sub))
 
             local indicatorName=selected and "check" or (playingCurrent and "volume-2" or "chevron-right")
             local indicatorColor=selected and P.Cyan or (playingCurrent and P.Green or Color3.fromRGB(188,172,255))
@@ -1647,6 +1662,16 @@ stop.MouseButton1Click:Connect(function()
 end)
 favorite.MouseButton1Click:Connect(function() if state.CurrentEntry then API:ToggleFavorite(state.CurrentEntry.Id);refreshList();render() end end)
 loop.MouseButton1Click:Connect(function() API:SetLoop(not state.Loop);render() end)
+resetBpm.MouseButton1Click:Connect(function()
+    if not state.CurrentSong or not state.CurrentEntry then
+        feedback.Text="Choose a song first."
+        return
+    end
+    local original=math.clamp(tonumber(state.CurrentSong.BPM or state.CurrentEntry.BPM) or 120,30,300)
+    local value=API:SetBPM(original)
+    feedback.Text=value and ("Restored original tempo  •  "..math.floor(value).." BPM") or "Could not reset this song."
+    render()
+end)
 bpm.FocusLost:Connect(function() local value=API:SetBPM(tonumber(bpm.Text));feedback.Text=value and ("Tempo set to "..math.floor(value).." BPM.") or "Choose a song first.";render() end)
 
 API.Changed:Connect(function(reason)
@@ -1672,11 +1697,13 @@ API.Changed:Connect(function(reason)
     end
     render()
 end)
+local lastNoteStatus=0
 API.NotePlayed:Connect(function(note)
     if state.PendingEntryId then
         local picked=getEntry(state.PendingEntryId)
         feedback.Text="Picked "..tostring(picked and picked.Name or "song")..". The current song keeps playing."
-    else
+    elseif os.clock()-lastNoteStatus>=.25 then
+        lastNoteStatus=os.clock()
         feedback.Text="Playing  "..tostring(note).."  •  Aurora output active"
     end
 end)
@@ -1719,3 +1746,4 @@ animate(window,{Size=UDim2.fromOffset(760,440)},.2)
 _G.Velora=API
 pcall(function() if type(getgenv)=="function" then getgenv().Velora=API end end)
 return API
+
