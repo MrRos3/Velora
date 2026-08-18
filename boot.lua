@@ -1,7 +1,7 @@
--- Velora 0.9.2 Pulse public compatibility boot.
+-- Velora 0.10.0 Nova public compatibility boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/84bea037cf215127e1e6d8523a7916f4df48006e/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@84bea037cf215127e1e6d8523a7916f4df48006e/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/6d7ed7e1b7423778c2e8e30f97d5a9b9959c9384/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@6d7ed7e1b7423778c2e8e30f97d5a9b9959c9384/release.lua",
 }
 
 local function fail(reason)
