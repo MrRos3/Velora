@@ -1109,14 +1109,28 @@ local close=radius(make("TextButton",{Position=UDim2.new(1,-52,0,14),Size=UDim2.
 close.MouseEnter:Connect(function() animate(close,{BackgroundColor3=Color3.fromRGB(104,48,76),TextColor3=P.Text}) end)
 close.MouseLeave:Connect(function() animate(close,{BackgroundColor3=Color3.fromRGB(49,42,65),TextColor3=P.Sub}) end)
 
+local windowScale=make("UIScale",{Scale=1},window)
+local shadowScale=make("UIScale",{Scale=1},shadow)
+local function fitViewport()
+    local camera=workspace.CurrentCamera
+    if not camera then return end
+    local view=camera.ViewportSize
+    local value=math.min(1,math.max(.68,math.min(view.X/810,view.Y/490)))
+    windowScale.Scale=value
+    shadowScale.Scale=value
+end
+fitViewport()
+if workspace.CurrentCamera then workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fitViewport) end
+
 local body=make("Frame",{Position=UDim2.fromOffset(14,90),Size=UDim2.new(1,-28,1,-104),BackgroundTransparency=1},window)
 local nav=radius(edge(make("Frame",{Size=UDim2.fromOffset(148,336),BackgroundColor3=P.Surface,BackgroundTransparency=.08,BorderSizePixel=0},body),Color3.fromRGB(88,81,119),.58),18)
 local browser=radius(edge(make("Frame",{Position=UDim2.fromOffset(158,0),Size=UDim2.fromOffset(326,336),BackgroundColor3=P.Surface,BackgroundTransparency=.08,BorderSizePixel=0},body),Color3.fromRGB(88,81,119),.58),18)
 local playerCard=radius(edge(make("Frame",{Position=UDim2.fromOffset(494,0),Size=UDim2.fromOffset(238,336),BackgroundColor3=P.Surface,BackgroundTransparency=.04,BorderSizePixel=0},body),Color3.fromRGB(106,88,153),.5),18)
 
 label(nav,"DISCOVER",UDim2.fromOffset(16,16),UDim2.fromOffset(116,14),Enum.Font.GothamBold,8,P.Muted)
-local navList=make("Frame",{Position=UDim2.fromOffset(10,42),Size=UDim2.fromOffset(128,205),BackgroundTransparency=1},nav)
+local navList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,42),Size=UDim2.fromOffset(128,215),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},nav)
 make("UIListLayout",{Padding=UDim.new(0,7),SortOrder=Enum.SortOrder.LayoutOrder},navList)
+padding(navList,0,4,0,4)
 local activeFilter="All Songs"
 local searchQuery=""
 local navButtons={}
