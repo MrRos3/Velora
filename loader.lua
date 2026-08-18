@@ -1,7 +1,7 @@
--- Velora 0.10.2 Nova public compatibility loader.
+-- Velora 0.10.1 Nova stable compatibility loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/f75470c35b63c3e78b6165fd28ce11a063f9c3e4/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@f75470c35b63c3e78b6165fd28ce11a063f9c3e4/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/b81530d9d6eda080f1d4a7631dbd0d638c0fdf87/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@b81530d9d6eda080f1d4a7631dbd0d638c0fdf87/release.lua",
 }
 
 local function fail(reason)
