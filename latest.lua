@@ -1,5 +1,5 @@
 --[[
-    Velora v0.3.1 "Nocturne" 🥀🎹
+    Velora v0.3.2 "Nocturne" 🥀🎹
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.3.1",
+    Version = "0.3.2",
     Codename = "Nocturne",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -490,13 +490,18 @@ local hasExecutorInput = type(keytapFn) == "function"
     or (type(keypressFn) == "function" and type(keyreleaseFn) == "function")
 
 if hasExecutorInput or virtualInput then
-    InputBackend.Name = hasExecutorInput and "Keyboard Input" or "Virtual Input"
+    InputBackend.Name = virtualInput and "Roblox Input" or "Executor Input"
     InputBackend.Available = true
     InputBackend.Send = function(note)
-        if hasExecutorInput and sendExecutorKey(note) then
+        -- VirtualInputManager targets the Roblox client directly. Some executors
+        -- expose key APIs that return successfully without forwarding to the game.
+        if virtualInput and sendVirtualKey(note) then
             return true
         end
-        return sendVirtualKey(note)
+        if hasExecutorInput then
+            return sendExecutorKey(note)
+        end
+        return false
     end
 end
 
@@ -532,7 +537,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.3.1")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.3.2")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -777,6 +782,12 @@ function API:LoadSong(id, autoplay)
 end
 
 function API:Play()
+    local focused = UserInputService:GetFocusedTextBox()
+    if focused then
+        focused:ReleaseFocus()
+        task.wait()
+    end
+
     if not state.Timeline or #state.Timeline.Events == 0 then
         return false, "No playable notes are loaded"
     end
@@ -1047,1498 +1058,364 @@ function API:GetSnapshot()
 end
 
 -- =========================================================
--- UI
+-- Compact Velora UI
 -- =========================================================
 
 local oldGui = PlayerGui:FindFirstChild("Velora")
-if oldGui then
-    oldGui:Destroy()
-end
-
+if oldGui then oldGui:Destroy() end
 local oldBlur = Lighting:FindFirstChild("VeloraBlur")
-if oldBlur then
-    oldBlur:Destroy()
+if oldBlur then oldBlur:Destroy() end
+
+local function inst(className, properties, parent)
+    local object = Instance.new(className)
+    for key, value in pairs(properties or {}) do object[key] = value end
+    object.Parent = parent
+    return object
 end
 
-local ui = {
-    Connections = {},
-    CategoryButtons = {},
-    SongCards = {},
-    PianoKeys = {},
-    CurrentFiltered = {},
-}
-
-local function connect(signal, callback)
-    local connection = signal:Connect(callback)
-    table.insert(ui.Connections, connection)
-    return connection
+local function round(object, radius)
+    inst("UICorner", { CornerRadius = UDim.new(0, radius or 6) }, object)
+    return object
 end
 
-local blur = create("BlurEffect", {
-    Name = "VeloraBlur",
-    Size = CONFIG.Blur and 12 or 0,
-}, Lighting)
-ui.Blur = blur
+local function outline(object, color, transparency)
+    inst("UIStroke", { Color = color or Color3.fromRGB(66, 71, 91), Transparency = transparency or 0 }, object)
+    return object
+end
 
-local gui = create("ScreenGui", {
-    Name = "Velora",
-    ResetOnSpawn = false,
-    IgnoreGuiInset = true,
-    DisplayOrder = 78,
-    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+local function pad(object, left, right, top, bottom)
+    inst("UIPadding", {
+        PaddingLeft = UDim.new(0, left or 0), PaddingRight = UDim.new(0, right or left or 0),
+        PaddingTop = UDim.new(0, top or 0), PaddingBottom = UDim.new(0, bottom or top or 0),
+    }, object)
+end
+
+local gui = inst("ScreenGui", {
+    Name = "Velora", ResetOnSpawn = false, IgnoreGuiInset = true,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling, DisplayOrder = 78,
 }, PlayerGui)
-ui.Gui = gui
 
-local backdrop = create("Frame", {
-    Name = "Backdrop",
-    BackgroundColor3 = C.Backdrop,
-    BackgroundTransparency = 0.34,
-    BorderSizePixel = 0,
-    Size = UDim2.fromScale(1, 1),
-}, gui)
-ui.Backdrop = backdrop
-
-local window = create("Frame", {
-    Name = "Window",
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.fromScale(0.5, 0.5),
-    Size = UDim2.fromOffset(920, 560),
-    BackgroundColor3 = C.Window,
-    BackgroundTransparency = 0.06,
-    BorderSizePixel = 0,
+local window = round(outline(inst("Frame", {
+    Name = "Window", AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromOffset(650, 360),
+    BackgroundColor3 = Color3.fromRGB(22, 22, 28), BorderSizePixel = 0,
     ClipsDescendants = true,
-}, backdrop)
-corner(window, 22)
-stroke(window, 0.60, 1.1)
-ui.Window = window
+}, gui), Color3.fromRGB(77, 80, 99), 0.2), 8)
 
-local windowGradient = create("UIGradient", {
-    Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 22, 40)),
-        ColorSequenceKeypoint.new(0.42, C.Window2),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 13, 23)),
-    }),
-    Rotation = 32,
+local top = inst("Frame", {
+    Size = UDim2.new(1, 0, 0, 54), BackgroundColor3 = Color3.fromRGB(45, 48, 62),
+    BorderSizePixel = 0,
 }, window)
-ui.WindowGradient = windowGradient
+round(top, 8)
+inst("Frame", {
+    Position = UDim2.new(0, 0, 1, -8), Size = UDim2.new(1, 0, 0, 8),
+    BackgroundColor3 = top.BackgroundColor3, BorderSizePixel = 0,
+}, top)
 
-local windowScale = create("UIScale", {
-    Scale = 1,
-}, window)
-ui.WindowScale = windowScale
-
-local topbar = create("Frame", {
-    Name = "Topbar",
-    BackgroundColor3 = C.Window2,
-    BackgroundTransparency = 0.30,
-    BorderSizePixel = 0,
-    Size = UDim2.new(1, 0, 0, 64),
-}, window)
-ui.Topbar = topbar
-
-local topSeparator = create("Frame", {
-    BackgroundColor3 = C.Edge,
-    BackgroundTransparency = 0.92,
-    BorderSizePixel = 0,
-    Position = UDim2.new(0, 18, 1, -1),
-    Size = UDim2.new(1, -36, 0, 1),
-}, topbar)
-ui.TopSeparator = topSeparator
-
-local brand = create("Frame", {
-    Position = UDim2.fromOffset(18, 14),
-    Size = UDim2.fromOffset(36, 36),
-    BackgroundColor3 = C.Raised,
-    BackgroundTransparency = 0.18,
-    BorderSizePixel = 0,
-}, topbar)
-corner(brand, 11)
-stroke(brand, 0.62)
-local brandIcon = icon(brand, "music-2", 18, CONFIG.Accent, "♪")
-brandIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-brandIcon.Position = UDim2.fromScale(0.5, 0.5)
-ui.BrandIcon = brandIcon
-
-local title = text(topbar, "VELORA", 18, C.Text, Enum.Font.GothamBold)
-title.Position = UDim2.fromOffset(66, 12)
-title.Size = UDim2.fromOffset(170, 22)
-
-local subtitle = text(topbar, "NOCTURNE  •  PIANO WORKSTATION", 8, CONFIG.Accent, Enum.Font.GothamBold)
-subtitle.Position = UDim2.fromOffset(67, 34)
-subtitle.Size = UDim2.fromOffset(250, 16)
-
-local statusPill = create("Frame", {
-    AnchorPoint = Vector2.new(1, 0.5),
-    Position = UDim2.new(1, -94, 0.5, 0),
-    Size = UDim2.fromOffset(144, 32),
-    BackgroundColor3 = C.Raised,
-    BackgroundTransparency = 0.42,
-    BorderSizePixel = 0,
-}, topbar)
-corner(statusPill, 10)
-stroke(statusPill, 0.76)
-ui.StatusPill = statusPill
-
-local statusDot = create("Frame", {
-    AnchorPoint = Vector2.new(0, 0.5),
-    Position = UDim2.new(0, 10, 0.5, 0),
-    Size = UDim2.fromOffset(6, 6),
-    BackgroundColor3 = C.Warning,
-    BorderSizePixel = 0,
-}, statusPill)
-corner(statusDot, 6)
-ui.StatusDot = statusDot
-
-local statusText = text(statusPill, "PREVIEW ONLY", 8, C.Sub, Enum.Font.GothamBold)
-statusText.Position = UDim2.fromOffset(24, 0)
-statusText.Size = UDim2.new(1, -30, 1, 0)
-ui.StatusText = statusText
-
-local function topButton(x, iconName, fallback)
-    local button = create("TextButton", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        Position = UDim2.new(1, x, 0.5, 0),
-        Size = UDim2.fromOffset(30, 30),
-        BackgroundColor3 = C.Raised,
-        BackgroundTransparency = 0.44,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-    }, topbar)
-    corner(button, 9)
-    stroke(button, 0.80)
-
-    local holder = icon(button, iconName, 14, C.Sub, fallback)
-    holder.AnchorPoint = Vector2.new(0.5, 0.5)
-    holder.Position = UDim2.fromScale(0.5, 0.5)
-
-    connect(button.MouseEnter, function()
-        uiHover()
-        tween(button, 0.12, { BackgroundTransparency = 0.24 })
-        recolorIcon(holder, C.Text)
-    end)
-
-    connect(button.MouseLeave, function()
-        tween(button, 0.12, { BackgroundTransparency = 0.44 })
-        recolorIcon(holder, C.Sub)
-    end)
-
-    return button
-end
-
-local minimizeButton = topButton(-48, "minus", "−")
-local closeButton = topButton(-12, "x", "×")
-ui.MinimizeButton = minimizeButton
-ui.CloseButton = closeButton
-
-local body = create("Frame", {
-    Name = "Body",
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Position = UDim2.fromOffset(0, 64),
-    Size = UDim2.new(1, 0, 1, -64),
-}, window)
-ui.Body = body
-
-local sidebar = create("Frame", {
-    Name = "Sidebar",
-    BackgroundColor3 = C.Window2,
-    BackgroundTransparency = 0.48,
-    BorderSizePixel = 0,
-    Position = UDim2.fromOffset(14, 14),
-    Size = UDim2.new(0, 170, 1, -28),
-}, body)
-corner(sidebar, 15)
-stroke(sidebar, 0.86)
-ui.Sidebar = sidebar
-
-local libraryLabel = text(sidebar, "LIBRARY", 9, C.Muted, Enum.Font.GothamBold)
-libraryLabel.Position = UDim2.fromOffset(14, 12)
-libraryLabel.Size = UDim2.new(1, -28, 0, 18)
-
-local categoryList = create("ScrollingFrame", {
-    Name = "Categories",
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Position = UDim2.fromOffset(8, 38),
-    Size = UDim2.new(1, -16, 1, -126),
-    CanvasSize = UDim2.new(),
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    ScrollBarThickness = 2,
-    ScrollBarImageColor3 = C.Muted,
-    ScrollBarImageTransparency = 0.55,
-}, sidebar)
-ui.CategoryList = categoryList
-
-local categoryLayout = create("UIListLayout", {
-    Padding = UDim.new(0, 4),
-    SortOrder = Enum.SortOrder.LayoutOrder,
-}, categoryList)
-ui.CategoryLayout = categoryLayout
-
-local libraryStats = create("Frame", {
-    AnchorPoint = Vector2.new(0, 1),
-    Position = UDim2.new(0, 8, 1, -8),
-    Size = UDim2.new(1, -16, 0, 72),
-    BackgroundColor3 = C.Panel,
-    BackgroundTransparency = 0.42,
-    BorderSizePixel = 0,
-}, sidebar)
-corner(libraryStats, 12)
-stroke(libraryStats, 0.88)
-ui.LibraryStats = libraryStats
-
-local statTitle = text(libraryStats, "VELORA LIBRARY", 8, C.Muted, Enum.Font.GothamBold)
-statTitle.Position = UDim2.fromOffset(11, 8)
-statTitle.Size = UDim2.new(1, -22, 0, 14)
-
-local statSongs = text(libraryStats, tostring(#state.Registry) .. " songs", 11, C.Text, Enum.Font.GothamSemibold)
-statSongs.Position = UDim2.fromOffset(11, 26)
-statSongs.Size = UDim2.new(1, -22, 0, 18)
-ui.StatSongs = statSongs
-
-local statHint = text(libraryStats, "GitHub-backed registry", 8, C.Muted, Enum.Font.Gotham)
-statHint.Position = UDim2.fromOffset(11, 46)
-statHint.Size = UDim2.new(1, -22, 0, 14)
-
-local browser = create("Frame", {
-    Name = "Browser",
-    BackgroundColor3 = C.Window2,
-    BackgroundTransparency = 0.56,
-    BorderSizePixel = 0,
-    Position = UDim2.fromOffset(194, 14),
-    Size = UDim2.new(0, 352, 1, -28),
-}, body)
-corner(browser, 15)
-stroke(browser, 0.86)
-ui.Browser = browser
-
-local browserTitle = text(browser, "All Songs", 15, C.Text, Enum.Font.GothamBold)
-browserTitle.Position = UDim2.fromOffset(14, 10)
-browserTitle.Size = UDim2.new(1, -28, 0, 24)
-ui.BrowserTitle = browserTitle
-
-local browserCount = text(browser, "0 tracks", 8, C.Muted, Enum.Font.GothamMedium)
-browserCount.Position = UDim2.fromOffset(14, 31)
-browserCount.Size = UDim2.new(1, -28, 0, 14)
-ui.BrowserCount = browserCount
-
-local searchShell = create("Frame", {
-    Position = UDim2.fromOffset(12, 54),
-    Size = UDim2.new(1, -64, 0, 38),
-    BackgroundColor3 = C.Panel,
-    BackgroundTransparency = 0.28,
-    BorderSizePixel = 0,
-}, browser)
-corner(searchShell, 11)
-local searchStroke = stroke(searchShell, 0.78)
-ui.SearchShell = searchShell
-ui.SearchStroke = searchStroke
-
-local searchIcon = icon(searchShell, "search", 14, C.Muted, "⌕")
-searchIcon.AnchorPoint = Vector2.new(0, 0.5)
-searchIcon.Position = UDim2.new(0, 11, 0.5, 0)
-ui.SearchIcon = searchIcon
-
-local searchBox = create("TextBox", {
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Position = UDim2.fromOffset(34, 0),
-    Size = UDim2.new(1, -42, 1, 0),
-    ClearTextOnFocus = false,
-    Font = Enum.Font.GothamMedium,
-    PlaceholderText = "Search songs, artists, tags...",
-    PlaceholderColor3 = C.Muted,
-    Text = "",
-    TextColor3 = C.Text,
-    TextSize = 9,
+inst("TextLabel", {
+    Position = UDim2.fromOffset(18, 7), Size = UDim2.fromOffset(250, 30),
+    BackgroundTransparency = 1, Font = Enum.Font.GothamBold, Text = "VELORA",
+    TextSize = 25, TextColor3 = Color3.fromRGB(245, 245, 250),
     TextXAlignment = Enum.TextXAlignment.Left,
-}, searchShell)
-ui.SearchBox = searchBox
+}, top)
+inst("TextLabel", {
+    Position = UDim2.fromOffset(19, 34), Size = UDim2.fromOffset(280, 13),
+    BackgroundTransparency = 1, Font = Enum.Font.GothamMedium,
+    Text = "PIANO PLAYER  •  NOCTURNE 0.3.2", TextSize = 8,
+    TextColor3 = Color3.fromRGB(174, 165, 255), TextXAlignment = Enum.TextXAlignment.Left,
+}, top)
 
-local randomButton = create("TextButton", {
-    AnchorPoint = Vector2.new(1, 0),
-     Position = UDim2.new(1, -12, 0, 54),
-    Size = UDim2.fromOffset(40, 38),
-    BackgroundColor3 = C.Panel,
-    BackgroundTransparency = 0.28,
-    BorderSizePixel = 0,
-    Text = "",
-    AutoButtonColor = false,
-}, browser)
-corner(randomButton, 11)
-stroke(randomButton, 0.78)
-local randomIcon = icon(randomButton, "shuffle", 15, C.Sub, "↝")
-randomIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-randomIcon.Position = UDim2.fromScale(0.5, 0.5)
-ui.RandomButton = randomButton
-ui.RandomIcon = randomIcon
+local inputBadge = round(outline(inst("TextLabel", {
+    Position = UDim2.new(1, -190, 0, 13), Size = UDim2.fromOffset(130, 29),
+    BackgroundColor3 = Color3.fromRGB(35, 37, 48), BorderSizePixel = 0,
+    Font = Enum.Font.GothamBold, Text = "●  CHECKING INPUT", TextSize = 8,
+    TextColor3 = Color3.fromRGB(204, 207, 220),
+}, top), Color3.fromRGB(85, 88, 106), 0.35), 6)
 
-local songList = create("ScrollingFrame", {
-    Name = "SongList",
+local close = round(inst("TextButton", {
+    Position = UDim2.new(1, -45, 0, 13), Size = UDim2.fromOffset(29, 29),
+    BackgroundColor3 = Color3.fromRGB(35, 37, 48), BorderSizePixel = 0,
+    Font = Enum.Font.GothamBold, Text = "×", TextSize = 17,
+    TextColor3 = Color3.fromRGB(210, 212, 222), AutoButtonColor = false,
+}, top), 6)
+
+local body = inst("Frame", {
+    Position = UDim2.fromOffset(0, 54), Size = UDim2.new(1, 0, 1, -54),
     BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Position = UDim2.fromOffset(8, 104),
-    Size = UDim2.new(1, -16, 1, -112),
-    CanvasSize = UDim2.new(),
-    AutomaticCanvasSize = Enum.AutomaticSize.Y,
-    ScrollBarThickness = 2,
-    ScrollBarImageColor3 = C.Muted,
-    ScrollBarImageTransparency = 0.55,
-}, browser)
-ui.SongList = songList
+}, window)
 
-local songLayout = create("UIListLayout", {
-    Padding = UDim.new(0, 6),
-    SortOrder = Enum.SortOrder.LayoutOrder,
-}, songList)
-ui.SongLayout = songLayout
-padding(songList, 4, 4, 0, 4)
-
-local playerPanel = create("Frame", {
-    Name = "NowPlaying",
-    BackgroundColor3 = C.Window2,
-    BackgroundTransparency = 0.46,
+local left = inst("Frame", {
+    Size = UDim2.fromOffset(128, 306), BackgroundColor3 = Color3.fromRGB(27, 27, 34),
     BorderSizePixel = 0,
-    Position = UDim2.fromOffset(556, 14),
-    Size = UDim2.new(1, -570, 1, -28),
 }, body)
-corner(playerPanel, 15)
-stroke(playerPanel, 0.82)
-ui.PlayerPanel = playerPanel
+local center = inst("Frame", {
+    Position = UDim2.fromOffset(128, 0), Size = UDim2.fromOffset(300, 306),
+    BackgroundColor3 = Color3.fromRGB(22, 22, 28), BorderSizePixel = 0,
+}, body)
+local right = inst("Frame", {
+    Position = UDim2.fromOffset(428, 0), Size = UDim2.fromOffset(222, 306),
+    BackgroundColor3 = Color3.fromRGB(27, 27, 34), BorderSizePixel = 0,
+}, body)
+inst("Frame", { Position=UDim2.fromOffset(127,0), Size=UDim2.fromOffset(1,306), BackgroundColor3=Color3.fromRGB(56,58,72), BorderSizePixel=0 }, body)
+inst("Frame", { Position=UDim2.fromOffset(427,0), Size=UDim2.fromOffset(1,306), BackgroundColor3=Color3.fromRGB(56,58,72), BorderSizePixel=0 }, body)
 
-local nowHeader = text(playerPanel, "NOW PLAYING", 9, C.Muted, Enum.Font.GothamBold)
-nowHeader.Position = UDim2.fromOffset(16, 12)
-nowHeader.Size = UDim2.new(1, -32, 0, 18)
+inst("TextLabel", {
+    Position=UDim2.fromOffset(12,12), Size=UDim2.fromOffset(104,16), BackgroundTransparency=1,
+    Font=Enum.Font.GothamBold, Text="LIBRARY", TextSize=9, TextColor3=Color3.fromRGB(140,143,162),
+    TextXAlignment=Enum.TextXAlignment.Left,
+}, left)
 
-local trackVisual = create("Frame", {
-    Position = UDim2.fromOffset(16, 40),
-    Size = UDim2.new(1, -32, 0, 116),
-    BackgroundColor3 = C.Panel,
-    BackgroundTransparency = 0.24,
-    BorderSizePixel = 0,
-}, playerPanel)
-corner(trackVisual, 15)
-stroke(trackVisual, 0.78)
-ui.TrackVisual = trackVisual
+local navHolder=inst("Frame",{Position=UDim2.fromOffset(8,35),Size=UDim2.fromOffset(112,190),BackgroundTransparency=1},left)
+inst("UIListLayout",{Padding=UDim.new(0,6),SortOrder=Enum.SortOrder.LayoutOrder},navHolder)
+local activeFilter="All Songs"
+local searchQuery=""
+local navButtons={}
 
-local visualHeader = create("Frame", {
-    Position = UDim2.fromOffset(12, 12),
-    Size = UDim2.new(1, -24, 0, 32),
-    BackgroundTransparency = 1,
-}, trackVisual)
-ui.VisualHeader = visualHeader
+local searchBox=round(inst("TextBox",{
+    Position=UDim2.fromOffset(12,12),Size=UDim2.fromOffset(276,30),
+    BackgroundColor3=Color3.fromRGB(39,40,51),BorderSizePixel=0,ClearTextOnFocus=false,
+    PlaceholderText="Search songs...",PlaceholderColor3=Color3.fromRGB(133,136,154),
+    Text="",TextSize=10,TextColor3=Color3.fromRGB(242,242,247),Font=Enum.Font.Gotham,
+    TextXAlignment=Enum.TextXAlignment.Left,
+},center),6)
+pad(searchBox,10,10,0,0)
 
-local trackGlyph = create("Frame", {
-    Size = UDim2.fromOffset(32, 32),
-    BackgroundColor3 = CONFIG.Accent,
-    BackgroundTransparency = 0.82,
-    BorderSizePixel = 0,
-}, visualHeader)
-corner(trackGlyph, 10)
-stroke(trackGlyph, 0.68, 1, CONFIG.Accent)
-local trackIcon = icon(trackGlyph, "music", 15, CONFIG.Accent, "♪")
-trackIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-trackIcon.Position = UDim2.fromScale(0.5, 0.5)
-ui.TrackGlyph = trackGlyph
-ui.TrackIcon = trackIcon
+local list=inst("ScrollingFrame",{
+    Position=UDim2.fromOffset(10,51),Size=UDim2.fromOffset(280,246),
+    BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,
+    ScrollBarImageColor3=Color3.fromRGB(139,124,255),CanvasSize=UDim2.new(),
+    AutomaticCanvasSize=Enum.AutomaticSize.Y,
+},center)
+inst("UIListLayout",{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder},list)
+pad(list,0,4,0,4)
 
-local visualTitle = text(visualHeader, "Select a song", 12, C.Text, Enum.Font.GothamBold)
-visualTitle.Position = UDim2.fromOffset(42, 0)
-visualTitle.Size = UDim2.new(1, -42, 0, 17)
-ui.VisualTitle = visualTitle
+inst("TextLabel",{
+    Position=UDim2.fromOffset(14,12),Size=UDim2.fromOffset(190,16),BackgroundTransparency=1,
+    Font=Enum.Font.GothamBold,Text="NOW PLAYING",TextSize=9,
+    TextColor3=Color3.fromRGB(140,143,162),TextXAlignment=Enum.TextXAlignment.Left,
+},right)
 
-local visualArtist = text(visualHeader, "Velora Library", 8, C.Muted, Enum.Font.GothamMedium)
-visualArtist.Position = UDim2.fromOffset(42, 16)
-visualArtist.Size = UDim2.new(1, -42, 0, 15)
-ui.VisualArtist = visualArtist
+local songTitle=inst("TextLabel",{
+    Position=UDim2.fromOffset(14,42),Size=UDim2.fromOffset(194,36),BackgroundTransparency=1,
+    Font=Enum.Font.GothamBold,Text="Choose a song",TextSize=16,TextColor3=Color3.fromRGB(245,245,250),
+    TextWrapped=true,TextXAlignment=Enum.TextXAlignment.Left,TextYAlignment=Enum.TextYAlignment.Top,
+},right)
+local songMeta=inst("TextLabel",{
+    Position=UDim2.fromOffset(14,79),Size=UDim2.fromOffset(194,18),BackgroundTransparency=1,
+    Font=Enum.Font.Gotham,Text="Nothing selected",TextSize=9,TextColor3=Color3.fromRGB(148,151,169),
+    TextXAlignment=Enum.TextXAlignment.Left,
+},right)
 
-local keyboard = create("Frame", {
-    Name = "PianoVisualizer",
-    Position = UDim2.fromOffset(12, 56),
-    Size = UDim2.new(1, -24, 0, 48),
-    BackgroundTransparency = 1,
-}, trackVisual)
-ui.Keyboard = keyboard
+local progressBack=round(inst("Frame",{
+    Position=UDim2.fromOffset(14,111),Size=UDim2.fromOffset(194,5),
+    BackgroundColor3=Color3.fromRGB(53,55,67),BorderSizePixel=0,
+},right),3)
+local progressFill=round(inst("Frame",{
+    Size=UDim2.new(0,0,1,0),BackgroundColor3=Color3.fromRGB(139,124,255),BorderSizePixel=0,
+},progressBack),3)
 
-local keyLayout = create("UIListLayout", {
-    FillDirection = Enum.FillDirection.Horizontal,
-    HorizontalAlignment = Enum.HorizontalAlignment.Center,
-    VerticalAlignment = Enum.VerticalAlignment.Bottom,
-    Padding = UDim.new(0, 3),
-    SortOrder = Enum.SortOrder.LayoutOrder,
-}, keyboard)
-ui.KeyLayout = keyLayout
+local play=round(inst("TextButton",{
+    Position=UDim2.fromOffset(75,135),Size=UDim2.fromOffset(72,38),
+    BackgroundColor3=Color3.fromRGB(139,124,255),BorderSizePixel=0,
+    Font=Enum.Font.GothamBold,Text="PLAY",TextSize=11,TextColor3=Color3.new(1,1,1),
+    AutoButtonColor=false,
+},right),7)
+local stop=round(inst("TextButton",{
+    Position=UDim2.fromOffset(14,135),Size=UDim2.fromOffset(52,38),
+    BackgroundColor3=Color3.fromRGB(48,50,62),BorderSizePixel=0,
+    Font=Enum.Font.GothamBold,Text="STOP",TextSize=9,TextColor3=Color3.fromRGB(211,213,224),
+    AutoButtonColor=false,
+},right),7)
+local fav=round(inst("TextButton",{
+    Position=UDim2.fromOffset(156,135),Size=UDim2.fromOffset(52,38),
+    BackgroundColor3=Color3.fromRGB(48,50,62),BorderSizePixel=0,
+    Font=Enum.Font.GothamBold,Text="♡",TextSize=18,TextColor3=Color3.fromRGB(211,213,224),
+    AutoButtonColor=false,
+},right),7)
 
-local visualKeys = { "a", "s", "d", "f", "g", "h", "j", "k", "l", ";", "'" }
-for index, keyName in ipairs(visualKeys) do
-    local key = create("Frame", {
-        Name = "Key_" .. keyName,
-        Size = UDim2.new(1 / #visualKeys, -3, 1, 0),
-        BackgroundColor3 = C.Text,
-        BackgroundTransparency = 0.06,
-        BorderSizePixel = 0,
-        LayoutOrder = index,
-    }, keyboard)
-    corner(key, 5)
+local bpmLabel=inst("TextLabel",{
+    Position=UDim2.fromOffset(14,194),Size=UDim2.fromOffset(60,28),BackgroundTransparency=1,
+    Font=Enum.Font.GothamBold,Text="BPM",TextSize=9,TextColor3=Color3.fromRGB(148,151,169),
+    TextXAlignment=Enum.TextXAlignment.Left,
+},right)
+local bpmBox=round(inst("TextBox",{
+    Position=UDim2.fromOffset(73,194),Size=UDim2.fromOffset(70,28),
+    BackgroundColor3=Color3.fromRGB(45,47,58),BorderSizePixel=0,ClearTextOnFocus=false,
+    Font=Enum.Font.GothamBold,Text="120",TextSize=10,TextColor3=Color3.fromRGB(239,240,245),
+},right),6)
+local loop=round(inst("TextButton",{
+    Position=UDim2.fromOffset(151,194),Size=UDim2.fromOffset(57,28),
+    BackgroundColor3=Color3.fromRGB(45,47,58),BorderSizePixel=0,
+    Font=Enum.Font.GothamBold,Text="LOOP",TextSize=8,TextColor3=Color3.fromRGB(174,176,190),
+    AutoButtonColor=false,
+},right),6)
+local feedback=round(inst("TextLabel",{
+    Position=UDim2.fromOffset(14,239),Size=UDim2.fromOffset(194,50),
+    BackgroundColor3=Color3.fromRGB(36,38,48),BorderSizePixel=0,
+    Font=Enum.Font.Gotham,Text="Select a song, then press Play.",TextWrapped=true,
+    TextSize=9,TextColor3=Color3.fromRGB(160,163,181),
+},right),7)
+pad(feedback,9,9,6,6)
 
-    local keyLabel = text(key, string.upper(keyName), 7, C.Window, Enum.Font.GothamBold, Enum.TextXAlignment.Center)
-    keyLabel.AnchorPoint = Vector2.new(0.5, 1)
-    keyLabel.Position = UDim2.new(0.5, 0, 1, -4)
-    keyLabel.Size = UDim2.new(1, 0, 0, 12)
-
-    ui.PianoKeys[string.lower(keyName)] = key
-end
-
-local trackName = text(playerPanel, "Nothing selected", 16, C.Text, Enum.Font.GothamBold)
-trackName.Position = UDim2.fromOffset(16, 168)
-trackName.Size = UDim2.new(1, -32, 0, 24)
-ui.TrackName = trackName
-
-local trackMeta = text(playerPanel, "Choose a song from the library", 9, C.Muted, Enum.Font.GothamMedium)
-trackMeta.Position = UDim2.fromOffset(16, 192)
-trackMeta.Size = UDim2.new(1, -32, 0, 18)
-ui.TrackMeta = trackMeta
-
-local progressHit = create("TextButton", {
-    Position = UDim2.fromOffset(16, 222),
-    Size = UDim2.new(1, -32, 0, 22),
-    BackgroundTransparency = 1,
-    BorderSizePixel = 0,
-    Text = "",
-    AutoButtonColor = false,
-}, playerPanel)
-ui.ProgressHit = progressHit
-
-local progressBack = create("Frame", {
-    AnchorPoint = Vector2.new(0, 0.5),
-    Position = UDim2.new(0, 0, 0.5, 0),
-    Size = UDim2.new(1, 0, 0, 4),
-    BackgroundColor3 = C.Raised,
-    BackgroundTransparency = 0.08,
-    BorderSizePixel = 0,
-}, progressHit)
-corner(progressBack, 4)
-ui.ProgressBack = progressBack
-
-local progressFill = create("Frame", {
-    Size = UDim2.new(0, 0, 1, 0),
-    BackgroundColor3 = CONFIG.Accent,
-    BorderSizePixel = 0,
-}, progressBack)
-corner(progressFill, 4)
-ui.ProgressFill = progressFill
-
-local progressThumb = create("Frame", {
-    AnchorPoint = Vector2.new(0.5, 0.5),
-    Position = UDim2.new(0, 0, 0.5, 0),
-    Size = UDim2.fromOffset(9, 9),
-    BackgroundColor3 = C.Text,
-    BorderSizePixel = 0,
-}, progressBack)
-corner(progressThumb, 7)
-ui.ProgressThumb = progressThumb
-
-local timeLeft = text(playerPanel, "0:00", 8, C.Muted, Enum.Font.GothamMedium)
-timeLeft.Position = UDim2.fromOffset(16, 244)
-timeLeft.Size = UDim2.fromOffset(50, 14)
-ui.TimeLeft = timeLeft
-
-local timeRight = text(playerPanel, "0:00", 8, C.Muted, Enum.Font.GothamMedium, Enum.TextXAlignment.Right)
-timeRight.AnchorPoint = Vector2.new(1, 0)
-timeRight.Position = UDim2.new(1, -16, 0, 244)
-timeRight.Size = UDim2.fromOffset(50, 14)
-ui.TimeRight = timeRight
-
-local controls = create("Frame", {
-    Position = UDim2.fromOffset(16, 268),
-    Size = UDim2.new(1, -32, 0, 52),
-    BackgroundTransparency = 1,
-}, playerPanel)
-ui.Controls = controls
-
-local controlLayout = create("UIListLayout", {
-    FillDirection = Enum.FillDirection.Horizontal,
-    HorizontalAlignment = Enum.HorizontalAlignment.Center,
-    VerticalAlignment = Enum.VerticalAlignment.Center,
-    Padding = UDim.new(0, 8),
-    SortOrder = Enum.SortOrder.LayoutOrder,
-}, controls)
-ui.ControlLayout = controlLayout
-
-local function controlButton(name, iconName, fallback, large, order)
-    local button = create("TextButton", {
-        Name = name,
-        Size = UDim2.fromOffset(large and 48 or 38, large and 48 or 38),
-        BackgroundColor3 = large and CONFIG.Accent or C.Raised,
-        BackgroundTransparency = large and 0.08 or 0.26,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-        LayoutOrder = order,
-    }, controls)
-    corner(button, large and 15 or 12)
-    stroke(button, large and 0.54 or 0.78)
-
-    local holder = icon(button, iconName, large and 18 or 15, large and C.Text or C.Sub, fallback)
-    holder.AnchorPoint = Vector2.new(0.5, 0.5)
-    holder.Position = UDim2.fromScale(0.5, 0.5)
-
-    connect(button.MouseEnter, function()
-        uiHover()
-        tween(button, 0.12, {
-            BackgroundTransparency = large and 0 or 0.12,
-        })
-        recolorIcon(holder, C.Text)
-    end)
-
-    connect(button.MouseLeave, function()
-        tween(button, 0.12, {
-            BackgroundTransparency = large and 0.08 or 0.26,
-        })
-        recolorIcon(holder, large and C.Text or C.Sub)
-    end)
-
-    return button, holder
-end
-
-local shuffleButton, shuffleIcon = controlButton("Shuffle", "shuffle", "↝", false, 1)
-local previousButton, previousIcon = controlButton("Previous", "skip-back", "|◀", false, 2)
-local playButton, playIcon = controlButton("Play", "play", "▶", true, 3)
-local stopButton, stopIcon = controlButton("Stop", "square", "■", false, 4)
-local loopButton, loopIcon = controlButton("Loop", "repeat-2", "↻", false, 5)
-ui.ShuffleButton = shuffleButton
-ui.ShuffleIcon = shuffleIcon
-ui.PreviousButton = previousButton
-ui.PlayButton = playButton
-ui.PlayIcon = playIcon
-ui.StopButton = stopButton
-ui.LoopButton = loopButton
-ui.LoopIcon = loopIcon
-
-local tweakPanel = create("Frame", {
-    Position = UDim2.fromOffset(16, 314),
-    Size = UDim2.new(1, -32, 0, 96),
-    BackgroundColor3 = C.Panel,
-    BackgroundTransparency = 0.34,
-    BorderSizePixel = 0,
-}, playerPanel)
-corner(tweakPanel, 13)
-stroke(tweakPanel, 0.84)
-ui.TweakPanel = tweakPanel
-
-local function tweakRow(y, labelText, valueText)
-    local row = create("Frame", {
-        Position = UDim2.fromOffset(0, y),
-        Size = UDim2.new(1, 0, 0, 43),
-        BackgroundTransparency = 1,
-    }, tweakPanel)
-
-    local label = text(row, labelText, 9, C.Sub, Enum.Font.GothamMedium)
-    label.Position = UDim2.fromOffset(12, 0)
-    label.Size = UDim2.fromOffset(100, 43)
-
-    local minus = create("TextButton", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        Position = UDim2.new(1, -100, 0.5, 0),
-        Size = UDim2.fromOffset(28, 28),
-        BackgroundColor3 = C.Raised,
-        BackgroundTransparency = 0.34,
-        BorderSizePixel = 0,
-        Text = "−",
-        TextColor3 = C.Sub,
-        TextSize = 15,
-        Font = Enum.Font.GothamMedium,
-        AutoButtonColor = false,
-    }, row)
-    corner(minus, 8)
-    stroke(minus, 0.84)
-
-    local value = text(row, valueText, 9, C.Text, Enum.Font.GothamBold, Enum.TextXAlignment.Center)
-    value.AnchorPoint = Vector2.new(1, 0.5)
-    value.Position = UDim2.new(1, -44, 0.5, 0)
-    value.Size = UDim2.fromOffset(50, 28)
-
-    local plus = create("TextButton", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        Position = UDim2.new(1, -8, 0.5, 0),
-        Size = UDim2.fromOffset(28, 28),
-        BackgroundColor3 = C.Raised,
-        BackgroundTransparency = 0.34,
-        BorderSizePixel = 0,
-        Text = "+",
-        TextColor3 = C.Sub,
-        TextSize = 14,
-        Font = Enum.Font.GothamMedium,
-        AutoButtonColor = false,
-    }, row)
-    corner(plus, 8)
-    stroke(plus, 0.84)
-
-    for _, button in ipairs({ minus, plus }) do
-        connect(button.MouseEnter, function()
-            uiHover()
-            tween(button, 0.12, { BackgroundTransparency = 0.16 })
-        end)
-        connect(button.MouseLeave, function()
-            tween(button, 0.12, { BackgroundTransparency = 0.34 })
-        end)
-    end
-
-    return row, minus, value, plus
-end
-
-local speedRow, speedMinus, speedValue, speedPlus = tweakRow(5, "Playback speed", "1.00x")
-local bpmRow, bpmMinus, bpmValue, bpmPlus = tweakRow(48, "Song BPM", "--")
-ui.SpeedValue = speedValue
-ui.BPMValue = bpmValue
-
-local inputButton = create("TextButton", {
-    AnchorPoint = Vector2.new(0, 1),
-    Position = UDim2.new(0, 16, 1, -16),
-    Size = UDim2.new(1, -32, 0, 38),
-    BackgroundColor3 = C.Panel,
-    BackgroundTransparency = 0.32,
-    BorderSizePixel = 0,
-    Text = "",
-    AutoButtonColor = false,
-}, playerPanel)
-corner(inputButton, 11)
-stroke(inputButton, 0.82)
-ui.InputButton = inputButton
-
-local inputIcon = icon(inputButton, "keyboard-music", 15, C.Muted, "⌨")
-inputIcon.AnchorPoint = Vector2.new(0, 0.5)
-inputIcon.Position = UDim2.new(0, 12, 0.5, 0)
-ui.InputIcon = inputIcon
-
-local inputLabel = text(inputButton, "PREVIEW ONLY", 8, C.Sub, Enum.Font.GothamBold)
-inputLabel.Position = UDim2.fromOffset(36, 0)
-inputLabel.Size = UDim2.new(1, -48, 1, 0)
-ui.InputLabel = inputLabel
-
-local mini = create("TextButton", {
-    Name = "MiniPlayer",
-    AnchorPoint = Vector2.new(1, 1),
-    Position = UDim2.new(1, -18, 1, -18),
-    Size = UDim2.fromOffset(194, 52),
-    BackgroundColor3 = C.Window2,
-    BackgroundTransparency = 0.12,
-    BorderSizePixel = 0,
-    Text = "",
-    AutoButtonColor = false,
-    Visible = false,
-    ZIndex = 50,
-}, gui)
-corner(mini, 15)
-stroke(mini, 0.56)
-ui.Mini = mini
-
-local miniIconShell = create("Frame", {
-    Position = UDim2.fromOffset(8, 8),
-    Size = UDim2.fromOffset(36, 36),
-    BackgroundColor3 = CONFIG.Accent,
-    BackgroundTransparency = 0.76,
-    BorderSizePixel = 0,
-    ZIndex = 51,
-}, mini)
-corner(miniIconShell, 11)
-stroke(miniIconShell, 0.66, 1, CONFIG.Accent)
-
-local miniIcon = icon(miniIconShell, "music-2", 16, CONFIG.Accent, "♪")
-miniIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-miniIcon.Position = UDim2.fromScale(0.5, 0.5)
-
-local miniTitle = text(mini, "VELORA", 9, C.Text, Enum.Font.GothamBold)
-miniTitle.Position = UDim2.fromOffset(54, 8)
-miniTitle.Size = UDim2.new(1, -62, 0, 16)
-miniTitle.ZIndex = 51
-ui.MiniTitle = miniTitle
-
-local miniMeta = text(mini, "CLICK TO RESTORE", 7, C.Muted, Enum.Font.GothamBold)
-miniMeta.Position = UDim2.fromOffset(54, 25)
-miniMeta.Size = UDim2.new(1, -62, 0, 15)
-miniMeta.ZIndex = 51
-ui.MiniMeta = miniMeta
-
-local function updateViewportScale()
-    local camera = workspace.CurrentCamera
-    if not camera then
-        return
-    end
-    local viewport = camera.ViewportSize
-    local value = math.clamp(math.min(viewport.X / 960, viewport.Y / 610) * 0.97, 0.48, 1)
-    windowScale.Scale = value
-end
-
-updateViewportScale()
-if workspace.CurrentCamera then
-    connect(workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"), updateViewportScale)
-end
-
--- drag
-local dragging = false
-local dragStart = nil
-local dragPosition = nil
-
-connect(topbar.InputBegan, function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        dragPosition = window.Position
-    end
-end)
-
-connect(topbar.InputEnded, function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
-    end
-end)
-
-connect(UserInputService.InputChanged, function(input)
-    if dragging and dragStart and dragPosition and (
-        input.UserInputType == Enum.UserInputType.MouseMovement
-        or input.UserInputType == Enum.UserInputType.Touch
-    ) then
-        local delta = input.Position - dragStart
-        window.Position = dragPosition + UDim2.fromOffset(delta.X, delta.Y)
-    end
-end)
-
-local hidden = false
-local function setHidden(value)
-    hidden = value == true
-    backdrop.Visible = not hidden
-    mini.Visible = hidden
-    if CONFIG.Blur then
-        blur.Size = hidden and 0 or 12
+local refreshList
+local categories={"All Songs","Favorites","Recent"}
+for _,entry in ipairs(state.Registry) do
+    for _,category in ipairs(entry.Categories or {}) do
+        if not table.find(categories,category) then table.insert(categories,category) end
     end
 end
 
-connect(minimizeButton.MouseButton1Click, function()
-    uiClick()
-    setHidden(true)
-end)
-
-connect(mini.MouseButton1Click, function()
-    uiClick()
-    setHidden(false)
-end)
-
-connect(UserInputService.InputBegan, function(input, processed)
-    if not processed and input.KeyCode == CONFIG.ToggleKey then
-        setHidden(not hidden)
+local function setFilter(name)
+    activeFilter=name
+    for filter,button in pairs(navButtons) do
+        button.BackgroundTransparency=filter==name and 0 or 1
+        button.TextColor3=filter==name and Color3.new(1,1,1) or Color3.fromRGB(166,169,185)
     end
-end)
-
-local function destroyUI()
-    if state.Destroyed then
-        return
-    end
-
-    state.Destroyed = true
-    stopConnection()
-
-    for _, connection in ipairs(ui.Connections) do
-        pcall(function()
-            connection:Disconnect()
-        end)
-    end
-
-    pcall(function()
-        changed:Destroy()
-        notePlayed:Destroy()
-    end)
-
-    if blur and blur.Parent then
-        blur:Destroy()
-    end
-
-    if gui and gui.Parent then
-        gui:Destroy()
-    end
-
-    if rawget(_G, "Velora") == API then
-        _G.Velora = nil
-    end
-
-    pcall(function()
-        if type(getgenv) == "function" and getgenv().Velora == API then
-            getgenv().Velora = nil
-        end
-    end)
+    refreshList()
 end
 
-connect(closeButton.MouseButton1Click, function()
-    uiClick()
-    destroyUI()
-end)
+for index,name in ipairs(categories) do
+    local button=round(inst("TextButton",{
+        Size=UDim2.new(1,0,0,29),BackgroundColor3=Color3.fromRGB(62,60,83),
+        BackgroundTransparency=index==1 and 0 or 1,BorderSizePixel=0,AutoButtonColor=false,
+        Font=Enum.Font.GothamMedium,Text="  "..name,TextSize=9,
+        TextColor3=index==1 and Color3.new(1,1,1) or Color3.fromRGB(166,169,185),
+        TextXAlignment=Enum.TextXAlignment.Left,
+    },navHolder),6)
+    navButtons[name]=button
+    button.MouseButton1Click:Connect(function() setFilter(name) end)
+end
 
-local function categories()
-    local output = { "All Songs", "Favorites", "Recent", "Queue" }
-    local seen = {}
+local function matches(entry)
+    local categoryMatch=activeFilter=="All Songs"
+        or (activeFilter=="Favorites" and API:IsFavorite(entry.Id))
+        or (activeFilter=="Recent" and table.find(state.Recent,entry.Id))
+        or table.find(entry.Categories or {},activeFilter)
+    local haystack=string.lower((entry.Name or "").." "..(entry.Artist or ""))
+    return categoryMatch and (searchQuery=="" or string.find(haystack,searchQuery,1,true))
+end
 
-    for _, entry in ipairs(state.Registry) do
-        for _, category in ipairs(entry.Categories or {}) do
-            if not seen[category] then
-                seen[category] = true
-                table.insert(output, category)
-            end
+refreshList=function()
+    for _,child in ipairs(list:GetChildren()) do
+        if child:IsA("GuiObject") then child:Destroy() end
+    end
+    for _,entry in ipairs(state.Registry) do
+        if matches(entry) then
+            local card=round(outline(inst("TextButton",{
+                Size=UDim2.new(1,0,0,48),BackgroundColor3=Color3.fromRGB(38,39,49),
+                BorderSizePixel=0,AutoButtonColor=false,Text="",
+            },list),Color3.fromRGB(67,69,84),0.5),7)
+            inst("TextLabel",{
+                Position=UDim2.fromOffset(12,7),Size=UDim2.new(1,-65,0,17),BackgroundTransparency=1,
+                Font=Enum.Font.GothamBold,Text=entry.Name or "Untitled",TextSize=10,
+                TextColor3=Color3.fromRGB(243,243,248),TextXAlignment=Enum.TextXAlignment.Left,
+            },card)
+            inst("TextLabel",{
+                Position=UDim2.fromOffset(12,25),Size=UDim2.new(1,-65,0,14),BackgroundTransparency=1,
+                Font=Enum.Font.Gotham,Text=(entry.Artist or "Unknown").."  •  "..tostring(entry.BPM or 120).." BPM",
+                TextSize=8,TextColor3=Color3.fromRGB(143,146,164),TextXAlignment=Enum.TextXAlignment.Left,
+            },card)
+            inst("TextLabel",{
+                Position=UDim2.new(1,-42,0,9),Size=UDim2.fromOffset(28,28),BackgroundTransparency=1,
+                Font=Enum.Font.GothamBold,Text="›",TextSize=18,TextColor3=Color3.fromRGB(154,146,235),
+            },card)
+            card.MouseButton1Click:Connect(function()
+                local ok,err=API:LoadSong(entry.Id,false)
+                feedback.Text=ok and "Ready. Press Play to send notes into the game." or tostring(err)
+            end)
         end
     end
-
-    return output
 end
 
-local categoryIcons = {
-    ["All Songs"] = { "list-music", "≡" },
-    ["Favorites"] = { "heart", "♡" },
-    ["Recent"] = { "clock-3", "◷" },
-    ["Queue"] = { "list-end", "☷" },
-}
-
-local function idsToEntries(ids)
-    local output = {}
-    for _, id in ipairs(ids) do
-        local entry = getEntry(id)
-        if entry then
-            table.insert(output, entry)
-        end
+local function render()
+    local snap=API:GetSnapshot()
+    local mode,connected=API:GetInputMode()
+    inputBadge.Text=connected and ("●  "..string.upper(mode)) or "●  NO PIANO OUTPUT"
+    inputBadge.TextColor3=connected and Color3.fromRGB(103,232,163) or Color3.fromRGB(255,190,105)
+    if snap.Entry then
+        songTitle.Text=snap.Entry.Name or "Untitled"
+        songMeta.Text=(snap.Entry.Artist or "Unknown").."  •  "..tostring(snap.BPM or 120).." BPM"
+        bpmBox.Text=tostring(math.floor(snap.BPM or 120))
+        fav.Text=API:IsFavorite(snap.Entry.Id) and "♥" or "♡"
     end
-    return output
+    progressFill.Size=UDim2.new(snap.Progress,0,1,0)
+    play.Text=snap.Playing and (snap.Paused and "RESUME" or "PAUSE") or "PLAY"
+    loop.BackgroundColor3=snap.Loop and Color3.fromRGB(92,78,155) or Color3.fromRGB(45,47,58)
 end
 
-local function entryMatchesSearch(entry)
-    local query = state.Search
-    if query == "" then
-        return true
-    end
-
-    if contains(entry.Name, query) or contains(entry.Artist, query) then
-        return true
-    end
-
-    for _, category in ipairs(entry.Categories or {}) do
-        if contains(category, query) then
-            return true
-        end
-    end
-
-    return false
-end
-
-local function categoryEntries()
-    local base = {}
-
-    if state.Category == "Favorites" then
-        for _, entry in ipairs(state.Registry) do
-            if state.Favorites[entry.Id] then
-                table.insert(base, entry)
-            end
-        end
-    elseif state.Category == "Recent" then
-        base = idsToEntries(state.Recent)
-    elseif state.Category == "Queue" then
-        base = idsToEntries(state.Queue)
-    elseif state.Category == "All Songs" then
-        for _, entry in ipairs(state.Registry) do
-            table.insert(base, entry)
-        end
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+    searchQuery=string.lower(searchBox.Text)
+    refreshList()
+end)
+play.MouseButton1Click:Connect(function()
+    local snap=API:GetSnapshot()
+    if snap.Playing and not snap.Paused then API:Pause(); feedback.Text="Paused."
     else
-        for _, entry in ipairs(state.Registry) do
-            for _, category in ipairs(entry.Categories or {}) do
-                if category == state.Category then
-                    table.insert(base, entry)
-                    break
-                end
-            end
-        end
+        local ok,err=API:Play()
+        feedback.Text=ok and "Sending notes to the game…" or (tostring(err).." — click the piano once, then retry.")
     end
-
-    local output = {}
-    for _, entry in ipairs(base) do
-        if entryMatchesSearch(entry) then
-            table.insert(output, entry)
-        end
-    end
-
-    return output
-end
-
-local rebuildSongs
-
-local function selectCategory(name)
-    state.Category = name
-    browserTitle.Text = name
-
-    for category, data in pairs(ui.CategoryButtons) do
-        local selected = category == name
-        tween(data.Button, 0.14, {
-            BackgroundTransparency = selected and 0.12 or 1,
-            BackgroundColor3 = selected and C.Raised or C.Panel,
-        })
-        recolorIcon(data.Icon, selected and CONFIG.Accent or C.Muted)
-        data.Label.TextColor3 = selected and C.Text or C.Sub
-        data.Indicator.Visible = selected
-    end
-
-    if rebuildSongs then
-        rebuildSongs()
-    end
-end
-
-local function rebuildCategories()
-    for _, child in ipairs(categoryList:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-    table.clear(ui.CategoryButtons)
-
-    local order = 0
-    for _, name in ipairs(categories()) do
-        order += 1
-        local button = create("TextButton", {
-            Name = "Category_" .. name,
-            Size = UDim2.new(1, 0, 0, 34),
-            BackgroundColor3 = C.Raised,
-            BackgroundTransparency = name == state.Category and 0.12 or 1,
-            BorderSizePixel = 0,
-            Text = "",
-            AutoButtonColor = false,
-            LayoutOrder = order,
-        }, categoryList)
-        corner(button, 9)
-
-        local indicator = create("Frame", {
-            Position = UDim2.fromOffset(0, 7),
-            Size = UDim2.fromOffset(2, 20),
-            BackgroundColor3 = CONFIG.Accent,
-            BorderSizePixel = 0,
-            Visible = name == state.Category,
-        }, button)
-        corner(indicator, 2)
-
-        local mapping = categoryIcons[name] or { "disc-3", "•" }
-        local holder = icon(button, mapping[1], 13, name == state.Category and CONFIG.Accent or C.Muted, mapping[2])
-        holder.AnchorPoint = Vector2.new(0, 0.5)
-        holder.Position = UDim2.new(0, 11, 0.5, 0)
-
-        local label = text(button, name, 9, name == state.Category and C.Text or C.Sub, Enum.Font.GothamMedium)
-        label.Position = UDim2.fromOffset(34, 0)
-        label.Size = UDim2.new(1, -42, 1, 0)
-
-        ui.CategoryButtons[name] = {
-            Button = button,
-            Icon = holder,
-            Label = label,
-            Indicator = indicator,
-        }
-
-        connect(button.MouseEnter, function()
-            uiHover()
-            if state.Category ~= name then
-                tween(button, 0.12, { BackgroundTransparency = 0.58 })
-            end
-        end)
-
-        connect(button.MouseLeave, function()
-            if state.Category ~= name then
-                tween(button, 0.12, { BackgroundTransparency = 1 })
-            end
-        end)
-
-        connect(button.MouseButton1Click, function()
-            uiClick()
-            selectCategory(name)
-        end)
-    end
-end
-
-local function makeSongCard(entry, order)
-    local selected = state.CurrentEntry and state.CurrentEntry.Id == entry.Id
-
-    local card = create("TextButton", {
-        Name = "Song_" .. entry.Id,
-        Size = UDim2.new(1, 0, 0, 66),
-        BackgroundColor3 = selected and C.Raised or C.Panel,
-        BackgroundTransparency = selected and 0.08 or 0.40,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-        LayoutOrder = order,
-    }, songList)
-    corner(card, 12)
-    local cardStroke = stroke(card, selected and 0.62 or 0.88)
-
-    local selectedLine = create("Frame", {
-        Position = UDim2.fromOffset(0, 10),
-        Size = UDim2.fromOffset(2, 46),
-        BackgroundColor3 = CONFIG.Accent,
-        BorderSizePixel = 0,
-        Visible = selected,
-    }, card)
-    corner(selectedLine, 2)
-
-    local songGlyph = create("Frame", {
-        Position = UDim2.fromOffset(10, 11),
-        Size = UDim2.fromOffset(44, 44),
-        BackgroundColor3 = CONFIG.Accent,
-        BackgroundTransparency = selected and 0.74 or 0.88,
-        BorderSizePixel = 0,
-    }, card)
-    corner(songGlyph, 11)
-    stroke(songGlyph, selected and 0.60 or 0.82, 1, CONFIG.Accent)
-
-    local glyphIcon = icon(songGlyph, "music-2", 16, CONFIG.Accent, "♪")
-    glyphIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-    glyphIcon.Position = UDim2.fromScale(0.5, 0.5)
-
-    local name = text(card, truncate(entry.Name, 25), 10, C.Text, Enum.Font.GothamSemibold)
-    name.Position = UDim2.fromOffset(64, 10)
-    name.Size = UDim2.new(1, -154, 0, 17)
-
-    local artist = text(card, truncate(entry.Artist or "Unknown", 22), 8, C.Muted, Enum.Font.GothamMedium)
-    artist.Position = UDim2.fromOffset(64, 28)
-    artist.Size = UDim2.new(1, -154, 0, 14)
-
-    local bpm = text(card, tostring(entry.BPM or "--") .. " BPM", 7, C.Muted, Enum.Font.GothamBold)
-    bpm.Position = UDim2.fromOffset(64, 44)
-    bpm.Size = UDim2.fromOffset(58, 13)
-
-    local favorite = create("TextButton", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        Position = UDim2.new(1, -48, 0.5, 0),
-        Size = UDim2.fromOffset(28, 28),
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-    }, card)
-
-    local favIcon = icon(favorite, "heart", 14, state.Favorites[entry.Id] and CONFIG.AccentAlt or C.Muted, state.Favorites[entry.Id] and "♥" or "♡")
-    favIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-    favIcon.Position = UDim2.fromScale(0.5, 0.5)
-
-    local queue = create("TextButton", {
-        AnchorPoint = Vector2.new(1, 0.5),
-        Position = UDim2.new(1, -14, 0.5, 0),
-        Size = UDim2.fromOffset(28, 28),
-        BackgroundTransparency = 1,
-        BorderSizePixel = 0,
-        Text = "",
-        AutoButtonColor = false,
-    }, card)
-
-    local queueIcon = icon(queue, "list-plus", 14, C.Muted, "+")
-    queueIcon.AnchorPoint = Vector2.new(0.5, 0.5)
-    queueIcon.Position = UDim2.fromScale(0.5, 0.5)
-
-    connect(card.MouseEnter, function()
-        uiHover()
-        if not (state.CurrentEntry and state.CurrentEntry.Id == entry.Id) then
-            tween(card, 0.12, { BackgroundTransparency = 0.20 })
-            cardStroke.Transparency = 0.72
-        end
-    end)
-
-    connect(card.MouseLeave, function()
-        if not (state.CurrentEntry and state.CurrentEntry.Id == entry.Id) then
-            tween(card, 0.12, { BackgroundTransparency = 0.40 })
-            cardStroke.Transparency = 0.88
-        end
-    end)
-
-    connect(card.MouseButton1Click, function()
-        uiClick()
-        API:LoadSong(entry.Id, false)
-    end)
-
-    connect(favorite.MouseButton1Click, function()
-        uiClick()
-        API:ToggleFavorite(entry.Id)
-    end)
-
-    connect(queue.MouseButton1Click, function()
-        uiClick()
-        API:AddToQueue(entry.Id)
-    end)
-
-    return card
-end
-
-rebuildSongs = function()
-    for _, child in ipairs(songList:GetChildren()) do
-        if not child:IsA("UIListLayout")
-            and not child:IsA("UIPadding") then
-            child:Destroy()
-        end
-    end
-    table.clear(ui.SongCards)
-
-    local entries = categoryEntries()
-    ui.CurrentFiltered = entries
-
-    browserCount.Text = string.format("%d track%s", #entries, #entries == 1 and "" or "s")
-
-    if #entries == 0 then
-        local empty = create("Frame", {
-            Size = UDim2.new(1, 0, 0, 120),
-            BackgroundTransparency = 1,
-            LayoutOrder = 1,
-        }, songList)
-
-        local emptyIcon = icon(empty, "music", 22, C.Muted, "♪")
-        emptyIcon.AnchorPoint = Vector2.new(0.5, 0)
-        emptyIcon.Position = UDim2.new(0.5, 0, 0, 20)
-
-        local emptyTitle = text(empty, "No songs here yet", 10, C.Sub, Enum.Font.GothamSemibold, Enum.TextXAlignment.Center)
-        emptyTitle.Position = UDim2.fromOffset(0, 52)
-        emptyTitle.Size = UDim2.new(1, 0, 0, 18)
-
-        local emptySub = text(empty, "Try another category or search.", 8, C.Muted, Enum.Font.Gotham, Enum.TextXAlignment.Center)
-        emptySub.Position = UDim2.fromOffset(0, 72)
-        emptySub.Size = UDim2.new(1, 0, 0, 16)
-        return
-    end
-
-    for index, entry in ipairs(entries) do
-        ui.SongCards[entry.Id] = makeSongCard(entry, index)
-    end
-end
-
-local function updateInputDisplay()
-    local mode, connected = API:GetInputMode()
-    statusText.Text = string.upper(mode)
-    inputLabel.Text = string.upper(mode)
-    statusDot.BackgroundColor3 = connected and C.Success or C.Warning
-    recolorIcon(inputIcon, connected and C.Success or C.Muted)
-end
-
-local function updateNowPlaying(animated)
-    local snap = API:GetSnapshot()
-    local entry = snap.Entry
-
-    if entry then
-        local titleText = truncate(entry.Name, 27)
-        local artistText = truncate(entry.Artist or "Unknown", 27)
-
-        if animated then
-            visualTitle.TextTransparency = 0.65
-            visualArtist.TextTransparency = 0.65
-            trackName.TextTransparency = 0.65
-            tween(visualTitle, 0.16, { TextTransparency = 0 })
-            tween(visualArtist, 0.16, { TextTransparency = 0 })
-            tween(trackName, 0.16, { TextTransparency = 0 })
-        end
-
-        visualTitle.Text = titleText
-        visualArtist.Text = artistText
-        trackName.Text = titleText
-        trackMeta.Text = string.format("%s  •  %s BPM  •  %d queued", artistText, tostring(snap.BPM or "--"), snap.QueueCount)
-        miniTitle.Text = titleText
-        miniMeta.Text = snap.Playing and (snap.Paused and "PAUSED" or "PLAYING") or "READY"
-        bpmValue.Text = tostring(snap.BPM or "--")
-    else
-        visualTitle.Text = "Select a song"
-        visualArtist.Text = "Velora Library"
-        trackName.Text = "Nothing selected"
-        trackMeta.Text = "Choose a song from the library"
-        miniTitle.Text = "VELORA"
-        miniMeta.Text = "CLICK TO RESTORE"
-        bpmValue.Text = "--"
-    end
-
-    speedValue.Text = string.format("%.2fx", snap.Speed)
-    recolorIcon(loopIcon, snap.Loop and CONFIG.Accent or C.Sub)
-    recolorIcon(shuffleIcon, snap.Shuffle and CONFIG.Accent or C.Sub)
-
-    loopButton.BackgroundTransparency = snap.Loop and 0.12 or 0.26
-    shuffleButton.BackgroundTransparency = snap.Shuffle and 0.12 or 0.26
-
-    local desiredIcon = snap.Playing and not snap.Paused and "pause" or "play"
-    local imageChild = playIcon:FindFirstChildWhichIsA("ImageLabel")
-    local textChild = playIcon:FindFirstChildWhichIsA("TextLabel")
-    if imageChild and Icons[desiredIcon] then
-        imageChild.Image = Icons[desiredIcon]
-        imageChild:SetAttribute("LucideName", desiredIcon)
-    elseif textChild then
-        textChild.Text = snap.Playing and not snap.Paused and "Ⅱ" or "▶"
-    end
-
-    updateInputDisplay()
-end
-
-local function refreshAll(reason)
-    if state.Destroyed then
-        return
-    end
-
-    if reason == "library" then
-        statSongs.Text = tostring(#state.Registry) .. " songs"
-        rebuildCategories()
-        rebuildSongs()
-    elseif reason == "favorites" or reason == "queue" then
-        rebuildCategories()
-        rebuildSongs()
-        updateNowPlaying(false)
-    elseif reason == "selection" then
-        rebuildSongs()
-        updateNowPlaying(true)
-    else
-        updateNowPlaying(false)
-    end
-end
-
-connect(searchBox:GetPropertyChangedSignal("Text"), function()
-    state.Search = searchBox.Text
-    rebuildSongs()
+    render()
+end)
+stop.MouseButton1Click:Connect(function() API:Stop();feedback.Text="Stopped.";render() end)
+fav.MouseButton1Click:Connect(function()
+    if state.CurrentEntry then API:ToggleFavorite(state.CurrentEntry.Id);refreshList();render() end
+end)
+loop.MouseButton1Click:Connect(function() API:SetLoop(not state.Loop);render() end)
+bpmBox.FocusLost:Connect(function()
+    local bpm=API:SetBPM(tonumber(bpmBox.Text))
+    feedback.Text=bpm and ("BPM set to "..math.floor(bpm)) or "Choose a song first."
+    render()
 end)
 
-connect(searchBox.Focused, function()
-    searchStroke.Color = CONFIG.Accent
-    searchStroke.Transparency = 0.38
-    recolorIcon(searchIcon, CONFIG.Accent)
+API.Changed:Connect(function(reason)
+    if reason=="input-error" then
+        feedback.Text="The game rejected keyboard input. Click the piano in-game once, then press Play."
+    elseif reason=="input-required" then
+        feedback.Text="No keyboard backend is available in this executor."
+    elseif reason=="finished" then
+        feedback.Text="Song finished."
+    end
+    render()
+end)
+API.NotePlayed:Connect(function(note)
+    feedback.Text="Playing note  "..tostring(note)
 end)
 
-connect(searchBox.FocusLost, function()
-    searchStroke.Color = C.Edge
-    searchStroke.Transparency = 0.78
-    recolorIcon(searchIcon, C.Muted)
-end)
-
-connect(randomButton.MouseEnter, function()
-    uiHover()
-    tween(randomButton, 0.12, { BackgroundTransparency = 0.12 })
-    recolorIcon(randomIcon, C.Text)
-end)
-
-connect(randomButton.MouseLeave, function()
-    tween(randomButton, 0.12, { BackgroundTransparency = 0.28 })
-    recolorIcon(randomIcon, C.Sub)
-end)
-
-connect(randomButton.MouseButton1Click, function()
-    uiClick()
-    local entries = categoryEntries()
-    if #entries > 0 then
-        local entry = entries[math.random(1, #entries)]
-        API:LoadSong(entry.Id, true)
+local dragging=false
+local dragStart,startPosition
+top.InputBegan:Connect(function(input)
+    if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then
+        dragging=true;dragStart=input.Position;startPosition=window.Position
     end
 end)
-
-connect(playButton.MouseButton1Click, function()
-    uiClick()
-    if not state.CurrentEntry and state.Registry[1] then
-        API:LoadSong(state.Registry[1].Id, false)
-    end
-
-    if state.Playing then
-        API:Pause()
-    else
-        API:Play()
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then
+        local delta=input.Position-dragStart
+        window.Position=UDim2.new(startPosition.X.Scale,startPosition.X.Offset+delta.X,startPosition.Y.Scale,startPosition.Y.Offset+delta.Y)
     end
 end)
-
-connect(stopButton.MouseButton1Click, function()
-    uiClick()
-    API:Stop()
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=false end
+end)
+UserInputService.InputBegan:Connect(function(input,processed)
+    if not processed and input.KeyCode==Enum.KeyCode.RightShift then gui.Enabled=not gui.Enabled end
 end)
 
-connect(loopButton.MouseButton1Click, function()
-    uiClick()
-    API:SetLoop(not state.Loop)
-end)
+close.MouseButton1Click:Connect(function() API:Stop();gui:Destroy() end)
+RunService.RenderStepped:Connect(function() if gui.Parent then render() end end)
 
-connect(shuffleButton.MouseButton1Click, function()
-    uiClick()
-    API:SetShuffle(not state.Shuffle)
-end)
+API.UI={Gui=gui,Window=window}
+API.State=state
+function API:Show() gui.Enabled=true end
+function API:Hide() gui.Enabled=false end
+function API:Destroy() API:Stop();gui:Destroy() end
 
-connect(previousButton.MouseButton1Click, function()
-    uiClick()
-    if #state.Recent >= 2 then
-        local previous = getEntry(state.Recent[2])
-        if previous then
-            API:LoadSong(previous.Id, true)
-        end
-    else
-        API:Seek(0)
-    end
-end)
+refreshList()
+if state.Registry[1] and not state.CurrentEntry then API:LoadSong(state.Registry[1].Id,false) end
+render()
+window.Size=UDim2.fromOffset(610,330)
+TweenService:Create(window,TweenInfo.new(0.22,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(650,360)}):Play()
 
-connect(speedMinus.MouseButton1Click, function()
-    uiClick()
-    API:SetSpeed(state.Speed - 0.1)
-end)
-
-connect(speedPlus.MouseButton1Click, function()
-    uiClick()
-    API:SetSpeed(state.Speed + 0.1)
-end)
-
-connect(bpmMinus.MouseButton1Click, function()
-    uiClick()
-    if state.CurrentBPM then
-        API:SetBPM(state.CurrentBPM - 5)
-    end
-end)
-
-connect(bpmPlus.MouseButton1Click, function()
-    uiClick()
-    if state.CurrentBPM then
-        API:SetBPM(state.CurrentBPM + 5)
-    end
-end)
-
-connect(inputButton.MouseEnter, function()
-    uiHover()
-    tween(inputButton, 0.12, { BackgroundTransparency = 0.18 })
-end)
-
-connect(inputButton.MouseLeave, function()
-    tween(inputButton, 0.12, { BackgroundTransparency = 0.32 })
-end)
-
-connect(inputButton.MouseButton1Click, function()
-    uiClick()
-    if state.BoundCallback then
-        return
-    end
-    if InputBackend.Available then
-        API:SetAutoInput(not state.AutoInput)
-    end
-end)
-
-local seeking = false
-local function seekFromX(x)
-    if progressHit.AbsoluteSize.X <= 0 then
-        return
-    end
-    local alpha = math.clamp((x - progressHit.AbsolutePosition.X) / progressHit.AbsoluteSize.X, 0, 1)
-    API:Seek(alpha)
-end
-
-connect(progressHit.InputBegan, function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-        seeking = true
-        seekFromX(input.Position.X)
-    end
-end)
-
-connect(progressHit.InputEnded, function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1
-        or input.UserInputType == Enum.UserInputType.Touch then
-        seeking = false
-    end
-end)
-
-connect(UserInputService.InputChanged, function(input)
-    if seeking and (
-        input.UserInputType == Enum.UserInputType.MouseMovement
-        or input.UserInputType == Enum.UserInputType.Touch
-    ) then
-        seekFromX(input.Position.X)
-    end
-end)
-
-connect(changed.Event, refreshAll)
-
-connect(notePlayed.Event, function(note)
-    local keyName = string.lower(tostring(note or ""))
-    local key = ui.PianoKeys[keyName]
-    if not key then
-        return
-    end
-
-    local token = (key:GetAttribute("PulseToken") or 0) + 1
-    key:SetAttribute("PulseToken", token)
-
-    tween(key, 0.045, {
-        BackgroundColor3 = CONFIG.Accent,
-        BackgroundTransparency = 0.02,
-    }, Enum.EasingStyle.Quad)
-
-    task.delay(0.11, function()
-        if key.Parent and key:GetAttribute("PulseToken") == token then
-            tween(key, 0.16, {
-                BackgroundColor3 = C.Text,
-                BackgroundTransparency = 0.06,
-            })
-        end
-    end)
-end)
-
-connect(RunService.RenderStepped, function()
-    if state.Destroyed then
-        return
-    end
-
-    local snap = API:GetSnapshot()
-    progressFill.Size = UDim2.new(snap.Progress, 0, 1, 0)
-    progressThumb.Position = UDim2.new(snap.Progress, 0, 0.5, 0)
-    timeLeft.Text = formatTime(snap.Position)
-    timeRight.Text = formatTime(snap.Duration)
-
-    if mini.Visible and snap.Entry then
-        miniMeta.Text = snap.Playing and (snap.Paused and "PAUSED" or "PLAYING") or "READY"
-    end
-end)
-
-rebuildCategories()
-selectCategory("All Songs")
-updateNowPlaying(false)
-
-if state.Registry[1] then
-    API:LoadSong(state.Registry[1].Id, false)
-end
-
--- startup entrance: scale + 8px rise, no decorative blobs.
-local finalPosition = window.Position
-window.Position = finalPosition + UDim2.fromOffset(0, 8)
-local targetScale = windowScale.Scale
-windowScale.Scale = targetScale * 0.97
-window.BackgroundTransparency = 0.20
-
-tween(window, 0.24, {
-    Position = finalPosition,
-    BackgroundTransparency = 0.06,
-})
-tween(windowScale, 0.24, {
-    Scale = targetScale,
-})
-
-API.UI = ui
-API.State = state
-
-function API:Show()
-    setHidden(false)
-end
-
-function API:Hide()
-    setHidden(true)
-end
-
-function API:Destroy()
-    destroyUI()
-end
-
-_G.Velora = API
-pcall(function()
-    if type(getgenv) == "function" then
-        getgenv().Velora = API
-    end
-end)
-
-print(string.format(
-    "[Velora] v%s %s loaded • %d songs • %s",
-    CONFIG.Version,
-    CONFIG.Codename,
-    #state.Registry,
-    select(1, API:GetInputMode())
-))
-
+_G.Velora=API
+pcall(function() if type(getgenv)=="function" then getgenv().Velora=API end end)
 return API
