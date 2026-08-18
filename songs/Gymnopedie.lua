@@ -1,12 +1,16 @@
--- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
 -- Source: https://www.mutopiaproject.org/ftp/SatieE/gymnopedie_1/gymnopedie_1.mid
+-- Edition license: Public Domain
 return {
     Id="gymnopedie",
     Name="Gymnopédie No. 1",
     Artist="Erik Satie",
-    BPM=72,
+    BPM=60,
     StepsPerBeat=12,
-    Categories={"TikTok Classics","Classical","Calm","Advanced"},
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/SatieE/gymnopedie_1/gymnopedie_1.mid",
+    SourceLicense="Public Domain",
+    Categories={"Famous","Classical","Calm","Complete"},
     Notes=[=[
 5 - - - | - - - - | - - - - | [ryI] - - -
 - - - - | - - - - | - - - - | - - - -
