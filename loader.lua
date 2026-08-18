@@ -1,4 +1,4 @@
-local source = game:HttpGet("https://raw.githubusercontent.com/MrRos3/Velora/main/latest.lua?velora=0.3.1")
+local source = game:HttpGet("https://raw.githubusercontent.com/MrRos3/Velora/main/latest.lua?velora=0.3.2")
 local chunk, compileError = loadstring(source)
 assert(chunk, "Velora failed to compile: " .. tostring(compileError))
 local result = chunk()
