@@ -1,5 +1,5 @@
 --[[
-    Velora v0.3.0 "Nocturne" 🥀🎹
+    Velora v0.3.1 "Nocturne" 🥀🎹
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -532,7 +532,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.3.0")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.3.1")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
