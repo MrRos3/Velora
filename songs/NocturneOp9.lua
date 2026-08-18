@@ -1,12 +1,16 @@
--- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
 -- Source: https://www.mutopiaproject.org/ftp/ChopinFF/O9/chopin_nocturne_op9_n2/chopin_nocturne_op9_n2.mid
+-- Edition license: Public Domain
 return {
     Id="nocturne-op9",
     Name="Nocturne Op. 9 No. 2",
     Artist="Frédéric Chopin",
-    BPM=84,
+    BPM=66,
     StepsPerBeat=12,
-    Categories={"TikTok Classics","Classical","Romantic","Advanced"},
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/ChopinFF/O9/chopin_nocturne_op9_n2/chopin_nocturne_op9_n2.mid",
+    SourceLicense="Public Domain",
+    Categories={"Famous","Classical","Romantic","Complete"},
     Notes=[=[
 P - - - | - - [@h] - | - - - - | [wY] - - -
 - - [EYo] - | - - - - | ( - - - | - - [Wyg] -
@@ -127,6 +131,51 @@ g D [@D] - | - - - - | [wY] - - - | - - [EYo] -
 - - - - | [(Z] - - - | - - [wYz] - | - - - -
 [EYol] - - - | - - [(J] - | - - - - | [qy] - - -
 - - [EOj] - | - - - - | [(H] - - - | - - [qys] -
-- - - - | [EOd] - - - | - - [(D]
+- - - - | [EOd] - - - | - - [(D] - | - - - -
+[wYg] - - D | - - [Eod] - | - D - D | [6v] - - -
+- - [qYc] - | - Z - - | [tYiz] - - l | - - [^k] -
+- - - - | [qYJ] - - - | - - [EYOj] - | - - - -
+[^j] - - H | - - [qyH] - | - h - - | [EyOh] - - -
+g - [@D] - | - - - - | [wY] - - - | - - [EYo] -
+- - - - | ( - - - | - - [wY] - | - - - -
+[EYo] - - - | - - [%D] - | - - - - | [(Wr] - - -
+- - [WrY] - | - - - - | [rYO] - g - | D - [WrY] g
+- D - g | [(Wr] - D - | g - [@h] - | - - - -
+[wY] - - - | - - [EYo] - | - - - - | ( - - -
+- - [wY] - | - - - - | [EYo] - - - | - - [%D] -
+- - - - | [(WrO] - - P | - - [WrYO] - | - o - -
+[(WrO] - - a | - - [WrYD] - | - H - - | [(WrZ] - - -
+c - [@v] - | - - - - | [wYZ] - - - | - - [EYoZ] -
+- - - - | 6 - - - | - - [qYz] - | - - - -
+[rYilm] - - - | - - [^kn] - | - - - - | [qEYJB] - - -
+- - [EYOjb] - | - - - - | [7HV] - - - | - - [wihv] -
+- - - - | [yiodz] - - - | - - [8DZ] - | - - - -
+[wYZ] - - - | - - [to] - | - - - - | 6 - - -
+- - [qtYgc] - | - - - - | [tYilm] - - - | - - [^kn] -
+- - - - | ^ - - - | - - q - | - - - -
+W - - - | - - y - | - - - - | E - - -
+- - i - | - - - - | O - - - | - - [dJB] -
+- - - - | - - - - | - - - - | - - - -
+- - - - | - - - - | - - - - | - - - -
+- - n - | - B - - | m - - b | - - n -
+- B - - | m - - b | - - n - | - B - -
+m - - b | - - n - | - B - - | m - - b
+- - n - | - B - - | m - - b | - - n -
+- B - - | m - - b | - - n - | - B - -
+m - - b | - - n - | - B - - | m - - b
+- - n - | - B - - | m - - b | - - n -
+- B - - | m - - b | - - n - | - B - -
+m - - b | - - n - | - B - - | m - - b
+- - n - | - B - - | z - - m | - - B -
+- b - - | V - - v | - - c - | - z - -
+Z - - k | - - J - | - - - - | H - - -
+- - s - | - - - - | d - - - | - - [@oD] -
+- - - - | [EP] - - - | - - [^h] - | - - - -
+[(oD] - - - | - - [EP] - | - - - - | [^h] - - -
+- - [@oD] - | - - - - | [EP] - - - | - - [^h] -
+- - - - | [(oD] - - - | - - [EP] - | - - - -
+[^h] - - - | - - [(oD] - | - - - - | - - - -
+- - - - | - - - - | [YPhZ] - - - | - - - -
+- - - - | - - - - | - - [@^wY]
 ]=],
 }
