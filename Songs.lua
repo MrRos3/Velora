@@ -1,10 +1,16 @@
--- Velora 0.6.0 Lucide — verified public-domain MIDI-derived arrangements.
+-- Velora 0.7.0 Opus — complete MIDI-derived arrangements.
 return {
-    {Id="fur-elise",Name="Für Elise",Artist="L. van Beethoven",BPM=128,Categories={"TikTok Classics","Classical","Advanced"},File="songs/FurElise.lua"},
-    {Id="moonlight-sonata",Name="Moonlight Sonata",Artist="L. van Beethoven",BPM=74,Categories={"TikTok Classics","Classical","Dark","Advanced"},File="songs/MoonlightSonata.lua"},
-    {Id="turkish-march",Name="Turkish March",Artist="W. A. Mozart",BPM=126,Categories={"TikTok Classics","Classical","Upbeat","Advanced"},File="songs/TurkishMarch.lua"},
-    {Id="clair-de-lune",Name="Clair de Lune",Artist="Claude Debussy",BPM=68,Categories={"TikTok Classics","Classical","Dreamy","Advanced"},File="songs/ClairDeLune.lua"},
-    {Id="nocturne-op9",Name="Nocturne Op. 9 No. 2",Artist="Frédéric Chopin",BPM=84,Categories={"TikTok Classics","Classical","Romantic","Advanced"},File="songs/NocturneOp9.lua"},
-    {Id="gymnopedie",Name="Gymnopédie No. 1",Artist="Erik Satie",BPM=72,Categories={"TikTok Classics","Classical","Calm","Advanced"},File="songs/Gymnopedie.lua"},
-    {Id="bach-prelude",Name="Prelude in C Major",Artist="J. S. Bach",BPM=96,Categories={"TikTok Classics","Classical","Study","Advanced"},File="songs/BachPrelude.lua"}
+    {Id="fur-elise",Name="Für Elise",Artist="L. van Beethoven",BPM=72,Categories={"Famous","Classical","Romantic","Complete"},File="songs/FurElise.lua"},
+    {Id="moonlight-sonata",Name="Moonlight Sonata — Adagio",Artist="L. van Beethoven",BPM=60,Categories={"Famous","Classical","Dark","Complete"},File="songs/MoonlightSonata.lua"},
+    {Id="turkish-march",Name="Turkish March",Artist="W. A. Mozart",BPM=126,Categories={"Famous","Classical","Upbeat","Complete"},File="songs/TurkishMarch.lua"},
+    {Id="clair-de-lune",Name="Clair de Lune",Artist="Claude Debussy",BPM=60,Categories={"Famous","Classical","Dreamy","Complete"},File="songs/ClairDeLune.lua"},
+    {Id="canon-in-d",Name="Canon in D",Artist="Johann Pachelbel",BPM=55,Categories={"Famous","Classical","Wedding","Complete"},File="songs/CanonInD.lua"},
+    {Id="nocturne-op9",Name="Nocturne Op. 9 No. 2",Artist="Frédéric Chopin",BPM=66,Categories={"Famous","Classical","Romantic","Complete"},File="songs/NocturneOp9.lua"},
+    {Id="gymnopedie",Name="Gymnopédie No. 1",Artist="Erik Satie",BPM=60,Categories={"Famous","Classical","Calm","Complete"},File="songs/Gymnopedie.lua"},
+    {Id="bach-prelude",Name="Prelude in C Major",Artist="J. S. Bach",BPM=60,Categories={"Famous","Classical","Study","Complete"},File="songs/BachPrelude.lua"},
+    {Id="minute-waltz",Name="Minute Waltz",Artist="Frédéric Chopin",BPM=240,Categories={"Famous","Classical","Fast","Complete"},File="songs/MinuteWaltz.lua"},
+    {Id="fantaisie-impromptu",Name="Fantaisie-Impromptu",Artist="Frédéric Chopin",BPM=168,Categories={"Famous","Classical","Virtuoso","Complete"},File="songs/FantaisieImpromptu.lua"},
+    {Id="pathetique-adagio",Name="Pathétique — Adagio Cantabile",Artist="L. van Beethoven",BPM=36,Categories={"Famous","Classical","Emotional","Complete"},File="songs/PathetiqueAdagio.lua"},
+    {Id="mozart-k545-allegro",Name="Piano Sonata K.545 — Allegro",Artist="W. A. Mozart",BPM=132,Categories={"Famous","Classical","Upbeat","Complete"},File="songs/MozartSonataK545.lua"},
+    {Id="ode-to-joy",Name="Ode to Joy",Artist="L. van Beethoven",BPM=100,Categories={"Famous","Classical","Starter","Complete"},File="songs/OdeToJoy.lua"}
 }
