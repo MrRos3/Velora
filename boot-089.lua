@@ -1,5 +1,8 @@
 -- Velora public compatibility boot.
-local RELEASE_URL = "https://raw.githubusercontent.com/MrRos3/Velora/main/release-089.lua?v=089-compat-boot-20260818"
+local RELEASE_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/588b972d48ef133dbe112daa261b22ecdab7ee67/release-089.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@588b972d48ef133dbe112daa261b22ecdab7ee67/release-089.lua",
+}
 
 local function fail(reason)
     local message = "Velora could not start: " .. tostring(reason)
@@ -18,11 +21,20 @@ if type(loadstring) ~= "function" then
     fail("this executor does not provide loadstring")
 end
 
-local downloaded, source = pcall(function()
-    return game:HttpGet(RELEASE_URL)
-end)
-if not downloaded or type(source) ~= "string" or source == "" then
-    fail("download failed - " .. tostring(source))
+local source
+local downloadError
+for _, url in ipairs(RELEASE_URLS) do
+    local downloaded, result = pcall(function()
+        return game:HttpGet(url)
+    end)
+    if downloaded and type(result) == "string" and result ~= "" then
+        source = result
+        break
+    end
+    downloadError = result
+end
+if not source then
+    fail("download failed - " .. tostring(downloadError))
 end
 
 local chunk, compileError = loadstring(source)
@@ -36,3 +48,4 @@ if not started then
 end
 
 return result
+
