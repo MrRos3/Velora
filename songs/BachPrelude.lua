@@ -1,12 +1,16 @@
--- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
 -- Source: https://www.mutopiaproject.org/ftp/BachJS/BWV846/wtk1-prelude1/wtk1-prelude1.mid
+-- Edition license: Public Domain
 return {
     Id="bach-prelude",
     Name="Prelude in C Major",
     Artist="J. S. Bach",
-    BPM=96,
+    BPM=60,
     StepsPerBeat=12,
-    Categories={"TikTok Classics","Classical","Study","Advanced"},
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/BachJS/BWV846/wtk1-prelude1/wtk1-prelude1.mid",
+    SourceLicense="Public Domain",
+    Categories={"Famous","Classical","Study","Complete"},
     Notes=[=[
 t - - u | - - o - | - s - - | f - - o
 - - s - | - f - - | t - - u | - - o -
