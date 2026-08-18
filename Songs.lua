@@ -1,12 +1,11 @@
--- Velora v0.4.0 Aurora song registry.
+-- Velora v0.5.0 Rose — public-domain short-form favorites.
 return {
-    {Id="velora-demo",Name="Aurora Overture",Artist="Velora",BPM=100,Categories={"Original","Starter","Bright"},File="songs/VeloraDemo.lua"},
-    {Id="moonlit-keys",Name="Moonlit Keys",Artist="Velora",BPM=88,Categories={"Original","Chill","Dreamy"},File="songs/MoonlitKeys.lua"},
-    {Id="stardust-waltz",Name="Stardust Waltz",Artist="Velora",BPM=96,Categories={"Original","Dreamy","Waltz"},File="songs/StardustWaltz.lua"},
-    {Id="neon-hearts",Name="Neon Hearts",Artist="Velora",BPM=118,Categories={"Original","Upbeat","Synth"},File="songs/NeonHearts.lua"},
-    {Id="rain-on-glass",Name="Rain on Glass",Artist="Velora",BPM=82,Categories={"Original","Chill","Ambient"},File="songs/RainOnGlass.lua"},
-    {Id="solar-bloom",Name="Solar Bloom",Artist="Velora",BPM=110,Categories={"Original","Bright","Upbeat"},File="songs/SolarBloom.lua"},
-    {Id="velvet-night",Name="Velvet Night",Artist="Velora",BPM=90,Categories={"Original","Night","Jazz"},File="songs/VelvetNight.lua"},
-    {Id="last-light",Name="Last Light",Artist="Velora",BPM=76,Categories={"Original","Cinematic","Slow"},File="songs/LastLight.lua"},
-    {Id="skyline-echo",Name="Skyline Echo",Artist="Velora",BPM=104,Categories={"Original","Electronic","Night"},File="songs/SkylineEcho.lua"},
+ {Id="fur-elise",Name="Für Elise",Artist="L. van Beethoven",BPM=112,Categories={"TikTok Classics","Classical","Advanced"},File="songs/FurElise.lua"},
+ {Id="moonlight-sonata",Name="Moonlight Sonata",Artist="L. van Beethoven",BPM=74,Categories={"TikTok Classics","Classical","Dark","Advanced"},File="songs/MoonlightSonata.lua"},
+ {Id="turkish-march",Name="Turkish March",Artist="W. A. Mozart",BPM=126,Categories={"TikTok Classics","Classical","Upbeat","Advanced"},File="songs/TurkishMarch.lua"},
+ {Id="clair-de-lune",Name="Clair de Lune",Artist="Claude Debussy",BPM=68,Categories={"TikTok Classics","Classical","Dreamy","Advanced"},File="songs/ClairDeLune.lua"},
+ {Id="swan-lake",Name="Swan Lake Theme",Artist="P. I. Tchaikovsky",BPM=92,Categories={"TikTok Classics","Classical","Dramatic","Advanced"},File="songs/SwanLake.lua"},
+ {Id="nocturne-op9",Name="Nocturne Op. 9 No. 2",Artist="Frédéric Chopin",BPM=84,Categories={"TikTok Classics","Classical","Romantic","Advanced"},File="songs/NocturneOp9.lua"},
+ {Id="gymnopedie",Name="Gymnopédie No. 1",Artist="Erik Satie",BPM=72,Categories={"TikTok Classics","Classical","Calm","Advanced"},File="songs/Gymnopedie.lua"},
+ {Id="bach-prelude",Name="Prelude in C Major",Artist="J. S. Bach",BPM=96,Categories={"TikTok Classics","Classical","Study","Advanced"},File="songs/BachPrelude.lua"},
 }
