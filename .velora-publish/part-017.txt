@@ -1,0 +1,124 @@
+Registry) do
+        for _, category in ipairs(entry.Categories or {}) do
+            if not seen[category] then
+                seen[category] = true
+                table.insert(output, category)
+            end
+        end
+    end
+
+    return output
+end
+
+local categoryIcons = {
+    ["All Songs"] = { "list-music", "≡" },
+    ["Favorites"] = { "heart", "♡" },
+    ["Recent"] = { "clock-3", "◷" },
+    ["Queue"] = { "list-end", "☷" },
+}
+
+local function idsToEntries(ids)
+    local output = {}
+    for _, id in ipairs(ids) do
+        local entry = getEntry(id)
+        if entry then
+            table.insert(output, entry)
+        end
+    end
+    return output
+end
+
+local function entryMatchesSearch(entry)
+    local query = state.Search
+    if query == "" then
+        return true
+    end
+
+    if contains(entry.Name, query) or contains(entry.Artist, query) then
+        return true
+    end
+
+    for _, category in ipairs(entry.Categories or {}) do
+        if contains(category, query) then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function categoryEntries()
+    local base = {}
+
+    if state.Category == "Favorites" then
+        for _, entry in ipairs(state.Registry) do
+            if state.Favorites[entry.Id] then
+                table.insert(base, entry)
+            end
+        end
+    elseif state.Category == "Recent" then
+        base = idsToEntries(state.Recent)
+    elseif state.Category == "Queue" then
+        base = idsToEntries(state.Queue)
+    elseif state.Category == "All Songs" then
+        for _, entry in ipairs(state.Registry) do
+            table.insert(base, entry)
+        end
+    else
+        for _, entry in ipairs(state.Registry) do
+            for _, category in ipairs(entry.Categories or {}) do
+                if category == state.Category then
+                    table.insert(base, entry)
+                    break
+                end
+            end
+        end
+    end
+
+    local output = {}
+    for _, entry in ipairs(base) do
+        if entryMatchesSearch(entry) then
+            table.insert(output, entry)
+        end
+    end
+
+    return output
+end
+
+local rebuildSongs
+
+local function selectCategory(name)
+    state.Category = name
+    browserTitle.Text = name
+
+    for category, data in pairs(ui.CategoryButtons) do
+        local selected = category == name
+        tween(data.Button, 0.14, {
+            BackgroundTransparency = selected and 0.12 or 1,
+            BackgroundColor3 = selected and C.Raised or C.Panel,
+        })
+        recolorIcon(data.Icon, selected and CONFIG.Accent or C.Muted)
+        data.Label.TextColor3 = selected and C.Text or C.Sub
+        data.Indicator.Visible = selected
+    end
+
+    if rebuildSongs then
+        rebuildSongs()
+    end
+end
+
+local function rebuildCategories()
+    for _, child in ipairs(categoryList:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+    table.clear(ui.CategoryButtons)
+
+    local order = 0
+    for _, name in ipairs(categories()) do
+        order += 1
+        local button = create("TextButton", {
+            Name = "Category_" .. name,
+            Size = UDim2.new(1, 0, 0, 34),
+            BackgroundC
