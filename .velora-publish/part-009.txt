@@ -1,0 +1,127 @@
+    Entry = state.CurrentEntry,
+        Song = state.CurrentSong,
+        Playing = state.Playing,
+        Paused = state.Paused,
+        Position = state.Position,
+        Duration = duration,
+        Progress = progress,
+        Speed = state.Speed,
+        BPM = state.CurrentBPM,
+        Loop = state.Loop,
+        Shuffle = state.Shuffle,
+        InputMode = mode,
+        Connected = connected,
+        QueueCount = #state.Queue,
+    }
+end
+
+-- =========================================================
+-- UI
+-- =========================================================
+
+local oldGui = PlayerGui:FindFirstChild("Velora")
+if oldGui then
+    oldGui:Destroy()
+end
+
+local oldBlur = Lighting:FindFirstChild("VeloraBlur")
+if oldBlur then
+    oldBlur:Destroy()
+end
+
+local ui = {
+    Connections = {},
+    CategoryButtons = {},
+    SongCards = {},
+    PianoKeys = {},
+    CurrentFiltered = {},
+}
+
+local function connect(signal, callback)
+    local connection = signal:Connect(callback)
+    table.insert(ui.Connections, connection)
+    return connection
+end
+
+local blur = create("BlurEffect", {
+    Name = "VeloraBlur",
+    Size = CONFIG.Blur and 12 or 0,
+}, Lighting)
+ui.Blur = blur
+
+local gui = create("ScreenGui", {
+    Name = "Velora",
+    ResetOnSpawn = false,
+    IgnoreGuiInset = true,
+    DisplayOrder = 78,
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+}, PlayerGui)
+ui.Gui = gui
+
+local backdrop = create("Frame", {
+    Name = "Backdrop",
+    BackgroundColor3 = C.Backdrop,
+    BackgroundTransparency = 0.34,
+    BorderSizePixel = 0,
+    Size = UDim2.fromScale(1, 1),
+}, gui)
+ui.Backdrop = backdrop
+
+local window = create("Frame", {
+    Name = "Window",
+    AnchorPoint = Vector2.new(0.5, 0.5),
+    Position = UDim2.fromScale(0.5, 0.5),
+    Size = UDim2.fromOffset(920, 560),
+    BackgroundColor3 = C.Window,
+    BackgroundTransparency = 0.06,
+    BorderSizePixel = 0,
+    ClipsDescendants = true,
+}, backdrop)
+corner(window, 22)
+stroke(window, 0.60, 1.1)
+ui.Window = window
+
+local windowGradient = create("UIGradient", {
+    Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 22, 40)),
+        ColorSequenceKeypoint.new(0.42, C.Window2),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 13, 23)),
+    }),
+    Rotation = 32,
+}, window)
+ui.WindowGradient = windowGradient
+
+local windowScale = create("UIScale", {
+    Scale = 1,
+}, window)
+ui.WindowScale = windowScale
+
+local topbar = create("Frame", {
+    Name = "Topbar",
+    BackgroundColor3 = C.Window2,
+    BackgroundTransparency = 0.30,
+    BorderSizePixel = 0,
+    Size = UDim2.new(1, 0, 0, 64),
+}, window)
+ui.Topbar = topbar
+
+local topSeparator = create("Frame", {
+    BackgroundColor3 = C.Edge,
+    BackgroundTransparency = 0.92,
+    BorderSizePixel = 0,
+    Position = UDim2.new(0, 18, 1, -1),
+    Size = UDim2.new(1, -36, 0, 1),
+}, topbar)
+ui.TopSeparator = topSeparator
+
+local brand = create("Frame", {
+    Position = UDim2.fromOffset(18, 14),
+    Size = UDim2.fromOffset(36, 36),
+    BackgroundColor3 = C.Raised,
+    BackgroundTransparency = 0.18,
+    BorderSizePixel = 0,
+}, topbar)
+corner(brand, 11)
+stroke(brand, 0.62)
+local brandIcon = icon(brand, "music-2", 18, CONFIG.Accent, "♪")
+bran
