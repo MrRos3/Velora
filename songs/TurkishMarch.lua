@@ -1,12 +1,16 @@
--- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Velora 0.7.0 complete arrangement generated from the credited MIDI edition.
 -- Source: https://www.mutopiaproject.org/ftp/MozartWA/KV331/KV331_3_RondoAllaTurca/KV331_3_RondoAllaTurca.mid
+-- Edition license: Public Domain
 return {
     Id="turkish-march",
     Name="Turkish March",
     Artist="W. A. Mozart",
     BPM=126,
     StepsPerBeat=12,
-    Categories={"TikTok Classics","Classical","Upbeat","Advanced"},
+    Complete=true,
+    Source="https://www.mutopiaproject.org/ftp/MozartWA/KV331/KV331_3_RondoAllaTurca/KV331_3_RondoAllaTurca.mid",
+    SourceLicense="Public Domain",
+    Categories={"Famous","Classical","Upbeat","Complete"},
     Notes=[=[
 a - - p | - - O - | - p - - | [es] - - -
 - - [tu] - | - - - - | [tud] - - s | - - [tua] -
@@ -127,6 +131,77 @@ a - - p | - - O - | - p - - | [es] - - -
 - s - - | [0Oa] - - - | - - u - | - - - -
 [ps] - - - | - - [ad] - | - - - - | [6sf] - - -
 - - [esf] - | - - - - | [8g] - - f | - - [td] -
-- s - - | [0Oa]
+- s - - | [0Oa] - - - | - - - - | - - - -
+a - - p | - - O - | - p - - | [es] - - -
+- - [tu] - | - - - - | [tud] - - s | - - [tua] -
+- s - - | [ef] - - - | - - [tu] - | - - - -
+[tug] - - f | - - [tuD] - | - f - - | [ek] - - j
+- - [tuH] - | - j - - | [ek] - - j | - - [tuH] -
+- j - - | [ql] - - - | - - [eY] - | - - - -
+[eYj] - - - | - - [eYk] - | - - - - | [0l] - - -
+- - [euk] - | - - - - | [9j] - - - | - - [qrH] -
+- - - - | [8j] - - - | - - [0ef] - | - - - -
+[9g] - - - | - - [qrd] - | - - - - | [0es] - - -
+- - [0e] - | - - - - | [0Wa] - - - | - - [0W] -
+- p a - | [6ep] - - - | - - - - | - - - -
+p - - j | - - a - | - k - [6*] | [0eS] - - L
+- - e - | - - - - | [ep] - - j | - - [ea] -
+- k - [6*] | [0eS] - - L | - - [ea] - | - k - -
+[ep] - - j | - - [eO] - | - H - [2$] | [69I] - - G
+- - [9O] - | - H - [@$] | [6(p] - - j | - - [(a] -
+- k - [3%] | [70O] - - H | - - [0u] - | - f - -
+[0p] - - j | - - [0a] - | - k - [6*] | [0eS] - - L
+- - e - | - - - - | [ep] - - j | - - [ea] -
+- k - [6*] | [0eS] - - L | - - [ea] - | - k - -
+[ep] - - j | - - [eO] - | - H - [2$] | [69I] - - G
+- - [9a] - | - k - [3%] | [70O] - - H | - - [0u] -
+- f - - | [6pj] - - - | - - - - | - - - [6*p]
+[0epj] - - - | - - e - | - - - - | [eSL] - - -
+- - e - | - L - [6*] | [0eSfjL] - - - | - - e -
+- - - - | e - - - | - - e - | - - - [6*]
+[0eSfjL] - - - | - - e - | - - - - | e - - -
+- - e - | - - - [6*] | [0ez] - - L | - - [ek] -
+- L - - | [ez] - - L | - - [ek] - | - L - [2$]
+[69Gjz] - - - | - - 9 - | - - - - | 9 - - -
+- - 9 - | - - - [6*z] | [0efjL] - - - | - z [efjL] -
+- - - z | [efjL] - - - | - z [efjL] - | - - - [3%]
+[70fHk] - - - | - - 0 - | - - - - | 0 - - -
+- - [0x] - | - - - [6*] | [0eSfjL] - - - | - - e -
+- - - - | e - - - | - - e - | - - - [6*]
+[0eSfjL] - - - | - - e - | - - - - | e - - -
+- - e - | - - - [6*] | [0ez] - - L | - - [ek] -
+- L - - | [ez] - - L | - - [ek] - | - L - [2$]
+[69Gjz] - - - | - - 9 - | - - - - | 9 - - -
+- - 9 - | - - - [6*z] | [0efjL] - - - | - - e -
+- - - - | e - - - | - - e - | - - - [3%L]
+[70fHk] - - - | - L [0fHk] - | - - - L | [0fHk] - - -
+- L [0fHk] - | - - - - | [ej] - - u | - - T -
+- u - f | [ejL] - - u | - - T - | - [uL] - f
+[ejL] - - u | - - T - | - u - - | e - - u
+- - T - | - u - f | [ejL] - - u | - - T -
+- u - - | e - - u | - - T - | - u - -
+[ez] - - [uL] | - - [Tk] - | - [uL] - - | [ez] - - [uL]
+- - [Tk] - | - [uL] - - | [ez] - - I | - - y -
+- I - - | e - - I | - - y - | - I - z
+[eL] - - u | - z [TL] - | - u - z | [eL] - - u
+- z [TL] - | - u - - | [0k] - - u | - - W -
+- u - - | 0 - - u | - - [Wx] - | - u - [6*]
+[0eSfjL] - - - | - - e - | - - - - | e - - -
+- - e - | - - - [6*] | [0eSfjL] - - - | - - e -
+- - - - | e - - - | - - e - | - - - [6*]
+[0ez] - - L | - - [ek] - | - L - - | [ez] - - L
+- - [ek] - | - L - [2$] | [69Gjz] - - - | - - 9 -
+- - - - | 9 - - - | - - 9 - | - - - [6*z]
+[0efjL] - - - | - - e - | - - - - | e - - -
+- - e - | - - - [3%L] | [70fHk] - - - | - L [0fHk] -
+- - - L | [0fHk] - - - | - L [0fHk] - | - - - [6*]
+[0epSfj] - - - | - - e - | - - - - | e - - -
+- - [eSL] - | - - - [6*] | [0epj] - - - | - - e -
+- - - - | e - - - | - - [efx] - | - - - [6*]
+[0epj] - - - | - - e - | - - - - | e - - -
+- - [eSL] - | - - - [6*] | [0epj] - - - | - - [eSL] -
+- - - [6*] | [0epj] - - - | - - [efx] - | - - - -
+[6pj] - - - | - - - - | - - - - | [6*0Sfj] - - -
+- - - - | - - - - | [6*0Sfj]
 ]=],
 }
