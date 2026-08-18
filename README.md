@@ -10,18 +10,3 @@ loadstring(game:HttpGet(
     true
 ))()
 ```
-
-## Rose 0.5.1
-
-- No visible outer shadow
-- Removed clipped corner decorations and sharp wedges
-- Full-theme palette: gradients, panels, outlines, navigation, cards, controls, artwork, progress, and scrollbars
-- Musical bar spacing so dense arrangements breathe between phrases
-- 🥀 title icon
-- Draggable song-progress scrubber
-- BPM text editing and adjustment arrows
-- Uppercase and shifted-symbol black-key support
-- Eight extended public-domain short-form favorites
-- Stops after each song unless Loop is enabled
-
-Before pressing Play, click the in-game piano once so it owns keyboard focus.
