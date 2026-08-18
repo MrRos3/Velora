@@ -1,0 +1,128 @@
+ong then
+        warn("[Velora] " .. tostring(loadError))
+        emit("error")
+        return false, loadError
+    end
+
+    stopConnection()
+
+    local bpm = math.clamp(tonumber(song.BPM or entry.BPM) or 120, 30, 300)
+    local timeline = parseSheet(song.Notes or "", bpm, song.StepsPerBeat)
+
+    state.CurrentEntry = entry
+    state.CurrentSong = song
+    state.CurrentBPM = bpm
+    state.Timeline = timeline
+    state.Playing = false
+    state.Paused = false
+    state.Position = 0
+    state.NextEvent = 1
+
+    addRecent(entry.Id)
+    emit("selection")
+
+    if autoplay then
+        return self:Play()
+    end
+
+    return true
+end
+
+function API:Play()
+    if not state.Timeline or #state.Timeline.Events == 0 then
+        return false
+    end
+
+    if state.Position >= state.Timeline.Duration then
+        state.Position = 0
+        state.NextEvent = 1
+    end
+
+    if state.Playing then
+        if state.Paused then
+            state.Paused = false
+            emit("resumed")
+        end
+        return true
+    end
+
+    state.Playing = true
+    state.Paused = false
+    emit("playing")
+
+    stopConnection()
+    state.Connection = RunService.Heartbeat:Connect(function(dt)
+        if state.Destroyed or state.Paused or not state.Timeline then
+            return
+        end
+
+        state.Position += dt * state.Speed
+
+        local events = state.Timeline.Events
+        while state.NextEvent <= #events and events[state.NextEvent].Time <= state.Position do
+            local event = events[state.NextEvent]
+            for _, note in ipairs(event.Notes) do
+                noteOutput(note)
+            end
+            state.NextEvent += 1
+        end
+
+        if state.Position >= state.Timeline.Duration then
+            if state.Loop then
+                state.Position = 0
+                state.NextEvent = 1
+                emit("looped")
+            else
+                stopConnection()
+                state.Playing = false
+                state.Paused = false
+                state.Position = state.Timeline.Duration
+                emit("finished")
+
+                local nextEntry = findNextEntry()
+                if nextEntry then
+                    task.defer(function()
+                        if not state.Destroyed then
+                            API:LoadSong(nextEntry.Id, true)
+                        end
+                    end)
+                end
+            end
+        end
+    end)
+
+    return true
+end
+
+function API:Pause()
+    if not state.Playing then
+        return false
+    end
+    state.Paused = not state.Paused
+    emit(state.Paused and "paused" or "resumed")
+    return state.Paused
+end
+
+function API:Stop()
+    stopConnection()
+    local hadState = state.Playing or state.Paused or state.Position > 0
+    state.Playing = false
+    state.Paused = false
+    state.Position = 0
+    state.NextEvent = 1
+    if hadState then
+        emit("stopped")
+    end
+end
+
+function API:Seek(progress)
+    if not state.Timeline then
+        return false
+    end
+
+    progress = math.clamp(tonumber(progress) or 0, 0, 1)
+    state.Position = state.Timeline.Duration * progress
+    state.NextEvent = 1
+
+    while state.NextEvent <= #state.Timeline.Events
+        and state.T
