@@ -1,4 +1,4 @@
--- Velora 0.8.6 Encore — complete MIDI-derived arrangements.
+-- Velora 0.8.7 Encore — complete MIDI-derived arrangements.
 return {
     {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=90,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
     {Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=110,Categories={"Famous","TikTok","Folk","Upbeat","Complete"},File="songs/IevanPolkka.lua"},
