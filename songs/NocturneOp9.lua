@@ -1,17 +1,132 @@
+-- Velora 0.6.0 arrangement generated from a public-domain Mutopia MIDI edition.
+-- Source: https://www.mutopiaproject.org/ftp/ChopinFF/O9/chopin_nocturne_op9_n2/chopin_nocturne_op9_n2.mid
 return {
- Id="nocturne-op9",Name="Nocturne Op. 9 No. 2",Artist="Frédéric Chopin",BPM=84,StepsPerBeat=3,Categories={"TikTok Classics","Classical","Romantic","Advanced"},
- Notes=[[
-q e t | y t e | [qa] - e | [ts] - -
-w r y | u y r | [ws] - r | [yd] - -
-e t u | i u t | [ed] - t | [uf] - -
-q E t | Y t E | [qF] - E | [tH] - -
-a d f | h f d | [aj] - d | [fh] - -
-s f h | j h f | [sk] - f | [hj] - -
-q e t | y u y | t e q | [qu] - -
-w R y | U y R | [wD] - R | [yF] - -
-[Q!] E t | [W@] R y | [eD] T u | [rF] Y i
-a d f | H j H | f d a | [aj] - -
-q E t | y t E | [qa] - [eD] | [tf] - -
-[qa] e t | [ws] r y | [ed] t u | [qa] - -
- ]],
+    Id="nocturne-op9",
+    Name="Nocturne Op. 9 No. 2",
+    Artist="Frédéric Chopin",
+    BPM=84,
+    StepsPerBeat=12,
+    Categories={"TikTok Classics","Classical","Romantic","Advanced"},
+    Notes=[=[
+P - - - | - - [@h] - | - - - - | [wY] - - -
+- - [EYo] - | - - - - | ( - - - | - - [Wyg] -
+- - - - | [ryOh] - - - | - - [@g] - | - - - -
+[wY] - - - | - - [EYo] - | - - - - | [2D] - - -
+- - [wY] - | - - - - | [EYoP] - - - | - - [1h] -
+- - - - | [wu] - - - | - - [Euos] - | - - - -
+[8l] - - - | - - [wu] - | - - - - | [tuPh] - - -
+- - [4J] - | - - - - | [qT] - - - | - - [ETu] -
+- - - - | [4H] - - - | - - [qt] - | - - - -
+[Wtih] - - - | - - [^g] - | - - - - | [qy] - - -
+- - [EyO] - | - - - - | [7h] - - - | - - [wi] -
+- - - - | [yiod] - - - | - - [8D] - | - - - -
+[wY] - - - | - - [tYo] - | - - - - | [6s] - - -
+- - [QY] - | - - - - | [tYI] - - - | - - [^P] -
+- - - - | [qYz] - - - | - - [EYOl] - | - - - -
+[^J] - - H | - - [qyh] - | - H - - | [EOs] - - d
+- - [@D] - | - - - - | [wY] - - - | - - [EYo] -
+- - - - | ( - - - | - - [wY] - | - - - -
+[EYoP] - - - | - - [(h] - | - - - - | [wY] - - -
+- - [EYo] - | - - - - | [(g] - - h | - - [Wyg] -
+- f - - | [ryOg] - - h | - - [(g] - | - - - -
+[wYD] - - - | - - [EYo] - | - - - - | 9 - - g
+- - [wYD] - | - d - - | [EYoD] - - g | - - [8h] -
+- a - - | [wus] - - S | - - [Euos] - | - g - -
+[8f] - - H | - - [wuh] - | - L - - | [tuPl] - - h
+- - [4J] - | - - - - | [qT] - - - | - - [ETu] -
+- - - - | [4H] - - - | - - [qt] - | - - - -
+[Wtih] - - - | - - [^g] - | - - - - | [qy] - - -
+- - [EyO] - | - - - [fg] | [7h] - - - | - - [wih] -
+- - - - | [yiod] - - - | - - [8D] - | - - - -
+[wY] - - - | - - [tYo] - | - - - - | [6s] - - -
+- - [QY] - | - - - - | [tYI] - - - | - - [^P] -
+- - - - | [qYz] - - - | - - [EYOl] - | - - - -
+[^J] - - H | - - [qyh] - | - H - H | [EOs] - - d
+- - [@D] - | - - - - | [wY] - - - | - - [EYo] -
+- - - - | ( - - - | - - [wYd] - | - - - -
+[EYoD] - - - | - - [^g] - | - - - - | [qy] - - -
+- - [Eyi] - | - - - - | [^h] - - - | - - [qy] -
+- - - - | [Eyig] - - - | - - [6g] - | - - - -
+[qt] - - - | - - [ti] - | - - - - | [6s] - - -
+- - [qt] - | - - - - | [ti] - - - | - - [%D] -
+- - - - | [(tD] - - - | - - [WtYD] - | - - - -
+[%D] - - - | - - [(rd] - | - D - - | [WrYg] - - -
+D - [@D] - | - - - - | [wY] - - - | - - [EYo] -
+- - - - | [(P] - - - | - - [wY] - | - - - -
+[EYo] - - - | - - [3J] - | - - - - | [0T] - - -
+- - [ETo] - | - - - - | [3j] - - - | - - [0t] -
+- - - - | [Etoh] - - - | - - [4pg] - | - - - -
+[qY] - - - | - - [tYi] - | - - - - | [5Pd] - - -
+- - [wy] - | - - - - | [Eyo] - - - | - - [1oD] -
+- - - - | [wY] - - - | - - [tYo] - | - - - -
+[4pd] - - - | - - [qYps] - | - - - - | [tYipd] - - -
+- - [EyiP] - | - - - - | [eYIa] - - - | - - [Wua] -
+- - - - | [wuPs] - - - | - - [qtYips] - | - - - -
+[EiOd] - - - | o [PD] [@h] - | - - - - | [wY] - - -
+- - [EYop] - | - P - - | [(a] - - P | - - [WyS] -
+- d - - | [EyOh] - - - | g - [(g] - | - - - -
+[wY] - - - | - - [EoD] - | - - - - | 9 - - g
+- - [wYD] - | - d - - | [EYoD] - - g | - - [8h] -
+- a - - | [wus] - - S | - - [Euos] - | - g - -
+[8f] - - H | - - [wuh] - | - L - - | [tuPl] - - h
+- - [4J] - | - - - - | [qT] - - - | - - [ETu] -
+- - - - | [4H] - - - | - - [qt] - | - - - -
+[Wtih] - - - | - - [^g] - | - - - - | [qy] - - -
+- - [EyO] - | - - - [fg] | [7h] - - - | - - [wih] -
+- - - - | [yiod] - - - | - - [8D] - | - - - -
+[wY] - - - | - - [tYo] - | - - - - | [6s] - - -
+- - [QY] - | - - - - | [tYI] - - - | - - [^P] -
+- - - - | [qYz] - - - | - - [EYOL] - | - - - -
+[^l] - k J | j - [qyH] - | g d a - | [EyOP] - d h
+g D [@D] - | - - - - | [wY] - - - | - - [Eo] -
+- - - - | ( - - - | - - [wYd] - | - - - -
+[EoD] - - - | - - [^g] - | - - - - | [qy] - - -
+- - [Eyi] - | - - - - | [^h] - - - | - - [qy] -
+- - - - | [Eyig] - - - | - - [6g] - | - - - -
+[qt] - - - | - - [ti] - | - - - - | [6s] - - -
+- - [qt] - | - - - - | [ti] - - - | - - [%D] -
+- - D - | [(t] - - D | - - [WtY] - | D - - -
+[%D] - - - | - - [(rd] - | - D - - | [WrYg] - - -
+D - [@D] - | - - - - | [wY] - - - | - - [EYo] -
+- - - - | [(P] - - - | - - [wY] - | - - - -
+[EYo] - - - | - - [3J] - | - - - - | [0T] - - -
+- - [ETo] - | - - - - | [3j] - - - | - - [0t] -
+- - - - | [Etoh] - - - | - - [4pg] - | - - - -
+[qY] - - - | - - [tYp] - | - - - - | [5Pd] - - -
+- - [wy] - | - - - - | [EyP] - - - | - - [1oD] -
+- - - - | [wY] - - - | - - [tYo] - | - - - -
+[4pd] - - - | - - [qYps] - | - - - - | [tYipd] - - -
+- - [EyiP] - | - - - - | [eYIa] - - - | - - [Wua] -
+- - - - | [wuPs] - - - | - - [qtYips] - | - - - -
+[EiOd] - - - | o [PD] [@h] - | - - - - | [wY] - - -
+- - [EYop] - | - P - - | [(a] - - P | - - [WyS] -
+- d - - | [EyOh] - - - | g - [(g] - | - - - -
+[wY] - - - | - - [EYoD] - | - - - - | 9 - - g
+- - [wYD] - | - d - - | [EYoD] - - g | - - [8h] -
+- a - - | [wus] - - S | - - [Euos] - | - g - -
+[8f] - - H | - - [wuh] - | - L - - | [tuPl] - - h
+- h [4J] - | - - - - | [qET] - - - | - - [ETu] -
+- - - - | [4H] - - - | - - [qt] - | - - - -
+[Wtih] - - - | - - [^g] - | - - - - | [qy] - - -
+- - [EyO] - | - - - [fg] | [7h] - - - | - - [wih] -
+- - - - | [yiod] - - - | - - [8D] - | - - - -
+[wY] - - - | - - [tYo] - | - - - - | [6s] - - -
+- - [QY] - | - - - - | [tYI] - - - | - - [^P] -
+- z - - | [qY] - - L | - - [EYOl] - | - k J -
+^ - j - | H - [qyp] - | P a s - | [EyOS] - d h
+g D [@D] - | - - - - | [wY] - - - | - - [EYo] -
+- - - - | ( - - - | - - [wY] - | - - - -
+[EYo] - - - | - - [@D] - | - - - - | [WrY] - - -
+- - [rYO] - | - - - - | [(g] - - - | - - [WrYD] -
+- - - - | [rYOg] - - - | - - [@h] - | - - - -
+[wY] - - - | - - [EYo] - | - - - - | ( - - -
+- - [wY] - | - - - - | [EYo] - - - | - - [@D] -
+- - - - | [WrY] - - - | - - [rYO] - | - - - -
+( - - g | - - [WrYD] - | - g - - | [rYOD] - - g
+- - [@h] - | - - - - | [wEY] - - - | - - [EYoD] -
+- - - - | [(Z] - - - | - - [wYz] - | - - - -
+[EYol] - - - | - - [(J] - | - - - - | [qy] - - -
+- - [EOj] - | - - - - | [(H] - - - | - - [qys] -
+- - - - | [EOd] - - - | - - [(D]
+]=],
 }
