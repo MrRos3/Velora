@@ -1,6 +1,6 @@
 # Velora 🥀🎹
 
-Velora v0.3.1 **Nocturne** is the current standalone Roblox piano workstation.
+Velora v0.3.2 **Nocturne** is a compact standalone Roblox piano workstation with an original three-column library, song list, and now-playing layout.
 
 ## Run
 
@@ -12,7 +12,7 @@ Press **Right Shift** to hide or restore the interface.
 
 ## Playback
 
-Velora now starts playback only when it has a real output path:
+Before pressing Play, click the in-game piano once so it owns keyboard focus. Velora then tries output in this order:
 
 1. A callback registered with `Velora:BindPiano(callback)`
 2. Executor keyboard input (`keytap` or `keypress` + `keyrelease`)
