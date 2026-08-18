@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.1 "Nova"
+    Velora v0.10.2 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.1",
+    Version = "0.10.2",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -604,7 +604,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.1")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.2")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -620,6 +620,7 @@ local API = {
 
 local state = {
     Registry = Registry,
+    EntryById = {},
     SongCache = {},
     CurrentEntry = nil,
     CurrentSong = nil,
@@ -642,6 +643,8 @@ local state = {
     Category = "All Songs",
     Search = "",
     Connection = nil,
+    UIConnections = {},
+    Cleaning = false,
     UI = nil,
     Destroyed = false,
 }
@@ -656,13 +659,17 @@ local function emit(reason)
     changed:Fire(reason or "changed")
 end
 
-local function getEntry(id)
+local function rebuildEntryIndex()
+    table.clear(state.EntryById)
     for _, entry in ipairs(state.Registry) do
-        if entry.Id == id then
-            return entry
-        end
+        state.EntryById[entry.Id] = entry
     end
-    return nil
+end
+
+rebuildEntryIndex()
+
+local function getEntry(id)
+    return state.EntryById[id]
 end
 
 local function loadSongData(entry)
@@ -797,6 +804,7 @@ function API:RefreshLibrary()
     local registry = loadRegistry()
     if type(registry) == "table" and #registry > 0 then
         state.Registry = registry
+        rebuildEntryIndex()
         state.SongCache = {}
         emit("library")
         return true
@@ -815,6 +823,7 @@ function API:AddRuntimeSong(entry, data)
     end
 
     table.insert(state.Registry, entry)
+    state.EntryById[entry.Id] = entry
     emit("library")
     return true
 end
@@ -1168,6 +1177,11 @@ end
 -- Aurora UI — original rounded floating-card design
 -- =========================================================
 
+pcall(function()
+    local previous=_G.Velora
+    if type(previous)~="table" and type(getgenv)=="function" then previous=getgenv().Velora end
+    if type(previous)=="table" and type(previous.Destroy)=="function" then previous:Destroy() end
+end)
 local oldGui=PlayerGui:FindFirstChild("Velora")
 if oldGui then oldGui:Destroy() end
 local oldBlur=Lighting:FindFirstChild("VeloraBlur")
@@ -1182,6 +1196,10 @@ local function make(className,props,parent)
     local ok,parentError=pcall(function() o.Parent=parent end)
     if not ok then warn("[Velora UI] Could not parent "..className..": "..tostring(parentError)) end
     return o
+end
+local function trackConnection(connection)
+    if connection then table.insert(state.UIConnections,connection) end
+    return connection
 end
 local function radius(o,r) make("UICorner",{CornerRadius=UDim.new(0,r or 14)},o);return o end
 local function edge(o,color,t,width) make("UIStroke",{Color=color or Color3.fromRGB(101,92,145),Transparency=t or .45,Thickness=width or 1},o);return o end
@@ -1261,7 +1279,7 @@ local fitOk,fitError=pcall(fitViewport)
 if not fitOk then warn("[Velora UI] Viewport fit skipped: "..tostring(fitError)) end
 if workspace.CurrentCamera then
     local signalOk,signalError=pcall(function()
-        workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fitViewport)
+        trackConnection(workspace.CurrentCamera:GetPropertyChangedSignal("ViewportSize"):Connect(fitViewport))
     end)
     if not signalOk then warn("[Velora UI] Viewport listener skipped: "..tostring(signalError)) end
 end
@@ -1476,7 +1494,7 @@ local function applyAccent(color)
         button.BackgroundColor3=color:Lerp(P.Ink,.48)
         if filter==activeFilter then button.BackgroundTransparency=0 end
     end
-    refreshList()
+    refreshList(true)
 end
 
 local function syncRgb()
@@ -1549,7 +1567,13 @@ local function songPalette(index)
     return {first,second}
 end
 
-refreshList=function()
+refreshList=function(force)
+    local selectedId=state.SelectedEntryId or (state.CurrentEntry and state.CurrentEntry.Id)
+    local playingId=state.Playing and state.CurrentEntry and state.CurrentEntry.Id or ""
+    local signature=table.concat({activeFilter,searchQuery,selectedId or "",playingId},"\0")
+    if not force and nova.listSignature==signature then return end
+    nova.listSignature=signature
+
     for _,child in ipairs(songList:GetChildren()) do
         if child:IsA("GuiObject") then
             child:Destroy()
@@ -1557,14 +1581,13 @@ refreshList=function()
     end
 
     local shown=0
-    local selectedId=state.SelectedEntryId or (state.CurrentEntry and state.CurrentEntry.Id)
 
     for index,entry in ipairs(state.Registry) do
         if entryMatches(entry) then
             shown+=1
 
             local selected=entry.Id==selectedId
-            local playingCurrent=state.Playing and state.CurrentEntry and entry.Id==state.CurrentEntry.Id
+            local playingCurrent=entry.Id==playingId
             local cardBase=selected and P.Violet:Lerp(P.Ink,.62) or P.Card
             local cardHover=selected and P.Violet:Lerp(P.Ink,.50) or P.Lift
 
@@ -1621,7 +1644,6 @@ refreshList=function()
                 else
                     feedback.Text="Selected "..tostring(entry.Name)..". Press Play when ready."
                 end
-                refreshList()
             end)
         end
     end
@@ -1643,53 +1665,74 @@ local function seekAt(screenX)
 end
 
 local function render()
-    local snap=API:GetSnapshot()
-    if snap.Entry then
-        nowTitle.Text=snap.Entry.Name or "Untitled"
-        nowMeta.Text=(snap.Entry.Artist or "Velora").."  •  "..tostring(math.floor(snap.BPM or 120)).." BPM"
-        if not bpm:IsFocused() then bpm.Text=tostring(math.floor(snap.BPM or 120)) end
-        recolorIcon(favoriteIcon,API:IsFavorite(snap.Entry.Id) and P.Pink or P.Sub)
+    local entry=state.CurrentEntry
+    local duration=state.Timeline and state.Timeline.Duration or 0
+    local progressValue=duration>0 and math.clamp(state.Position/duration,0,1) or 0
+    if entry then
+        local titleValue=entry.Name or "Untitled"
+        local bpmValue=tostring(math.floor(state.CurrentBPM or 120))
+        local metaValue=(entry.Artist or "Velora").."  •  "..bpmValue.." BPM"
+        if nowTitle.Text~=titleValue then nowTitle.Text=titleValue end
+        if nowMeta.Text~=metaValue then nowMeta.Text=metaValue end
+        if not bpm:IsFocused() and bpm.Text~=bpmValue then bpm.Text=bpmValue end
+        local favoriteValue=state.Favorites[entry.Id]==true
+        if nova.lastFavorite~=favoriteValue then
+            nova.lastFavorite=favoriteValue
+            recolorIcon(favoriteIcon,favoriteValue and P.Pink or P.Sub)
+        end
     end
     if not seeking then
-        fill.Size=UDim2.new(snap.Progress,0,1,0)
-        scrubber.Position=UDim2.new(snap.Progress,0,.5,0)
+        fill.Size=UDim2.new(progressValue,0,1,0)
+        scrubber.Position=UDim2.new(progressValue,0,.5,0)
     end
-    timeLeft.Text=clock(snap.Position);timeRight.Text=clock(snap.Duration)
-    local showPause=snap.Playing and not snap.Paused
-    playIcon.Visible=not showPause;pauseIcon.Visible=showPause
-    loop.BackgroundColor3=snap.Loop and P.Violet:Lerp(P.Ink,.45) or P.Card
-    recolorIcon(loopIcon,snap.Loop and P.Text or P.Sub)
-    nova.loopLabel.TextColor3=snap.Loop and P.Text or P.Muted
+    local leftValue,rightValue=clock(state.Position),clock(duration)
+    if timeLeft.Text~=leftValue then timeLeft.Text=leftValue end
+    if timeRight.Text~=rightValue then timeRight.Text=rightValue end
+    local showPause=state.Playing and not state.Paused
+    if nova.lastShowPause~=showPause then
+        nova.lastShowPause=showPause
+        playIcon.Visible=not showPause
+        pauseIcon.Visible=showPause
+    end
+    if nova.lastLoop~=state.Loop then
+        nova.lastLoop=state.Loop
+        loop.BackgroundColor3=state.Loop and P.Violet:Lerp(P.Ink,.45) or P.Card
+        recolorIcon(loopIcon,state.Loop and P.Text or P.Sub)
+        nova.loopLabel.TextColor3=state.Loop and P.Text or P.Muted
+    end
     local statusText,statusColor="READY",P.Cyan
-    if snap.Playing and not snap.Paused then
+    if state.Playing and not state.Paused then
         statusText,statusColor="PLAYING",P.Green
-    elseif snap.Paused then
+    elseif state.Paused then
         statusText,statusColor="PAUSED",P.Pink
-    elseif snap.Duration>0 and snap.Progress>=.999 then
+    elseif duration>0 and progressValue>=.999 then
         statusText,statusColor="DONE",P.Cyan
     end
-    nova.playbackStatus.Text=statusText
-    nova.playbackStatus.TextColor3=statusColor
-    nova.playbackDot.BackgroundColor3=statusColor
-    nova.playbackBadgeBorder.Color=statusColor
-    nova.playbackBadge.BackgroundColor3=statusColor:Lerp(P.Ink,.84)
+    if nova.lastStatus~=statusText or nova.lastStatusColor~=statusColor then
+        nova.lastStatus=statusText
+        nova.lastStatusColor=statusColor
+        nova.playbackStatus.Text=statusText
+        nova.playbackStatus.TextColor3=statusColor
+        nova.playbackDot.BackgroundColor3=statusColor
+        nova.playbackBadgeBorder.Color=statusColor
+        nova.playbackBadge.BackgroundColor3=statusColor:Lerp(P.Ink,.84)
+    end
 end
 
 search:GetPropertyChangedSignal("Text"):Connect(function() searchQuery=string.lower(search.Text);refreshList() end)
 seekHit.InputBegan:Connect(function(input)
     if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then seeking=true;seekAt(input.Position.X) end
 end)
-UserInputService.InputChanged:Connect(function(input)
+trackConnection(UserInputService.InputChanged:Connect(function(input)
     if seeking and (input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then seekAt(input.Position.X) end
-end)
-UserInputService.InputEnded:Connect(function(input)
+end))
+trackConnection(UserInputService.InputEnded:Connect(function(input)
     if seeking and (input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch) then seekAt(input.Position.X);seeking=false end
-end)
-bpmDown.MouseButton1Click:Connect(function() local snap=API:GetSnapshot();API:SetBPM((snap.BPM or 120)-5);render() end)
-bpmUp.MouseButton1Click:Connect(function() local snap=API:GetSnapshot();API:SetBPM((snap.BPM or 120)+5);render() end)
+end))
+bpmDown.MouseButton1Click:Connect(function() API:SetBPM((state.CurrentBPM or 120)-5);render() end)
+bpmUp.MouseButton1Click:Connect(function() API:SetBPM((state.CurrentBPM or 120)+5);render() end)
 play.MouseButton1Click:Connect(function()
-    local snap=API:GetSnapshot()
-    if snap.Playing and not snap.Paused then API:Pause();feedback.Text="Paused in the moonlight."
+    if state.Playing and not state.Paused then API:Pause();feedback.Text="Paused in the moonlight."
     else local ok,err=API:Play();feedback.Text=ok and "Aurora is playing into the game." or (tostring(err).." — click the piano once.") end
     render()
 end)
@@ -1701,14 +1744,13 @@ stop.MouseButton1Click:Connect(function()
         state.PendingEntryId=nil
         local ok,err=API:LoadSong(pendingId,false)
         feedback.Text=ok and "Selected song is ready. Press Play when you want." or tostring(err)
-        refreshList()
     else
         feedback.Text="Stopped. The song is ready to restart."
     end
 
     render()
 end)
-favorite.MouseButton1Click:Connect(function() if state.CurrentEntry then API:ToggleFavorite(state.CurrentEntry.Id);refreshList();render() end end)
+favorite.MouseButton1Click:Connect(function() if state.CurrentEntry then API:ToggleFavorite(state.CurrentEntry.Id) end end)
 loop.MouseButton1Click:Connect(function() API:SetLoop(not state.Loop);render() end)
 resetBpm.MouseButton1Click:Connect(function()
     if not state.CurrentSong or not state.CurrentEntry then
@@ -1739,7 +1781,9 @@ API.Changed:Connect(function(reason)
         task.delay(.09,function() if art.Parent then animate(art,{Rotation=0},.1) end end)
     end
 
-    if reason=="selection" or reason=="selection-focus" or reason=="pending-selection"
+    if reason=="favorites" or reason=="library" then
+        refreshList(true)
+    elseif reason=="selection" or reason=="selection-focus" or reason=="pending-selection"
         or reason=="pending-ready" or reason=="playing" or reason=="stopped" or reason=="finished" then
         refreshList()
     end
@@ -1761,29 +1805,48 @@ local dragStart,startPos
 header.InputBegan:Connect(function(input)
     if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=true;dragStart=input.Position;startPos=window.Position end
 end)
-UserInputService.InputChanged:Connect(function(input)
+trackConnection(UserInputService.InputChanged:Connect(function(input)
     if dragging and (input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then local delta=input.Position-dragStart;window.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)  end
-end)
-UserInputService.InputEnded:Connect(function(input) if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=false end end)
-UserInputService.InputBegan:Connect(function(input,processed) if not processed and input.KeyCode==Enum.KeyCode.RightShift then gui.Enabled=not gui.Enabled end end)
-close.MouseButton1Click:Connect(function() API:Stop();gui:Destroy() end)
+end))
+trackConnection(UserInputService.InputEnded:Connect(function(input) if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=false end end))
+trackConnection(UserInputService.InputBegan:Connect(function(input,processed) if not processed and input.KeyCode==Enum.KeyCode.RightShift then gui.Enabled=not gui.Enabled end end))
+
+local function cleanup()
+    if state.Cleaning then return end
+    state.Cleaning=true
+    state.Destroyed=true
+    stopConnection()
+    for index=#state.UIConnections,1,-1 do
+        pcall(function() state.UIConnections[index]:Disconnect() end)
+    end
+    table.clear(state.UIConnections)
+    pcall(function() changed:Destroy() end)
+    pcall(function() notePlayed:Destroy() end)
+    if _G.Velora==API then _G.Velora=nil end
+    pcall(function() if type(getgenv)=="function" and getgenv().Velora==API then getgenv().Velora=nil end end)
+end
+
+close.MouseButton1Click:Connect(function() API:Destroy() end)
 
 local lastRender=0
-local renderConnection=RunService.RenderStepped:Connect(function()
+trackConnection(RunService.RenderStepped:Connect(function()
     if not gui.Parent then return end
     local now=os.clock()
     if now-lastRender>=1/30 then
         lastRender=now
         render()
     end
-end)
-gui.AncestryChanged:Connect(function(_,parent) if not parent and renderConnection then renderConnection:Disconnect() end end)
+end))
+trackConnection(gui.AncestryChanged:Connect(function(_,parent) if not parent then cleanup() end end))
 
 API.UI={Gui=gui,Window=window}
 API.State=state
 function API:Show() gui.Enabled=true end
 function API:Hide() gui.Enabled=false end
-function API:Destroy() API:Stop();gui:Destroy() end
+function API:Destroy()
+    cleanup()
+    if gui.Parent then gui:Destroy() end
+end
 
 refreshList()
 if state.Registry[1] and not state.CurrentEntry then API:LoadSong(state.Registry[1].Id,false) end
