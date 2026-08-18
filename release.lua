@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.3 "Nova"
+    Velora v0.10.4 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -19,6 +19,7 @@ local UserInputService = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local SoundService = game:GetService("SoundService")
 local TextService = game:GetService("TextService")
+local HttpService = game:GetService("HttpService")
 
 local LocalPlayer = Players.LocalPlayer
 if not LocalPlayer then
@@ -30,7 +31,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.3",
+    Version = "0.10.4",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -604,7 +605,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.3")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.4")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -612,6 +613,81 @@ local function loadRegistry()
 end
 
 local Registry = loadRegistry()
+
+local FAVORITES_DIRECTORY = "Velora"
+local FAVORITES_PATH = FAVORITES_DIRECTORY .. "/favorites.json"
+local FAVORITES_MEMORY_KEY = "VeloraFavorites"
+
+local function favoritesSnapshot(source)
+    local snapshot = {}
+    for id, enabled in pairs(type(source) == "table" and source or {}) do
+        if type(id) == "string" and enabled == true then
+            snapshot[id] = true
+        end
+    end
+    return snapshot
+end
+
+local function runtimeEnvironment()
+    if type(getgenv) == "function" then
+        local ok, environment = pcall(getgenv)
+        if ok and type(environment) == "table" then
+            return environment
+        end
+    end
+    return _G
+end
+
+local function loadFavorites()
+    local favorites = {}
+
+    pcall(function()
+        if type(isfile) ~= "function" or type(readfile) ~= "function" or not isfile(FAVORITES_PATH) then
+            return
+        end
+
+        local decoded = HttpService:JSONDecode(readfile(FAVORITES_PATH))
+        if type(decoded) ~= "table" then
+            return
+        end
+
+        for id, enabled in pairs(decoded) do
+            if type(id) == "string" and enabled == true then
+                favorites[id] = true
+            elseif type(enabled) == "string" then
+                favorites[enabled] = true
+            end
+        end
+    end)
+
+    local environment = runtimeEnvironment()
+    for id, enabled in pairs(type(environment[FAVORITES_MEMORY_KEY]) == "table" and environment[FAVORITES_MEMORY_KEY] or {}) do
+        if type(id) == "string" and enabled == true then
+            favorites[id] = true
+        end
+    end
+
+    return favorites
+end
+
+local function saveFavorites(source)
+    local snapshot = favoritesSnapshot(source)
+    runtimeEnvironment()[FAVORITES_MEMORY_KEY] = snapshot
+
+    local wroteFile = false
+    pcall(function()
+        if type(writefile) ~= "function" then
+            return
+        end
+        if type(isfolder) == "function" and not isfolder(FAVORITES_DIRECTORY) and type(makefolder) == "function" then
+            makefolder(FAVORITES_DIRECTORY)
+        end
+        writefile(FAVORITES_PATH, HttpService:JSONEncode(snapshot))
+        wroteFile = true
+    end)
+
+    return wroteFile
+end
 
 local API = {
     Version = CONFIG.Version,
@@ -636,7 +712,7 @@ local state = {
     Shuffle = false,
     AutoInput = CONFIG.AutoInput and InputBackend.Available,
     BoundCallback = nil,
-    Favorites = {},
+    Favorites = loadFavorites(),
     Recent = {},
     Queue = {},
     Category = "All Songs",
@@ -1091,9 +1167,11 @@ function API:ToggleFavorite(id)
     if not getEntry(id) then
         return false
     end
-    state.Favorites[id] = not state.Favorites[id]
+    local enabled = state.Favorites[id] ~= true
+    state.Favorites[id] = enabled and true or nil
+    saveFavorites(state.Favorites)
     emit("favorites")
-    return state.Favorites[id]
+    return enabled
 end
 
 function API:AddToQueue(id)
@@ -1350,6 +1428,25 @@ local resetIcon=icon(resetBpm,"rotate-ccw",15,P.Sub,"");resetIcon.AnchorPoint=Ve
 label(resetBpm,"RESET BPM",UDim2.fromOffset(35,4),UDim2.fromOffset(158,14),Enum.Font.BuilderSansExtraBold,10,P.Text)
 local feedback=label(resetBpm,"Restore the song's original tempo",UDim2.fromOffset(35,18),UDim2.fromOffset(158,13),Enum.Font.BuilderSansMedium,8,P.Sub)
 feedback.TextTruncate=Enum.TextTruncate.AtEnd
+local function bindButtonMotion(button,hoverScale)
+    local scale=make("UIScale",{Scale=1},button)
+    local raised=hoverScale or 1.035
+    button.MouseEnter:Connect(function() animate(scale,{Scale=raised},.14) end)
+    button.MouseLeave:Connect(function() animate(scale,{Scale=1},.16) end)
+    button.MouseButton1Down:Connect(function() animate(scale,{Scale=.965},.07) end)
+    button.MouseButton1Up:Connect(function() animate(scale,{Scale=raised},.10) end)
+    return scale
+end
+
+bindButtonMotion(settingsButton)
+bindButtonMotion(close)
+bindButtonMotion(stop)
+bindButtonMotion(play,1.025)
+bindButtonMotion(favorite,1.055)
+bindButtonMotion(bpmDown,1.05)
+bindButtonMotion(bpmUp,1.05)
+bindButtonMotion(loop)
+bindButtonMotion(resetBpm,1.018)
 play.MouseEnter:Connect(function() animate(playGlow,{Transparency=.64});animate(playRim,{Transparency=.02}) end)
 play.MouseLeave:Connect(function() animate(playGlow,{Transparency=.78});animate(playRim,{Transparency=.12}) end)
 resetBpm.MouseEnter:Connect(function() animate(resetGlow,{Transparency=.74});animate(resetRim,{Transparency=.18}) end)
@@ -1397,6 +1494,8 @@ label(palette,"HEX",UDim2.fromOffset(18,202),UDim2.fromOffset(35,16),Enum.Font.B
 local hexInput=radius(make("TextBox",{Position=UDim2.fromOffset(18,221),Size=UDim2.fromOffset(158,40),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,Text="#8F6CFF",Font=Enum.Font.Code,TextSize=11,TextColor3=P.Text,ZIndex=51},palette),12)
 local preview=radius(make("Frame",{Position=UDim2.fromOffset(188,221),Size=UDim2.fromOffset(74,40),BackgroundColor3=P.Violet,BorderSizePixel=0,ZIndex=51},palette),12)
 local applyColorButton=radius(gradient(make("TextButton",{Position=UDim2.fromOffset(18,276),Size=UDim2.fromOffset(244,31),BackgroundColor3=P.Violet,BorderSizePixel=0,Text="APPLY COLOR",Font=Enum.Font.BuilderSansExtraBold,TextSize=9,TextColor3=P.Text,ZIndex=51},palette),P.Violet,P.Pink,0),11)
+bindButtonMotion(paletteClose,1.045)
+bindButtonMotion(applyColorButton,1.018)
 
 local function setPaletteVisible(visible)
     paletteDim.Visible=visible
@@ -1491,6 +1590,7 @@ end
 
 for _,color in ipairs(swatchColors) do
     local swatch=radius(edge(make("TextButton",{Size=UDim2.fromOffset(34,34),BackgroundColor3=color,BorderSizePixel=0,Text="",AutoButtonColor=false,ZIndex=52},swatchRow),Color3.new(1,1,1),.72),12)
+    bindButtonMotion(swatch,1.08)
     swatch.MouseButton1Click:Connect(function()
         local r,g,b=math.floor(color.R*255+.5),math.floor(color.G*255+.5),math.floor(color.B*255+.5)
         rgbInputs[1].Text=tostring(r);rgbInputs[2].Text=tostring(g);rgbInputs[3].Text=tostring(b)
@@ -1708,7 +1808,27 @@ stop.MouseButton1Click:Connect(function()
 
     render()
 end)
-favorite.MouseButton1Click:Connect(function() if state.CurrentEntry then API:ToggleFavorite(state.CurrentEntry.Id);refreshList();render() end end)
+favorite.MouseButton1Click:Connect(function()
+    if not state.CurrentEntry then
+        feedback.Text="Choose a song before adding a favorite."
+        return
+    end
+
+    local entry=state.CurrentEntry
+    local enabled=API:ToggleFavorite(entry.Id)
+    feedback.Text=enabled and ("Saved "..tostring(entry.Name).." to Favorites.") or ("Removed "..tostring(entry.Name).." from Favorites.")
+    refreshList()
+    render()
+
+    favoriteIcon.Rotation=enabled and -12 or 10
+    favoriteIcon.Size=UDim2.fromOffset(15,15)
+    animate(favoriteIcon,{Rotation=0,Size=UDim2.fromOffset(enabled and 25 or 21,enabled and 25 or 21)},.13)
+    animate(favorite,{BackgroundColor3=enabled and P.Pink:Lerp(P.Ink,.72) or P.Lift},.13)
+    task.delay(.14,function()
+        if favoriteIcon.Parent then animate(favoriteIcon,{Size=UDim2.fromOffset(20,20)},.14) end
+        if favorite.Parent then animate(favorite,{BackgroundColor3=P.Card},.16) end
+    end)
+end)
 loop.MouseButton1Click:Connect(function() API:SetLoop(not state.Loop);render() end)
 resetBpm.MouseButton1Click:Connect(function()
     if not state.CurrentSong or not state.CurrentEntry then
@@ -1740,7 +1860,7 @@ API.Changed:Connect(function(reason)
     end
 
     if reason=="selection" or reason=="selection-focus" or reason=="pending-selection"
-        or reason=="pending-ready" or reason=="playing" or reason=="stopped" or reason=="finished" then
+        or reason=="pending-ready" or reason=="playing" or reason=="stopped" or reason=="finished" or reason=="favorites" then
         refreshList()
     end
     render()
@@ -1766,7 +1886,7 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 UserInputService.InputEnded:Connect(function(input) if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then dragging=false end end)
 UserInputService.InputBegan:Connect(function(input,processed) if not processed and input.KeyCode==Enum.KeyCode.RightShift then gui.Enabled=not gui.Enabled end end)
-close.MouseButton1Click:Connect(function() API:Stop();gui:Destroy() end)
+close.MouseButton1Click:Connect(function() saveFavorites(state.Favorites);API:Stop();gui:Destroy() end)
 
 local lastRender=0
 local renderConnection=RunService.RenderStepped:Connect(function()
@@ -1783,7 +1903,7 @@ API.UI={Gui=gui,Window=window}
 API.State=state
 function API:Show() gui.Enabled=true end
 function API:Hide() gui.Enabled=false end
-function API:Destroy() API:Stop();gui:Destroy() end
+function API:Destroy() saveFavorites(state.Favorites);API:Stop();gui:Destroy() end
 
 refreshList()
 if state.Registry[1] and not state.CurrentEntry then API:LoadSong(state.Registry[1].Id,false) end
