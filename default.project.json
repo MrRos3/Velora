@@ -1,0 +1,27 @@
+{
+  "name": "Velora",
+  "tree": {
+    "$className": "DataModel",
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Velora": {
+          "$className": "Folder",
+          "Main": {
+            "$className": "LocalScript",
+            "$path": "Main.lua"
+          },
+          "Songs": {
+            "$className": "ModuleScript",
+            "$path": "Songs.lua"
+          },
+          "src": {
+            "$path": "src"
+          },
+          "songs": {
+            "$path": "songs"
+          }
+        }
+      }
+    }
+  }
+}

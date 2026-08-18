@@ -1,6 +1,5 @@
--- Velora v0.1
--- Central song registry.
--- Add new songs here without touching the player engine.
+-- Velora v0.2 song registry.
+-- Add one entry here for every ModuleScript inside songs/.
 
 return {
     {
@@ -8,7 +7,15 @@ return {
         Name = "Velora Demo",
         Artist = "Velora",
         BPM = 100,
-        Categories = { "Demo", "Starter" },
+        Categories = { "Original", "Starter" },
         File = "songs/VeloraDemo.lua",
+    },
+    {
+        Id = "moonlit-keys",
+        Name = "Moonlit Keys",
+        Artist = "Velora",
+        BPM = 88,
+        Categories = { "Original", "Chill" },
+        File = "songs/MoonlitKeys.lua",
     },
 }
