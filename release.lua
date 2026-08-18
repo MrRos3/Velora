@@ -1,5 +1,5 @@
 --[[
-    Velora v0.9.1 "Pulse"
+    Velora v0.9.2 "Pulse"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.9.1",
+    Version = "0.9.2",
     Codename = "Pulse",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -604,7 +604,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.9.1")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.9.2")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -1289,7 +1289,7 @@ search.FocusLost:Connect(function() animate(searchGlow,{Transparency=.93});anima
 local resultTitle=label(browser,"ALL SONGS",UDim2.fromOffset(16,62),UDim2.fromOffset(200,20),Enum.Font.BuilderSansExtraBold,12,P.Text)
 local songList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,88),Size=UDim2.new(1,-20,1,-98),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},browser)
 make("UIListLayout",{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder},songList)
-padding(songList,2,5,0,5)
+padding(songList,2,5,4,5)
 
 label(playerCard,"NOW PLAYING",UDim2.fromOffset(16,14),UDim2.fromOffset(160,14),Enum.Font.BuilderSansBold,9,P.Muted)
 local art=radius(gradient(make("Frame",{Position=UDim2.fromOffset(16,39),Size=UDim2.fromOffset(72,72),BackgroundColor3=P.Violet,BorderSizePixel=0},playerCard),P.Violet,P.Pink,45),18)
@@ -1538,12 +1538,6 @@ refreshList=function()
                 Text="",
             },songList),15)
             edge(card,selected and P.Violet or Color3.fromRGB(86,77,117),selected and .08 or .58,selected and 1.6 or 1)
-            if selected then
-                glowEdge(card,P.Violet,.70,.04,5.5)
-            elseif playingCurrent then
-                glowEdge(card,P.Green,.78,.12,4.5)
-            end
-
             local palette=songPalette(index)
             local tile=radius(gradient(make("Frame",{
                 Position=UDim2.fromOffset(9,7),
