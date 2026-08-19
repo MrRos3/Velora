@@ -1,5 +1,5 @@
--- Velora 0.10.9 complete 73-measure Anlatamam piano arrangement.
--- Rebuilt from the complete three-page score with its four tempo sections.
+-- Velora 0.10.10 verified 73-measure Anlatamam piano arrangement.
+-- Rebuilt from the complete three-page score and cross-checked at multiple resolutions.
 return {
     Id="anlatamam-kara-sevda",
     Name="Anlatamam (Kara Sevda OST)",
@@ -54,7 +54,7 @@ return {
 [8hv] - - - - - - - - - - - | [gc] - - - - - - - - - - - | [DZ] - - - - - [dz] - - - - - | [sl] - - - - - - - - - - -
 [^E] - - - - - [dL] - - - - - | [sl] - - - - - [dL] - - - - - | - - - - - - [DZ] - - - - - | [gc] - - - - - - - - - - -
 [^hv] - - - - - - - - - - - | [gc] - - - - - - - - - - - | [DZ] - - - - - [dz] - - - - - | [sl] - - - - - - - - - - -
-[%WdLz] - - - - - [sl] - - - - - | [dL] - - - - - - - - - - - | [DZ] - - - - - [gc] - - - - - | - - - - - - - - - - - -
+[%W] - - - - - [dL] - - - - - | [sl] - - - - - [dL] - - - - - | - - - - - - [DZ] - - - - - | [gc] - - - - - - - - - - -
 [%hv] - - - - - - - - - - - | [HV] - - - - - - - - - - - | [hv] - - - - - [gc] - - - - - | [DZ] - - - - - - - - - - -
 [^E] - - - - - [dL] - - - - - | [sl] - - - - - [dL] - - - - - | - - - - - - [DZ] - - - - - | [gc] - - - - - - - - - - -
 [^hv] - - - - - - - - - - - | [gc] - - - - - - - - - - - | [DZ] - - - - - [dz] - - - - - | [sl] - - - - - - - - - - -
@@ -62,7 +62,7 @@ return {
 [8hv] - - - - - - - - - - - | [gc] - - - - - - - - - - - | [DZ] - - - - - [dz] - - - - - | [sl] - - - - - - - - - - -
 [^E] - - - - - [dL] - - - - - | [sl] - - - - - [dL] - - - - - | - - - - - - [DZ] - - - - - | [gc] - - - - - - - - - - -
 [^hv] - - - - - - - - - - - | [gc] - - - - - - - - - - - | [DZ] - - - - - [dz] - - - - - | [sl] - - - - - - - - - - -
-[%WdLz] - - - - - [sl] - - - - - | [dz] - - - - - - - - - - - | [DZ] - - - - - [gc] - - - - - | - - - - - - - - - - - -
+[%Wz] - - - - - [dL] - - - - - | [sl] - - - - - [dL] - - - - - | - - - - - - [DZ] - - - - - | [gc] - - - - - - - - - - -
 [%hv] - - - - - - - - - - - | [gc] - - - - - - - - - - - | [DZ] - - - - - [dz] - - - - - | [sl] - - - - - - - - - - -
 [^E] - - - - - [dL] - - - - - | [sl] - - - - - [dL] - - - - - | - - - - - - [DZ] - - - - - | [gc] - - - - - - - - - - -
 [^h] - - - - - - - - - - - | - - - - - - H - - - - - | - - - - - - J - - - - - | l - - - - - z - - - - -
