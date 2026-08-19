@@ -1,7 +1,7 @@
--- Velora 0.10.6 Nova Succession library loader.
+-- Velora 0.10.7 Nova complete Love Story loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/ec93368f33a08f2b3d06a006071e6d5d3d66c1c3/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@ec93368f33a08f2b3d06a006071e6d5d3d66c1c3/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/d036b27994928e7d474936fb3b27a302466e3647/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@d036b27994928e7d474936fb3b27a302466e3647/release.lua",
 }
 
 local function fail(reason)
