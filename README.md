@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.9 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.10 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,7 +18,12 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.9
+## Nova 0.10.10
+
+- Corrected two misread Anlatamam measures where melody notes had been grouped at the wrong beat
+- Cross-checked the complete score at multiple recognition resolutions to catch dropped or shifted events
+- Repeated notes now release and retrigger safely when a slow game frame delivers nearby events together
+- Stale delayed releases can no longer cut off a newer press of the same piano key
 
 - Replaced the short Anlatamam MIDI with a clean, complete 73-measure piano arrangement
 - **Anlatamam (Kara Sevda OST)** now runs for about 3:06 and includes the full scored ending
