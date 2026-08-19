@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.5 "Nova"
+    Velora v0.10.6 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -31,7 +31,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.5",
+    Version = "0.10.6",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -581,7 +581,7 @@ end
 -- =========================================================
 
 local FALLBACK_SONGS = {
-    {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=70,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
+    {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
     {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=90,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
     {Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=110,Categories={"Famous","TikTok","Folk","Upbeat","Complete"},File="songs/IevanPolkka.lua"},
@@ -606,7 +606,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.5")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.6")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
