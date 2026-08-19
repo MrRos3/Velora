@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.7 "Nova"
+    Velora v0.10.8 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -31,7 +31,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.7",
+    Version = "0.10.8",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -288,7 +288,10 @@ end
 
 local function parseSheet(sheet, bpm, stepsPerBeat)
     bpm = math.clamp(tonumber(bpm) or 120, 30, 300)
-    stepsPerBeat = math.clamp(tonumber(stepsPerBeat) or 2, 1, 16)
+    -- Detailed scores such as Love Story use 24 timing steps per displayed
+    -- half-note beat. Capping this at 16 stretches every rest and corrupts the
+    -- song's tempo, so retain high-resolution grids while keeping a safe cap.
+    stepsPerBeat = math.clamp(tonumber(stepsPerBeat) or 2, 1, 64)
 
     local stepDuration = (60 / bpm) / stepsPerBeat
     local events = {}
@@ -606,7 +609,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.7")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.8")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
