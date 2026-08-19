@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.9 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.7 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,16 +18,7 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.9
-
-- Replaced the short Anlatamam MIDI with a clean, complete 73-measure piano arrangement
-- **Anlatamam (Kara Sevda OST)** now runs for about 3:06 and includes the full scored ending
-- Playback follows all four written tempo sections: 100 → 80 → 100 → 90 BPM
-- Tempo arrows and Reset BPM scale the entire tempo map together without damaging the song's phrasing
-
-- Fixed high-resolution song timing being silently limited to 16 steps per beat
-- Love Story now honors its full 24-step grid and displays the correct **3:19** duration at 85 BPM
-- Corrected the stretched rests and sluggish note spacing caused by the old timing limit
+## Nova 0.10.7
 
 - Replaced Love Story's 2:55 MIDI sequence with the complete five-page piano arrangement
 - **Love Story — Indila** now includes all 188 measures and runs for about 3:19
@@ -75,7 +66,7 @@ loadstring(game:HttpGet(
 
 ## Music sources
 
-Arrangements are generated from credited MIDI editions and scores. Source and licensing details are stored inside each song file. Love Story uses Anastazja Szczepiek's complete five-page piano score, and Anlatamam uses a complete three-page piano score with its written tempo changes. Owner-supplied MIDI conversions include Ievan Polkka, Kamado Tanjiro no Uta, and Erika.
+Arrangements are generated from credited MIDI editions and scores. Source and licensing details are stored inside each song file. Love Story now uses Anastazja Szczepiek's complete five-page piano score. Owner-supplied MIDI conversions include Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and the opening section of Succession.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
 
