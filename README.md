@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.5 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.6 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,10 +18,11 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.5
+## Nova 0.10.6
 
-- Added the complete supplied `Succession.mid` arrangement as **Succession — Main Title Theme** by Nicholas Britell
-- The arrangement runs at the MIDI's original 70 BPM with chords, octave-folding, and explicit rests
+- Replaced the 27-second Succession fragment with a complete 50-measure piano arrangement
+- **Succession — Main Title Theme** now runs for about 1:23 at the score's half-note tempo of 72 BPM
+- The complete arrangement includes the opening theme, quiet bridge, bass ostinato, reprise, final chord, black-key notes, chords, and explicit rests
 - Clean scale-and-press hover motion on the existing buttons
 - A quick heart pop and confirmation message when adding or removing a favorite
 - Favorites save immediately to `Velora/favorites.json` when executor file APIs are available
@@ -61,7 +62,7 @@ loadstring(game:HttpGet(
 
 ## Music sources
 
-Arrangements are generated from credited MIDI editions. Source and licensing details are stored inside each song file. Owner-supplied MIDI conversions include Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and Succession.
+Arrangements are generated from credited MIDI editions and scores. Source and licensing details are stored inside each song file. Owner-supplied MIDI conversions include Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and the opening section of Succession.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
 
