@@ -1,7 +1,7 @@
--- Velora 0.10.4 Nova interaction polish boot.
+-- Velora 0.10.5 Nova Succession library boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/28f79a72e94a20de323b48c0431992e6a6cba3e9/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@28f79a72e94a20de323b48c0431992e6a6cba3e9/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/d995fad1ec5c41255fdbfbf44e9e470b8363b6e3/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@d995fad1ec5c41255fdbfbf44e9e470b8363b6e3/release.lua",
 }
 
 local function fail(reason)
