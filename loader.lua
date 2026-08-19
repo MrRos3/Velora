@@ -1,7 +1,7 @@
--- Velora 0.10.7 Nova complete Love Story loader.
+-- Velora 0.10.8 Nova corrected Love Story timing loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/d036b27994928e7d474936fb3b27a302466e3647/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@d036b27994928e7d474936fb3b27a302466e3647/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/4cab46da131e0950225cab80836f64202a9ed73b/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@4cab46da131e0950225cab80836f64202a9ed73b/release.lua",
 }
 
 local function fail(reason)
