@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.7 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.8 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,7 +18,11 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.7
+## Nova 0.10.8
+
+- Fixed high-resolution song timing being silently limited to 16 steps per beat
+- Love Story now honors its full 24-step grid and displays the correct **3:19** duration at 85 BPM
+- Corrected the stretched rests and sluggish note spacing caused by the old timing limit
 
 - Replaced Love Story's 2:55 MIDI sequence with the complete five-page piano arrangement
 - **Love Story — Indila** now includes all 188 measures and runs for about 3:19
