@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.4 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.5 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,8 +18,10 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.4
+## Nova 0.10.5
 
+- Added the complete supplied `Succession.mid` arrangement as **Succession — Main Title Theme** by Nicholas Britell
+- The arrangement runs at the MIDI's original 70 BPM with chords, octave-folding, and explicit rests
 - Clean scale-and-press hover motion on the existing buttons
 - A quick heart pop and confirmation message when adding or removing a favorite
 - Favorites save immediately to `Velora/favorites.json` when executor file APIs are available
@@ -50,7 +52,7 @@ loadstring(game:HttpGet(
 - Defensive Lucide icon loading so one unavailable asset cannot stop the GUI
 - Compatibility loader with GitHub and jsDelivr release fallbacks
 - Clear in-game error notifications instead of silent launcher failures
-- 21 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
+- 22 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
 - Clear selected-song highlight without a side rail
 - Picking another song never interrupts the song already playing
 - A completed song stops unless Loop is enabled
@@ -59,7 +61,7 @@ loadstring(game:HttpGet(
 
 ## Music sources
 
-Arrangements are generated from credited MIDI editions. Source and licensing details are stored inside each song file. Owner-supplied MIDI conversions include Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, and Anlatamam.
+Arrangements are generated from credited MIDI editions. Source and licensing details are stored inside each song file. Owner-supplied MIDI conversions include Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and Succession.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
 
