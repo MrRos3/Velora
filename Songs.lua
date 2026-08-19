@@ -1,5 +1,6 @@
 -- Velora 0.10.8 Nova — complete MIDI- and score-derived arrangements.
 return {
+    {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
     {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=85,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
@@ -23,4 +24,3 @@ return {
     {Id="mozart-k545-allegro",Name="Piano Sonata K.545 — Allegro",Artist="W. A. Mozart",BPM=132,Categories={"Famous","Classical","Upbeat","Complete"},File="songs/MozartSonataK545.lua"},
     {Id="ode-to-joy",Name="Ode to Joy",Artist="L. van Beethoven",BPM=100,Categories={"Famous","Classical","Starter","Complete"},File="songs/OdeToJoy.lua"}
 }
-
