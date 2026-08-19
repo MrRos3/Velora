@@ -1,15 +1,18 @@
--- Velora 0.10.5 arrangement converted from a MIDI supplied by the repository owner.
--- Supplied file: Succession.mid
--- Supplied file SHA-256: 52A04D08E4D80EFBF28833B887EC5CFDCE74B3A831AD071FC6843613FF578C84
+-- Velora 0.10.6 complete 50-measure Succession piano arrangement.
+-- Measures 1-16 preserve the repository owner's supplied MIDI conversion.
+-- Measures 17-50 were transcribed from the complete three-page piano score.
 return {
     Id="succession-main-title",
     Name="Succession — Main Title Theme",
     Artist="Nicholas Britell",
-    BPM=70,
+    BPM=72,
     StepsPerBeat=12,
     Complete=true,
-    Source="User-provided MIDI attachment: Succession.mid",
-    SourceLicense="User-provided input",
+    Measures=50,
+    DurationSeconds=83.33,
+    Arranger="Fionn Murphy",
+    Source="https://musescore.com/finnstrike7/scores/7385645",
+    SourceLicense="All rights reserved — personal/non-commercial piano transcription",
     Categories={"Famous","Soundtrack","TV","Dark","Complete"},
     Notes=[=[
 [671$] - - $ | - - [$80xVb] - | - $ - - | [2$80e] - - $
@@ -35,7 +38,58 @@ return {
 - [$H] - - | [2$8tYG] - - [$h] | - - [$8qeH] - | - [$h] - -
 [27eti] - - [$v] | - - [$9qec] - | - [$Z] - - | [2$9tyL] - - [$z]
 - - [$9qeZ] - | - [$z] - - | [37Wyo] - - [$z] | - - [$70Wl] -
-- [$k] - - | [2$7ryH] - - [$h] | - - [$70Wg] - | - [$D]
+- [$k] - - | [2$7ryH] - - [$h] | - - [$70Wg] - | - [$D] - -
+[158t] - - - | - - - - | - - - - | t - - y
+- - Y - | - - - - | [158Y] - - - | - - t -
+- - - - | Y - - i | - - o - | - - - -
+[148i] - - - | - - W - | - - - - | i - - o
+- - O - | - - - - | [158o] - - - | - - - -
+- - - - | - - - o | - - s - | - - - -
+[148yiP] - - - | - - - - | - - - - | - - - -
+- - O - | - - - - | [158to] - - - | - - - -
+- - - - | - - - o | - - s - | - - - -
+[148yiP] - - - | - - - - | - - - - | - - - -
+- - [iPd] - | - - - - | [158tos] - - - | - - - -
+- - - - | - - - - | - - i - | - Y - -
+[%to] - - - | - - i - | - - - - | Y - - -
+- - - - | - - - - | [%Os] - - - | - - - -
+- - - - | [Pd] - - - | - - - - | - - - -
+[%sD] - - - | - - - - | - - - - | [sDH] - - -
+- - - - | - - - - | [5osdh] - - - | - - - -
+- - - - | [5oadh] - - - | - - - - | - [5oh] - -
+[1DhlZ] - - 5 | - - 8 - | - 5 - - | 1 - - 5
+- - 8 - | - 5 - - | [1DhlZ] - - 5 | - - 8 -
+- 5 - - | 1 - - 5 | - - 8 - | - 5 - -
+[1Hlc] - - 5 | - - 8 - | - 5 - - | 1 - - 5
+- - 8 - | - 5 - - | [1hJZv] - - 5 | - - 8 -
+- 5 - - | 1 - - 5 | - - 8 - | - 5 - -
+[1PdghJ] - - 5 | - - 8 - | - 5 - - | 1 - - 5
+- - 8 - | - 5 - - | [1sDhl] - - 5 | - - 8 -
+- 5 - - | 1 - - 5 | - - 8 - | - 5 - -
+[1dgJ] - - 5 | - - 8 - | - 5 - - | 1 - - 5
+- - 8 - | - 5 - - | [1sDh] - - 5 | - - 8 -
+- 5 - - | ^ - - 4 | - - ^ - | - 4 - -
+[%sDH] - - @ | - - % - | - @ - - | % - - @
+- - % - | - @ - - | [%DHl] - - @ | - - % -
+- @ - - | % - - @ | - - % - | - @ - -
+[%HlZ] - - @ | - - % - | - @ - - | % - - @
+- - % - | - @ - - | [5dhlz] - - 2 | - - 5 -
+- 2 - - | [5dhkz] - - 2 | - - 5 - | - 2 - -
+[18] - - - | - - [sDhl] - | - - - - | [18] - - -
+- - [sDhl] - | - - - - | [18sDhl] - - - | - - [sDhl] -
+- - - - | [18] - - - | - - [sDhl] - | - k l -
+[%z] - - l | - - [WtYJ] - | - H - - | [WtYG] - - h
+- - [WtYH] - | - h - - | 4 - - v | - - [qWtyc] -
+- Z - - | [qWtyL] - - z | - - [qWtyZ] - | - z - -
+[5z] - - l | - - [wtyok] - | - H - - | [wtyoh] - - g
+- - [wryoD] - | - d - - | [18Gh] - - - | - - [wtYDhl] -
+- - - - | [wtYDhl] - - - | - - [wtY] - | - k l -
+[%z] - - l | - - [WtYJ] - | - H - - | [WtYG] - - h
+- - [WtYH] - | - h - - | 4 - - v | - - [qWtyc] -
+- Z - - | [qWtyL] - - z | - - [qWtyZ] - | - z - -
+[5z] - - l | - - [wtyok] - | - H - - | [wtyoh] - - g
+- - [wryoD] - | - d - - | [518Gh] - - - | - - [(wtDhl] -
+- - - - | - - - - | - - - - | - - - -
 ]=],
 }
 
