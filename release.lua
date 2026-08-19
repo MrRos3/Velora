@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.8 "Nova"
+    Velora v0.10.9 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -31,7 +31,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.8",
+    Version = "0.10.9",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -286,7 +286,7 @@ local function parseChord(token)
     return notes
 end
 
-local function parseSheet(sheet, bpm, stepsPerBeat)
+local function parseSheet(sheet, bpm, stepsPerBeat, tempoMap, baseBPM)
     bpm = math.clamp(tonumber(bpm) or 120, 30, 300)
     -- Detailed scores such as Love Story use 24 timing steps per displayed
     -- half-note beat. Capping this at 16 stretches every rest and corrupts the
@@ -294,32 +294,59 @@ local function parseSheet(sheet, bpm, stepsPerBeat)
     stepsPerBeat = math.clamp(tonumber(stepsPerBeat) or 2, 1, 64)
 
     local stepDuration = (60 / bpm) / stepsPerBeat
+    local normalizedTempoMap = {}
+    local tempoScale = bpm / math.clamp(tonumber(baseBPM) or bpm, 30, 300)
+    if type(tempoMap) == "table" then
+        for _, change in ipairs(tempoMap) do
+            local step = math.max(0, math.floor(tonumber(change.Step) or 0))
+            local mappedBPM = tonumber(change.BPM)
+            if mappedBPM and mappedBPM > 0 then
+                table.insert(normalizedTempoMap, { Step = step, BPM = math.clamp(mappedBPM * tempoScale, 30, 300) })
+            end
+        end
+        table.sort(normalizedTempoMap, function(left, right)
+            return left.Step < right.Step
+        end)
+    end
+
     local events = {}
     local cursor = 0
+    local stepIndex = 0
+    local tempoIndex = 1
+    local currentStepDuration = stepDuration
+
+    local function updateTempo()
+        while normalizedTempoMap[tempoIndex] and stepIndex >= normalizedTempoMap[tempoIndex].Step do
+            currentStepDuration = (60 / normalizedTempoMap[tempoIndex].BPM) / stepsPerBeat
+            tempoIndex += 1
+        end
+    end
 
     for token in tostring(sheet or ""):gmatch("%S+") do
         if token == "|" then
             -- Bar lines are visual separators. Exact rests are encoded as "-".
-        elseif token == "-" or token == "_" then
-            cursor += stepDuration
         else
-            local notes
-            if token:sub(1, 1) == "[" and token:sub(-1) == "]" then
-                notes = parseChord(token)
-            else
-                notes = { token }
+            updateTempo()
+            if token ~= "-" and token ~= "_" then
+                local notes
+                if token:sub(1, 1) == "[" and token:sub(-1) == "]" then
+                    notes = parseChord(token)
+                else
+                    notes = { token }
+                end
+
+                if #notes > 0 then
+                    table.insert(events, {
+                        Time = cursor,
+                        Notes = notes,
+                        Token = token,
+                        Index = #events + 1,
+                    })
+                end
             end
 
-            if #notes > 0 then
-                table.insert(events, {
-                    Time = cursor,
-                    Notes = notes,
-                    Token = token,
-                    Index = #events + 1,
-                })
-            end
-
-            cursor += stepDuration
+            cursor += currentStepDuration
+            stepIndex += 1
         end
     end
 
@@ -585,7 +612,7 @@ end
 
 local FALLBACK_SONGS = {
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
-    {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
+    {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=100,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
     {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=85,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
     {Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=110,Categories={"Famous","TikTok","Folk","Upbeat","Complete"},File="songs/IevanPolkka.lua"},
     {Id="kamado-tanjiro-no-uta",Name="Kamado Tanjiro no Uta",Artist="Go Shiina feat. Nami Nakagawa",BPM=151,Categories={"Famous","Anime","Demon Slayer","Emotional","Complete"},File="songs/KamadoTanjiroNoUta.lua"},
@@ -609,7 +636,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.8")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.9")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -939,7 +966,8 @@ function API:LoadSong(id, autoplay)
     stopConnection()
 
     local bpm = math.clamp(tonumber(song.BPM or entry.BPM) or 120, 30, 300)
-    local timeline = parseSheet(song.Notes or "", bpm, song.StepsPerBeat)
+    local baseBPM = tonumber(song.BPM or entry.BPM) or bpm
+    local timeline = parseSheet(song.Notes or "", bpm, song.StepsPerBeat, song.TempoMap, baseBPM)
 
     state.CurrentEntry = entry
     state.CurrentSong = song
@@ -1107,7 +1135,8 @@ function API:SetBPM(value)
     local paused = state.Paused
 
     stopConnection()
-    state.Timeline = parseSheet(state.CurrentSong.Notes or "", bpm, state.CurrentSong.StepsPerBeat)
+    local baseBPM = tonumber(state.CurrentSong.BPM) or state.CurrentBPM or bpm
+    state.Timeline = parseSheet(state.CurrentSong.Notes or "", bpm, state.CurrentSong.StepsPerBeat, state.CurrentSong.TempoMap, baseBPM)
     state.CurrentBPM = bpm
     self:Seek(progress)
 
