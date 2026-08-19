@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.6 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.7 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,7 +18,11 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.6
+## Nova 0.10.7
+
+- Replaced Love Story's 2:55 MIDI sequence with the complete five-page piano arrangement
+- **Love Story — Indila** now includes all 188 measures and runs for about 3:19
+- The new arrangement preserves its 3/4 pulse at the score's half-note tempo of 85 BPM, with melody rests, black-key notes, and full piano chords
 
 - Replaced the 27-second Succession fragment with a complete 50-measure piano arrangement
 - **Succession — Main Title Theme** now runs for about 1:23 at the score's half-note tempo of 72 BPM
@@ -53,7 +57,7 @@ loadstring(game:HttpGet(
 - Defensive Lucide icon loading so one unavailable asset cannot stop the GUI
 - Compatibility loader with GitHub and jsDelivr release fallbacks
 - Clear in-game error notifications instead of silent launcher failures
-- 22 complete arrangements with explicit notes, chords, rests, and twelve timing steps per beat
+- 22 complete arrangements with explicit notes, chords, rests, and high-resolution timing grids
 - Clear selected-song highlight without a side rail
 - Picking another song never interrupts the song already playing
 - A completed song stops unless Loop is enabled
@@ -62,7 +66,7 @@ loadstring(game:HttpGet(
 
 ## Music sources
 
-Arrangements are generated from credited MIDI editions and scores. Source and licensing details are stored inside each song file. Owner-supplied MIDI conversions include Love Story, Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and the opening section of Succession.
+Arrangements are generated from credited MIDI editions and scores. Source and licensing details are stored inside each song file. Love Story now uses Anastazja Szczepiek's complete five-page piano score. Owner-supplied MIDI conversions include Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and the opening section of Succession.
 
 Before pressing Play, click the in-game piano once so it owns keyboard focus.
 
