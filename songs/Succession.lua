@@ -12,7 +12,7 @@ return {
     DurationSeconds=83.33,
     Arranger="Fionn Murphy",
     Source="https://musescore.com/finnstrike7/scores/7385645",
-    SourceLicense="All rights reserved — personal/non-commercial piano transcription",
+    SourceLicense="All rights reserved",
     Categories={"Famous","Soundtrack","TV","Dark","Complete"},
     Notes=[=[
 [671$] - - $ | - - [$80xVb] - | - $ - - | [2$80e] - - $
