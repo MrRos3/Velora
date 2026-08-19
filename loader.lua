@@ -1,7 +1,7 @@
--- Velora 0.10.10 Nova corrected Anlatamam playback loader.
+-- Velora 0.10.9 Nova complete Anlatamam loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/5d5e4e12bd232b77e17f60dcaf631bdd74ab2482/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@5d5e4e12bd232b77e17f60dcaf631bdd74ab2482/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/e0a1769bf0f32ac371261789144f838bc027426c/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@e0a1769bf0f32ac371261789144f838bc027426c/release.lua",
 }
 
 local function fail(reason)
