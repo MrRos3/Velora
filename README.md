@@ -20,53 +20,7 @@ loadstring(game:HttpGet(
 
 ## Nova 0.10.8
 
-- Fixed high-resolution song timing being silently limited to 16 steps per beat
-- Love Story now honors its full 24-step grid and displays the correct **3:19** duration at 85 BPM
-- Corrected the stretched rests and sluggish note spacing caused by the old timing limit
 
-- Replaced Love Story's 2:55 MIDI sequence with the complete five-page piano arrangement
-- **Love Story — Indila** now includes all 188 measures and runs for about 3:19
-- The new arrangement preserves its 3/4 pulse at the score's half-note tempo of 85 BPM, with melody rests, black-key notes, and full piano chords
-
-- Replaced the 27-second Succession fragment with a complete 50-measure piano arrangement
-- **Succession — Main Title Theme** now runs for about 1:23 at the score's half-note tempo of 72 BPM
-- The complete arrangement includes the opening theme, quiet bridge, bass ostinato, reprise, final chord, black-key notes, chords, and explicit rests
-- Clean scale-and-press hover motion on the existing buttons
-- A quick heart pop and confirmation message when adding or removing a favorite
-- Favorites save immediately to `Velora/favorites.json` when executor file APIs are available
-- Session-memory fallback keeps favorites during re-execution when file APIs are unavailable
-- Closing or destroying the GUI performs one final favorites save
-- No piano input, playback timing, songs, or layout behavior changed
-- Deeper ink surfaces and cleaner separation make the existing three-panel layout feel more premium
-- Softer internal luminescence keeps the interface vivid without restoring the outer glow or glowing song cards
-- More restrained borders, richer palette blending, and clearer selected/hover states
-
-- Clean panel surfaces with no decorative blobs or header stripe
-- A compact Nova studio capsule showing the complete library size
-- Live READY, PLAYING, PAUSED, and DONE playback states
-- A dynamic result counter for every search and category
-- Clear TEMPO and LOOP labels plus a richer library summary card
-- Palette-aware progress detail and interactive surface borders
-- Fast hover feedback that only runs while the user is interacting
-- The outer window glow is removed and replaced by soft luminous borders on internal panels and controls
-- Song cards use a crisp selection outline without glow
-- Extra list spacing keeps the first song's rounded top border fully visible
-- Search, artwork, play, and Reset BPM controls brighten on focus or hover
-- Brighter secondary text, larger labels, and clearer font weights improve readability
-- The panel beneath the tempo arrows is now a one-click Reset BPM control
-- Palette colors update the window, internal glows, cards, controls, and icons together
-- Faster 0.12-second interaction motion with stale tween cancellation
-- Clicks and selections render immediately
-- Playback progress is capped at a smooth 30 FPS to reduce unnecessary UI work
-- Defensive Lucide icon loading so one unavailable asset cannot stop the GUI
-- Compatibility loader with GitHub and jsDelivr release fallbacks
-- Clear in-game error notifications instead of silent launcher failures
-- 22 complete arrangements with explicit notes, chords, rests, and high-resolution timing grids
-- Clear selected-song highlight without a side rail
-- Picking another song never interrupts the song already playing
-- A completed song stops unless Loop is enabled
-- Draggable progress, BPM controls, and RGB/HEX palette customization
-- 🥀 remains the only interface emoji
 
 ## Music sources
 
