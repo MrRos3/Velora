@@ -1,4 +1,4 @@
--- Velora 0.10.9 Nova — complete MIDI- and score-derived arrangements.
+-- Velora 0.10.10 Nova — complete MIDI- and score-derived arrangements.
 return {
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=100,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
