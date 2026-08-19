@@ -1,7 +1,7 @@
--- Velora 0.10.9 Nova complete Anlatamam boot.
+-- Velora 0.10.8 Nova corrected Love Story timing boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/e0a1769bf0f32ac371261789144f838bc027426c/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@e0a1769bf0f32ac371261789144f838bc027426c/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/4cab46da131e0950225cab80836f64202a9ed73b/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@4cab46da131e0950225cab80836f64202a9ed73b/release.lua",
 }
 
 local function fail(reason)
