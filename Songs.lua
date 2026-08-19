@@ -1,8 +1,8 @@
--- Velora 0.10.6 Nova — complete MIDI-derived arrangements.
+-- Velora 0.10.7 Nova — complete MIDI- and score-derived arrangements.
 return {
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
-    {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=90,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
+    {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=85,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
     {Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=110,Categories={"Famous","TikTok","Folk","Upbeat","Complete"},File="songs/IevanPolkka.lua"},
     {Id="kamado-tanjiro-no-uta",Name="Kamado Tanjiro no Uta",Artist="Go Shiina feat. Nami Nakagawa",BPM=151,Categories={"Famous","Anime","Demon Slayer","Emotional","Complete"},File="songs/KamadoTanjiroNoUta.lua"},
     {Id="erika",Name="Erika",Artist="Herms Niel",BPM=112,Categories={"Famous","Historical","German","March","Complete"},File="songs/Erika.lua"},
