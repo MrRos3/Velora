@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.10 "Nova"
+    Velora v0.10.9 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -31,7 +31,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.10",
+    Version = "0.10.9",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -484,12 +484,6 @@ local keypressFn = findGlobal("keypress")
 local keyreleaseFn = findGlobal("keyrelease")
 local keytapFn = findGlobal("keytap")
 local virtualInput = nil
-local heldInput = {
-    Executor = {},
-    ExecutorGeneration = {},
-    Virtual = {},
-    VirtualGeneration = {},
-}
 
 pcall(function()
     virtualInput = game:GetService("VirtualInputManager")
@@ -504,46 +498,6 @@ local function partitionNotes(notes, mapper)
         end
     end
     return plain, shifted
-end
-
-local function retriggerExecutor(code)
-    if heldInput.Executor[code] then
-        keyreleaseFn(code)
-    end
-
-    local generation = (heldInput.ExecutorGeneration[code] or 0) + 1
-    heldInput.ExecutorGeneration[code] = generation
-    heldInput.Executor[code] = true
-    keypressFn(code)
-
-    task.delay(CONFIG.InputHold, function()
-        if heldInput.ExecutorGeneration[code] ~= generation or not heldInput.Executor[code] then
-            return
-        end
-        heldInput.Executor[code] = nil
-        pcall(keyreleaseFn, code)
-    end)
-end
-
-local function retriggerVirtual(keyCode)
-    if heldInput.Virtual[keyCode] then
-        virtualInput:SendKeyEvent(false, keyCode, false, game)
-    end
-
-    local generation = (heldInput.VirtualGeneration[keyCode] or 0) + 1
-    heldInput.VirtualGeneration[keyCode] = generation
-    heldInput.Virtual[keyCode] = true
-    virtualInput:SendKeyEvent(true, keyCode, false, game)
-
-    task.delay(CONFIG.InputHold, function()
-        if heldInput.VirtualGeneration[keyCode] ~= generation or not heldInput.Virtual[keyCode] then
-            return
-        end
-        heldInput.Virtual[keyCode] = nil
-        pcall(function()
-            virtualInput:SendKeyEvent(false, keyCode, false, game)
-        end)
-    end)
 end
 
 local function sendExecutorNotes(notes)
@@ -568,14 +522,28 @@ local function sendExecutorNotes(notes)
 
     return pcall(function()
         for _, code in ipairs(plain) do
-            retriggerExecutor(code)
+            keypressFn(code)
         end
         if #shifted > 0 then
-            retriggerExecutor(0x10)
+            keypressFn(0x10)
             for _, code in ipairs(shifted) do
-                retriggerExecutor(code)
+                keypressFn(code)
             end
         end
+
+        task.delay(CONFIG.InputHold, function()
+            pcall(function()
+                for index = #shifted, 1, -1 do
+                    keyreleaseFn(shifted[index])
+                end
+                if #shifted > 0 then
+                    keyreleaseFn(0x10)
+                end
+                for index = #plain, 1, -1 do
+                    keyreleaseFn(plain[index])
+                end
+            end)
+        end)
     end)
 end
 
@@ -591,14 +559,28 @@ local function sendVirtualNotes(notes)
 
     return pcall(function()
         for _, keyCode in ipairs(plain) do
-            retriggerVirtual(keyCode)
+            virtualInput:SendKeyEvent(true, keyCode, false, game)
         end
         if #shifted > 0 then
-            retriggerVirtual(Enum.KeyCode.LeftShift)
+            virtualInput:SendKeyEvent(true, Enum.KeyCode.LeftShift, false, game)
             for _, keyCode in ipairs(shifted) do
-                retriggerVirtual(keyCode)
+                virtualInput:SendKeyEvent(true, keyCode, false, game)
             end
         end
+
+        task.delay(CONFIG.InputHold, function()
+            pcall(function()
+                for index = #shifted, 1, -1 do
+                    virtualInput:SendKeyEvent(false, shifted[index], false, game)
+                end
+                if #shifted > 0 then
+                    virtualInput:SendKeyEvent(false, Enum.KeyCode.LeftShift, false, game)
+                end
+                for index = #plain, 1, -1 do
+                    virtualInput:SendKeyEvent(false, plain[index], false, game)
+                end
+            end)
+        end)
     end)
 end
 
@@ -654,7 +636,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.10")
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=0.10.9")
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
