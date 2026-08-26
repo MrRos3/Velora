@@ -1,6 +1,6 @@
 -- Velora Upgrade Lab test loader.
 -- Test branch only. Main is intentionally untouched.
-local LAB_REF = "b0451c469687b6b7f26605bcf079b2ec1d3c923b"
+local LAB_REF = "b1bcb1376742aa042d1dee30ed2f5f169ad31ff7"
 
 local SMOOTH_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/smooth.lua",
@@ -10,6 +10,11 @@ local SMOOTH_URLS = {
 local UPGRADE_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/upgrades.lua",
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. LAB_REF .. "/upgrades.lua",
+}
+
+local FIX_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/upgrade_fixes.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. LAB_REF .. "/upgrade_fixes.lua",
 }
 
 local function fail(reason)
@@ -71,6 +76,25 @@ if not installed then
 end
 if ok ~= true then
     fail("upgrade pack install failed - " .. tostring(installError or ok))
+end
+
+local fixSource = download(FIX_URLS, "upgrade polish")
+local fixChunk, fixCompileError = loadstring(fixSource)
+if type(fixChunk) ~= "function" then
+    fail("upgrade polish compile failed - " .. tostring(fixCompileError))
+end
+
+local fixLoaded, fixInstaller = pcall(fixChunk)
+if not fixLoaded or type(fixInstaller) ~= "function" then
+    fail("upgrade polish startup failed - " .. tostring(fixInstaller))
+end
+
+local fixed, fixOk, fixError = pcall(fixInstaller, api)
+if not fixed then
+    fail("upgrade polish runtime failed - " .. tostring(fixOk))
+end
+if fixOk ~= true then
+    fail("upgrade polish install failed - " .. tostring(fixError or fixOk))
 end
 
 return api
