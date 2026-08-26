@@ -3,6 +3,7 @@ return {
     {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
     {Id="la-petite-fille-de-la-mer",Name="La petite fille de la mer",Artist="Vangelis",BPM=80,Categories={"Famous","Soundtrack","Ambient","Piano","Emotional","Complete"},File="songs/LaPetiteFilleDeLaMer.lua"},
     {Id="salvatore-lana-del-rey",Name="Salvatore",Artist="Lana Del Rey",BPM=58,Categories={"Famous","Lana Del Rey","Pop","Piano","Cinematic","Emotional","Complete"},File="songs/Salvatore.lua"},
+    {Id="idea-22",Name="Idea 22",Artist="Gibran Alcocer",BPM=104,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Complete"},File="songs/Idea22.lua"},
     {Id="la-foule-inspired",Name="La Foule — Inspired Waltz",Artist="Velora Original",BPM=174,Categories={"French","Waltz","Musette","Piano","Dramatic","Upbeat","Original","Complete"},File="songs/LaFouleInspired.lua"},
     {Id="uae-national-anthem",Name="Ishy Bilady — UAE National Anthem",Artist="United Arab Emirates",BPM=125,Categories={"Famous","National Anthem","UAE","Patriotic","Piano","Complete"},File="songs/UAENationalAnthem.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
