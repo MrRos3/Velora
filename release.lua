@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.15 "Nova"
+    Velora v0.10.16 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 
 local CONFIG = {
-    Version = "0.10.15",
+    Version = "0.10.16",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -38,7 +38,7 @@ local CONFIG = {
     ClickSound = "rbxassetid://4307186075",
     HoverSound = "rbxassetid://408524543",
     UiSounds = true,
-    Blur = true,
+    Blur = false,
     AutoInput = true,
     InputHold = 0.015,
 }
@@ -1390,9 +1390,9 @@ function nova.glassify(object,backgroundTransparency,tint)
                 ColorSequenceKeypoint.new(1,P.Ink),
             }),
             Transparency=NumberSequence.new({
-                NumberSequenceKeypoint.new(0,.78),
-                NumberSequenceKeypoint.new(.42,.91),
-                NumberSequenceKeypoint.new(1,.84),
+                NumberSequenceKeypoint.new(0,.50),
+                NumberSequenceKeypoint.new(.42,.76),
+                NumberSequenceKeypoint.new(1,.62),
             }),
             Rotation=112,
         },object)
@@ -1430,7 +1430,6 @@ function nova.disposeVisuals()
 end
 
 nova.gui=make("ScreenGui",{Name="Velora",ResetOnSpawn=false,IgnoreGuiInset=true,DisplayOrder=78,ZIndexBehavior=Enum.ZIndexBehavior.Sibling},PlayerGui)
-if CONFIG.Blur then nova.blur=make("BlurEffect",{Name="VeloraBlur",Size=0},Lighting) end
 nova.shadow=radius(make("Frame",{Visible=false,AnchorPoint=Vector2.new(.5,.5),Position=UDim2.new(.5,0,.5,0),Size=UDim2.fromOffset(760,440),BackgroundTransparency=1,BorderSizePixel=0},nova.gui),24)
 local window=radius(edge(gradient(make("Frame",{Name="Aurora",AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.5),Size=UDim2.fromOffset(760,440),BackgroundColor3=P.Ink,BorderSizePixel=0,ClipsDescendants=true},nova.gui),Color3.fromRGB(20,17,34),Color3.fromRGB(7,9,16),32),Color3.fromRGB(96,90,116),.82,1),24)
 nova.windowBorder=window:FindFirstChildOfClass("UIStroke")
@@ -1482,10 +1481,10 @@ if workspace.CurrentCamera then
 end
 
 nova.body=make("Frame",{Position=UDim2.fromOffset(14,90),Size=UDim2.new(1,-28,1,-104),BackgroundTransparency=1},window)
-nova.nav=radius(edge(make("CanvasGroup",{Size=UDim2.fromOffset(148,336),BackgroundColor3=P.Surface,BackgroundTransparency=.24,GroupTransparency=0,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.67),18)
+nova.nav=radius(edge(make("Frame",{Size=UDim2.fromOffset(148,336),BackgroundColor3=P.Surface,BackgroundTransparency=.18,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.60),18)
 nova.navBorder=nova.nav:FindFirstChildOfClass("UIStroke")
 nova.navGlow,nova.navRim=glowEdge(nova.nav,P.Violet,.94,.66,2.5)
-nova.browser=radius(edge(make("CanvasGroup",{Position=UDim2.fromOffset(158,0),Size=UDim2.fromOffset(326,336),BackgroundColor3=P.Surface,BackgroundTransparency=.24,GroupTransparency=0,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.67),18)
+nova.browser=radius(edge(make("Frame",{Position=UDim2.fromOffset(158,0),Size=UDim2.fromOffset(326,336),BackgroundColor3=P.Surface,BackgroundTransparency=.18,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.60),18)
 nova.browserBorder=nova.browser:FindFirstChildOfClass("UIStroke")
 nova.browserGlow,nova.browserRim=glowEdge(nova.browser,P.Violet,.94,.66,2.5)
 nova.playerCard=radius(edge(make("Frame",{Position=UDim2.fromOffset(494,0),Size=UDim2.fromOffset(238,336),BackgroundColor3=P.Surface,BackgroundTransparency=.20,BorderSizePixel=0},nova.body),Color3.fromRGB(106,88,153),.61),18)
@@ -1785,17 +1784,17 @@ function nova.setCompactMode(enabled)
     settingsButton.Visible=true
 
     if enabled then
-        animate(nova.nav,{GroupTransparency=1},.22)
-        animate(nova.browser,{GroupTransparency=1},.22)
         animate(nova.brandTitle,{TextTransparency=1},.18)
         animate(nova.brandSubtitle,{TextTransparency=1},.18)
         animate(settingsButton,{BackgroundTransparency=1},.18)
         if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=1} or {TextTransparency=1},.18) end
+        animate(nova.nav,{Position=UDim2.fromOffset(-158,0)},.32)
+        animate(nova.browser,{Position=UDim2.fromOffset(-336,0)},.34)
         animate(window,{Size=UDim2.fromOffset(266,440)},.36)
         animate(nova.shadow,{Size=UDim2.fromOffset(266,440)},.36)
         animate(nova.playerCard,{Position=UDim2.fromOffset(0,0)},.36)
         animate(nova.minimizeButton,{Position=UDim2.new(1,-98,0,14)},.32)
-        task.delay(.24,function()
+        task.delay(.35,function()
             if transition==nova.compactTransition then
                 nova.nav.Visible=false;nova.browser.Visible=false
                 nova.brandTitle.Visible=false;nova.brandSubtitle.Visible=false
@@ -1803,7 +1802,8 @@ function nova.setCompactMode(enabled)
             end
         end)
     else
-        nova.nav.GroupTransparency=1;nova.browser.GroupTransparency=1
+        nova.nav.Position=UDim2.fromOffset(-158,0)
+        nova.browser.Position=UDim2.fromOffset(-336,0)
         nova.brandTitle.TextTransparency=1;nova.brandSubtitle.TextTransparency=1
         settingsButton.BackgroundTransparency=1
         if settingsGlyph then
@@ -1811,12 +1811,12 @@ function nova.setCompactMode(enabled)
         end
         animate(window,{Size=UDim2.fromOffset(760,440)},.38)
         animate(nova.shadow,{Size=UDim2.fromOffset(760,440)},.38)
+        animate(nova.nav,{Position=UDim2.fromOffset(0,0)},.34)
+        animate(nova.browser,{Position=UDim2.fromOffset(158,0)},.36)
         animate(nova.playerCard,{Position=UDim2.fromOffset(494,0)},.38)
         animate(nova.minimizeButton,{Position=UDim2.new(1,-144,0,14)},.34)
         task.delay(.08,function()
             if transition==nova.compactTransition then
-                animate(nova.nav,{GroupTransparency=0},.26)
-                animate(nova.browser,{GroupTransparency=0},.26)
                 animate(nova.brandTitle,{TextTransparency=0},.24)
                 animate(nova.brandSubtitle,{TextTransparency=0},.24)
                 animate(settingsButton,{BackgroundTransparency=.24},.24)
@@ -2106,7 +2106,6 @@ function nova.dismiss()
     API:Stop()
     if nova.reveal then animate(nova.reveal,{GroupTransparency=1},.20) end
     animate(nova.windowScale,{Scale=nova.windowScale.Scale*.96},.20)
-    if nova.blur then animate(nova.blur,{Size=0},.20) end
     task.delay(.21,function()
         nova.disposeVisuals()
         if nova.gui then nova.gui:Destroy() end
@@ -2150,7 +2149,6 @@ window.BackgroundTransparency=1
 animate(nova.windowScale,{Scale=nova.loadScale},.42)
 animate(window,{BackgroundTransparency=.18},.36)
 animate(nova.reveal,{GroupTransparency=0},.36)
-if nova.blur then animate(nova.blur,{Size=14},.42) end
 
 _G.Velora=API
 pcall(function() if type(getgenv)=="function" then getgenv().Velora=API end end)
