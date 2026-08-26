@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.14 "Nova"
+    Velora v0.10.15 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 
 local CONFIG = {
-    Version = "0.10.14",
+    Version = "0.10.15",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -1357,7 +1357,7 @@ local liveTweens=setmetatable({}, {__mode="k"})
 local function animate(o,props,time)
     local previous=liveTweens[o]
     if previous then previous:Cancel() end
-    local motion=TweenService:Create(o,TweenInfo.new(time or .12,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),props)
+    local motion=TweenService:Create(o,TweenInfo.new(time or .16,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),props)
     liveTweens[o]=motion
     motion:Play()
     return motion
@@ -1374,26 +1374,77 @@ local P={
     Cyan=Color3.fromRGB(83,220,239),Green=Color3.fromRGB(95,232,169),
 }
 local nova={}
+nova.glassLayers=setmetatable({}, {__mode="k"})
+
+function nova.glassify(object,backgroundTransparency,tint)
+    if not object then return object end
+    object.BackgroundTransparency=backgroundTransparency or .22
+    tint=tint or P.Violet
+    local surface=object:FindFirstChildOfClass("UIGradient")
+    if not surface then
+        surface=make("UIGradient",{
+            Name="GlassSurface",
+            Color=ColorSequence.new({
+                ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
+                ColorSequenceKeypoint.new(.28,tint:Lerp(Color3.new(1,1,1),.35)),
+                ColorSequenceKeypoint.new(1,P.Ink),
+            }),
+            Transparency=NumberSequence.new({
+                NumberSequenceKeypoint.new(0,.78),
+                NumberSequenceKeypoint.new(.42,.91),
+                NumberSequenceKeypoint.new(1,.84),
+            }),
+            Rotation=112,
+        },object)
+    end
+    local stroke=object:FindFirstChildOfClass("UIStroke")
+    if not stroke then
+        stroke=make("UIStroke",{Color=Color3.new(1,1,1),Transparency=.58,Thickness=1,ApplyStrokeMode=Enum.ApplyStrokeMode.Border},object)
+    end
+    stroke.Color=Color3.new(1,1,1)
+    stroke.Transparency=math.min(stroke.Transparency,.62)
+    stroke.Thickness=math.max(stroke.Thickness,1)
+    local rim=stroke:FindFirstChild("GlassRim")
+    if not rim then
+        rim=make("UIGradient",{
+            Name="GlassRim",
+            Color=ColorSequence.new({
+                ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
+                ColorSequenceKeypoint.new(.48,tint:Lerp(Color3.new(1,1,1),.18)),
+                ColorSequenceKeypoint.new(1,Color3.new(1,1,1)),
+            }),
+            Transparency=NumberSequence.new({
+                NumberSequenceKeypoint.new(0,.12),
+                NumberSequenceKeypoint.new(.45,.64),
+                NumberSequenceKeypoint.new(1,.30),
+            }),
+            Rotation=32,
+        },stroke)
+    end
+    nova.glassLayers[object]={Surface=surface,Stroke=rim}
+    return object
+end
+
+function nova.disposeVisuals()
+    if nova.blur then nova.blur:Destroy();nova.blur=nil end
+end
 
 nova.gui=make("ScreenGui",{Name="Velora",ResetOnSpawn=false,IgnoreGuiInset=true,DisplayOrder=78,ZIndexBehavior=Enum.ZIndexBehavior.Sibling},PlayerGui)
+if CONFIG.Blur then nova.blur=make("BlurEffect",{Name="VeloraBlur",Size=0},Lighting) end
 nova.shadow=radius(make("Frame",{Visible=false,AnchorPoint=Vector2.new(.5,.5),Position=UDim2.new(.5,0,.5,0),Size=UDim2.fromOffset(760,440),BackgroundTransparency=1,BorderSizePixel=0},nova.gui),24)
 local window=radius(edge(gradient(make("Frame",{Name="Aurora",AnchorPoint=Vector2.new(.5,.5),Position=UDim2.fromScale(.5,.5),Size=UDim2.fromOffset(760,440),BackgroundColor3=P.Ink,BorderSizePixel=0,ClipsDescendants=true},nova.gui),Color3.fromRGB(20,17,34),Color3.fromRGB(7,9,16),32),Color3.fromRGB(96,90,116),.82,1),24)
 nova.windowBorder=window:FindFirstChildOfClass("UIStroke")
+nova.glassify(window,.18,P.Violet)
 
 local header=radius(edge(gradient(make("Frame",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,64),BackgroundColor3=P.Surface,BorderSizePixel=0},window),Color3.fromRGB(47,35,72),Color3.fromRGB(20,19,33),16),Color3.fromRGB(152,128,215),.58),18)
 nova.headerBorder=header:FindFirstChildOfClass("UIStroke")
 nova.headerGlow,nova.headerRim=glowEdge(header,P.Violet,.91,.55,3.2)
+nova.glassify(header,.20,P.Violet)
 local logo=radius(gradient(make("Frame",{Position=UDim2.fromOffset(12,10),Size=UDim2.fromOffset(44,44),BackgroundColor3=P.Violet,BorderSizePixel=0},header),P.Violet,P.Pink,45),14)
 nova.logoGlow,nova.logoRim=glowEdge(logo,P.Violet,.82,.18,4.5)
 nova.logoText=label(logo,"🥀",UDim2.fromScale(0,0),UDim2.fromScale(1,1),Enum.Font.BuilderSans,21,P.Text);nova.logoText.TextXAlignment=Enum.TextXAlignment.Center
 nova.brandTitle=label(header,"VELORA",UDim2.fromOffset(68,10),UDim2.fromOffset(190,24),Enum.Font.BuilderSansExtraBold,20,P.Text)
-nova.brandSubtitle=label(header,"AURORA  •  PIANO STUDIO",UDim2.fromOffset(69,35),UDim2.fromOffset(210,14),Enum.Font.BuilderSansBold,9,Color3.fromRGB(220,211,244))
-
-nova.studioBadge=radius(edge(make("Frame",{Position=UDim2.new(1,-340,0,14),Size=UDim2.fromOffset(180,36),BackgroundColor3=P.Card,BackgroundTransparency=.02,BorderSizePixel=0},header),P.Violet,.70,1),12)
-nova.studioBadgeBorder=nova.studioBadge:FindFirstChildOfClass("UIStroke")
-nova.studioBadgeIcon=icon(nova.studioBadge,"sparkles",16,P.Cyan,"");nova.studioBadgeIcon.AnchorPoint=Vector2.new(.5,.5);nova.studioBadgeIcon.Position=UDim2.fromOffset(18,18)
-label(nova.studioBadge,"NOVA INTERFACE",UDim2.fromOffset(35,4),UDim2.fromOffset(134,14),Enum.Font.BuilderSansExtraBold,9,P.Text)
-label(nova.studioBadge,tostring(#state.Registry).." COMPLETE TRACKS",UDim2.fromOffset(35,18),UDim2.fromOffset(134,12),Enum.Font.BuilderSansBold,7,P.Sub)
+nova.brandSubtitle=label(header,"MADE BY SALTY",UDim2.fromOffset(69,35),UDim2.fromOffset(210,14),Enum.Font.BuilderSansBold,9,Color3.fromRGB(220,211,244))
 
 local settingsButton=radius(edge(make("TextButton",{Position=UDim2.new(1,-98,0,14),Size=UDim2.fromOffset(36,36),BackgroundColor3=Color3.fromRGB(43,38,58),BorderSizePixel=0,AutoButtonColor=false,Text=""},header),Color3.fromRGB(105,94,143),.65),12)
 local settingsIcon=icon(settingsButton,"settings",17,P.Sub,"");settingsIcon.AnchorPoint=Vector2.new(.5,.5);settingsIcon.Position=UDim2.fromScale(.5,.5)
@@ -1402,18 +1453,24 @@ nova.minimizeIcon=icon(nova.minimizeButton,"minimize-2",17,P.Sub,"");nova.minimi
 nova.restoreIcon=icon(nova.minimizeButton,"maximize-2",17,P.Sub,"");nova.restoreIcon.AnchorPoint=Vector2.new(.5,.5);nova.restoreIcon.Position=UDim2.fromScale(.5,.5);nova.restoreIcon.Visible=false
 nova.close=radius(make("TextButton",{Position=UDim2.new(1,-52,0,14),Size=UDim2.fromOffset(36,36),BackgroundColor3=Color3.fromRGB(43,38,58),BorderSizePixel=0,AutoButtonColor=false,Text=""},header),12)
 nova.closeIcon=icon(nova.close,"x",18,P.Sub,"");nova.closeIcon.AnchorPoint=Vector2.new(.5,.5);nova.closeIcon.Position=UDim2.fromScale(.5,.5)
+for _,object in ipairs({settingsButton,nova.minimizeButton,nova.close}) do nova.glassify(object,.24,P.Violet) end
 
 nova.compactMode=false
 nova.windowScale=make("UIScale",{Scale=1},window)
 nova.shadowScale=make("UIScale",{Scale=1},nova.shadow)
-local function fitViewport()
+local function fitViewport(duration)
     local camera=workspace.CurrentCamera
     if not camera then return end
     local view=camera.ViewportSize
     local baseWidth=nova.compactMode and 316 or 810
     local value=math.min(1,math.max(.68,math.min(view.X/baseWidth,view.Y/490)))
-    nova.windowScale.Scale=value
-    nova.shadowScale.Scale=value
+    if duration then
+        animate(nova.windowScale,{Scale=value},duration)
+        animate(nova.shadowScale,{Scale=value},duration)
+    else
+        nova.windowScale.Scale=value
+        nova.shadowScale.Scale=value
+    end
 end
 local fitOk,fitError=pcall(fitViewport)
 if not fitOk then warn("[Velora UI] Viewport fit skipped: "..tostring(fitError)) end
@@ -1425,15 +1482,18 @@ if workspace.CurrentCamera then
 end
 
 nova.body=make("Frame",{Position=UDim2.fromOffset(14,90),Size=UDim2.new(1,-28,1,-104),BackgroundTransparency=1},window)
-nova.nav=radius(edge(make("Frame",{Size=UDim2.fromOffset(148,336),BackgroundColor3=P.Surface,BackgroundTransparency=.02,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.67),18)
+nova.nav=radius(edge(make("CanvasGroup",{Size=UDim2.fromOffset(148,336),BackgroundColor3=P.Surface,BackgroundTransparency=.24,GroupTransparency=0,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.67),18)
 nova.navBorder=nova.nav:FindFirstChildOfClass("UIStroke")
 nova.navGlow,nova.navRim=glowEdge(nova.nav,P.Violet,.94,.66,2.5)
-nova.browser=radius(edge(make("Frame",{Position=UDim2.fromOffset(158,0),Size=UDim2.fromOffset(326,336),BackgroundColor3=P.Surface,BackgroundTransparency=.02,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.67),18)
+nova.browser=radius(edge(make("CanvasGroup",{Position=UDim2.fromOffset(158,0),Size=UDim2.fromOffset(326,336),BackgroundColor3=P.Surface,BackgroundTransparency=.24,GroupTransparency=0,BorderSizePixel=0},nova.body),Color3.fromRGB(88,81,119),.67),18)
 nova.browserBorder=nova.browser:FindFirstChildOfClass("UIStroke")
 nova.browserGlow,nova.browserRim=glowEdge(nova.browser,P.Violet,.94,.66,2.5)
-nova.playerCard=radius(edge(make("Frame",{Position=UDim2.fromOffset(494,0),Size=UDim2.fromOffset(238,336),BackgroundColor3=P.Surface,BackgroundTransparency=.01,BorderSizePixel=0},nova.body),Color3.fromRGB(106,88,153),.61),18)
+nova.playerCard=radius(edge(make("Frame",{Position=UDim2.fromOffset(494,0),Size=UDim2.fromOffset(238,336),BackgroundColor3=P.Surface,BackgroundTransparency=.20,BorderSizePixel=0},nova.body),Color3.fromRGB(106,88,153),.61),18)
 nova.playerBorder=nova.playerCard:FindFirstChildOfClass("UIStroke")
 nova.playerGlow,nova.playerRim=glowEdge(nova.playerCard,P.Violet,.91,.55,3.2)
+nova.glassify(nova.nav,.24,P.Violet)
+nova.glassify(nova.browser,.24,P.Violet)
+nova.glassify(nova.playerCard,.20,P.Violet)
 
 label(nova.nav,"DISCOVER",UDim2.fromOffset(16,16),UDim2.fromOffset(116,14),Enum.Font.BuilderSansBold,9,P.Muted)
 nova.navList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,42),Size=UDim2.fromOffset(128,215),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},nova.nav)
@@ -1447,6 +1507,7 @@ local refreshList
 nova.search=radius(edge(make("TextBox",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,38),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,PlaceholderText="Search the library",PlaceholderColor3=P.Sub,Text="",TextSize=11,TextColor3=P.Text,Font=Enum.Font.BuilderSansMedium,TextXAlignment=Enum.TextXAlignment.Left},nova.browser),Color3.fromRGB(87,78,119),.64),12)
 nova.searchBorder=nova.search:FindFirstChildOfClass("UIStroke")
 nova.searchGlow,nova.searchRim=glowEdge(nova.search,P.Violet,.95,.68,2.6)
+nova.glassify(nova.search,.30,P.Violet)
 padding(nova.search,39,13,0,0)
 nova.searchIcon=icon(nova.browser,"search",15,P.Muted,"");nova.searchIcon.Position=UDim2.fromOffset(27,26)
 nova.search.Focused:Connect(function() animate(nova.searchGlow,{Transparency=.78});animate(nova.searchRim,{Transparency=.18}) end)
@@ -1454,6 +1515,7 @@ nova.search.FocusLost:Connect(function() animate(nova.searchGlow,{Transparency=.
 nova.resultTitle=label(nova.browser,"ALL SONGS",UDim2.fromOffset(16,62),UDim2.fromOffset(200,20),Enum.Font.BuilderSansExtraBold,12,P.Text)
 nova.viewCountPill=radius(edge(make("Frame",{Position=UDim2.new(1,-88,0,62),Size=UDim2.fromOffset(74,20),BackgroundColor3=P.Card,BackgroundTransparency=.02,BorderSizePixel=0},nova.browser),P.Violet,.72,1),9)
 nova.viewCountBorder=nova.viewCountPill:FindFirstChildOfClass("UIStroke")
+nova.glassify(nova.viewCountPill,.28,P.Violet)
 nova.viewCountText=label(nova.viewCountPill,"0 TRACKS",UDim2.fromScale(0,0),UDim2.fromScale(1,1),Enum.Font.BuilderSansExtraBold,8,P.Sub);nova.viewCountText.TextXAlignment=Enum.TextXAlignment.Center
 nova.songList=make("ScrollingFrame",{Position=UDim2.fromOffset(10,88),Size=UDim2.new(1,-20,1,-98),BackgroundTransparency=1,BorderSizePixel=0,ScrollBarThickness=2,ScrollBarImageColor3=P.Violet,AutomaticCanvasSize=Enum.AutomaticSize.Y,CanvasSize=UDim2.new()},nova.browser)
 make("UIListLayout",{Padding=UDim.new(0,8),SortOrder=Enum.SortOrder.LayoutOrder},nova.songList)
@@ -1462,6 +1524,7 @@ padding(nova.songList,2,5,4,5)
 label(nova.playerCard,"NOW PLAYING",UDim2.fromOffset(16,14),UDim2.fromOffset(160,14),Enum.Font.BuilderSansBold,9,P.Muted)
 nova.playbackBadge=radius(edge(make("Frame",{Position=UDim2.new(1,-88,0,10),Size=UDim2.fromOffset(72,20),BackgroundColor3=P.Card,BackgroundTransparency=.02,BorderSizePixel=0},nova.playerCard),P.Green,.68,1),9)
 nova.playbackBadgeBorder=nova.playbackBadge:FindFirstChildOfClass("UIStroke")
+nova.glassify(nova.playbackBadge,.24,P.Green)
 nova.playbackDot=radius(make("Frame",{Position=UDim2.fromOffset(9,7),Size=UDim2.fromOffset(6,6),BackgroundColor3=P.Green,BorderSizePixel=0},nova.playbackBadge),6)
 nova.playbackStatus=label(nova.playbackBadge,"READY",UDim2.fromOffset(20,0),UDim2.fromOffset(45,20),Enum.Font.BuilderSansExtraBold,8,P.Sub)
 function nova.setPlaybackBadgeText(textValue)
@@ -1517,6 +1580,12 @@ nova.resetIcon=icon(nova.resetBpm,"rotate-ccw",15,P.Sub,"");nova.resetIcon.Ancho
 label(nova.resetBpm,"RESET BPM",UDim2.fromOffset(35,4),UDim2.fromOffset(158,14),Enum.Font.BuilderSansExtraBold,10,P.Text)
 nova.feedback=label(nova.resetBpm,"Restore the song's original tempo",UDim2.fromOffset(35,18),UDim2.fromOffset(158,13),Enum.Font.BuilderSansMedium,8,P.Sub)
 nova.feedback.TextTruncate=Enum.TextTruncate.AtEnd
+nova.glassify(art,.08,P.Violet)
+nova.glassify(play,.08,P.Violet)
+nova.glassify(nova.progress,.18,P.Violet)
+for _,object in ipairs({nova.stop,nova.favorite,nova.bpmPill,nova.bpmDown,nova.bpmUp,nova.loop,nova.resetBpm}) do
+    nova.glassify(object,.26,P.Violet)
+end
 local function bindButtonMotion(button)
     local scale=make("UIScale",{Scale=1},button)
     button.MouseButton1Down:Connect(function() animate(scale,{Scale=.965},.06) end)
@@ -1564,6 +1633,12 @@ label(nova.palette,"HEX",UDim2.fromOffset(18,202),UDim2.fromOffset(35,16),Enum.F
 nova.hexInput=radius(make("TextBox",{Position=UDim2.fromOffset(18,221),Size=UDim2.fromOffset(158,40),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,Text="#8F6CFF",Font=Enum.Font.Code,TextSize=11,TextColor3=P.Text,ZIndex=51},nova.palette),12)
 nova.preview=radius(make("Frame",{Position=UDim2.fromOffset(188,221),Size=UDim2.fromOffset(74,40),BackgroundColor3=P.Violet,BorderSizePixel=0,ZIndex=51},nova.palette),12)
 nova.applyColorButton=radius(gradient(make("TextButton",{Position=UDim2.fromOffset(18,276),Size=UDim2.fromOffset(244,31),BackgroundColor3=P.Violet,BorderSizePixel=0,Text="APPLY COLOR",Font=Enum.Font.BuilderSansExtraBold,TextSize=9,TextColor3=P.Text,ZIndex=51},nova.palette),P.Violet,P.Pink,0),11)
+nova.glassify(nova.libraryCount,.24,P.Violet)
+nova.glassify(nova.palette,.16,P.Violet)
+nova.glassify(nova.paletteClose,.24,P.Violet)
+nova.glassify(nova.hexInput,.24,P.Violet)
+nova.glassify(nova.applyColorButton,.08,P.Violet)
+for _,object in ipairs(nova.rgbInputs) do nova.glassify(object,.24,P.Violet) end
 bindButtonMotion(nova.paletteClose)
 bindButtonMotion(nova.applyColorButton)
 
@@ -1585,7 +1660,6 @@ nova.accentGradients={
 }
 nova.themedStrokes={
     nova.headerBorder,nova.headerGlow,nova.headerRim,nova.logoGlow,nova.logoRim,
-    nova.studioBadgeBorder,
     nova.navBorder,nova.navGlow,nova.navRim,nova.browserBorder,nova.browserGlow,nova.browserRim,
     nova.playerBorder,nova.playerGlow,nova.playerRim,nova.searchBorder,nova.searchGlow,nova.searchRim,nova.viewCountBorder,
     nova.artBorderGlow,nova.artBorderRim,nova.progressGlow,nova.progressRim,nova.playBorder,nova.playGlow,nova.playRim,
@@ -1605,7 +1679,7 @@ local function applyAccent(color)
 
     nova.preview.BackgroundColor3=color
     for _,object in ipairs({nova.nav,nova.browser,nova.playerCard,nova.palette}) do object.BackgroundColor3=P.Surface end
-    for _,object in ipairs({nova.studioBadge,nova.search,nova.viewCountPill,nova.playbackBadge,nova.stop,nova.favorite,nova.bpmPill,nova.loop,nova.resetBpm,nova.libraryCount,nova.paletteClose,nova.minimizeButton,nova.close}) do object.BackgroundColor3=P.Card end
+    for _,object in ipairs({nova.search,nova.viewCountPill,nova.playbackBadge,nova.stop,nova.favorite,nova.bpmPill,nova.loop,nova.resetBpm,nova.libraryCount,nova.paletteClose,nova.minimizeButton,nova.close}) do object.BackgroundColor3=P.Card end
     for _,object in ipairs(nova.rgbInputs) do object.BackgroundColor3=P.Card end
     nova.hexInput.BackgroundColor3=P.Card
     nova.songList.ScrollBarImageColor3=color
@@ -1622,7 +1696,7 @@ local function applyAccent(color)
     recolorIcon(settingsIcon,P.Sub);recolorIcon(nova.minimizeIcon,P.Sub);recolorIcon(nova.restoreIcon,P.Sub);recolorIcon(nova.closeIcon,P.Sub);recolorIcon(nova.searchIcon,P.Muted)
     recolorIcon(nova.artIcon,P.Text);recolorIcon(nova.stopIcon,P.Sub);recolorIcon(nova.playIcon,P.Text);recolorIcon(nova.pauseIcon,P.Text)
     recolorIcon(nova.bpmDownIcon,P.Sub);recolorIcon(nova.bpmUpIcon,P.Sub);recolorIcon(nova.resetIcon,P.Sub);recolorIcon(nova.paletteCloseIcon,P.Sub)
-    recolorIcon(nova.studioBadgeIcon,secondary);recolorIcon(nova.libraryIcon,P.Cyan)
+    recolorIcon(nova.libraryIcon,P.Cyan)
     recolorIcon(nova.favoriteIcon,state.CurrentEntry and API:IsFavorite(state.CurrentEntry.Id) and secondary or P.Sub)
     recolorIcon(nova.loopIcon,state.Loop and P.Text or P.Sub)
 
@@ -1641,9 +1715,29 @@ local function applyAccent(color)
     for _,strokeObject in ipairs(nova.themedStrokes) do
         if strokeObject then strokeObject.Color=color:Lerp(Color3.new(1,1,1),.22) end
     end
+    for object,layers in pairs(nova.glassLayers) do
+        if not object.Parent then
+            nova.glassLayers[object]=nil
+        else
+            if layers.Surface then
+                layers.Surface.Color=ColorSequence.new({
+                    ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
+                    ColorSequenceKeypoint.new(.28,color:Lerp(Color3.new(1,1,1),.35)),
+                    ColorSequenceKeypoint.new(1,P.Ink),
+                })
+            end
+            if layers.Stroke then
+                layers.Stroke.Color=ColorSequence.new({
+                    ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
+                    ColorSequenceKeypoint.new(.48,color:Lerp(Color3.new(1,1,1),.18)),
+                    ColorSequenceKeypoint.new(1,Color3.new(1,1,1)),
+                })
+            end
+        end
+    end
     for filter,button in pairs(navButtons) do
         button.BackgroundColor3=color:Lerp(P.Ink,.62)
-        if filter==activeFilter then button.BackgroundTransparency=0 end
+        if filter==activeFilter then button.BackgroundTransparency=.16 end
     end
     refreshList()
 end
@@ -1677,28 +1771,60 @@ nova.hexInput.FocusLost:Connect(function()
 end)
 nova.applyColorButton.MouseButton1Click:Connect(function() applyAccent(syncRgb());setPaletteVisible(false) end)
 function nova.setCompactMode(enabled)
+    if nova.compactMode==enabled then return end
     nova.compactMode=enabled
-    nova.nav.Visible=not enabled
-    nova.browser.Visible=not enabled
-    nova.studioBadge.Visible=not enabled
-    nova.brandTitle.Visible=not enabled
-    nova.brandSubtitle.Visible=not enabled
-    settingsButton.Visible=not enabled
+    nova.compactTransition=(nova.compactTransition or 0)+1
+    local transition=nova.compactTransition
+    local settingsGlyph=settingsIcon:FindFirstChildWhichIsA("ImageLabel") or settingsIcon:FindFirstChildWhichIsA("TextLabel")
+    nova.nav.Visible=true
+    nova.browser.Visible=true
     nova.minimizeIcon.Visible=not enabled
     nova.restoreIcon.Visible=enabled
+    nova.brandTitle.Visible=true
+    nova.brandSubtitle.Visible=true
+    settingsButton.Visible=true
 
     if enabled then
-        window.Size=UDim2.fromOffset(266,440)
-        nova.shadow.Size=UDim2.fromOffset(266,440)
-        nova.playerCard.Position=UDim2.fromOffset(0,0)
-        nova.minimizeButton.Position=UDim2.new(1,-98,0,14)
+        animate(nova.nav,{GroupTransparency=1},.22)
+        animate(nova.browser,{GroupTransparency=1},.22)
+        animate(nova.brandTitle,{TextTransparency=1},.18)
+        animate(nova.brandSubtitle,{TextTransparency=1},.18)
+        animate(settingsButton,{BackgroundTransparency=1},.18)
+        if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=1} or {TextTransparency=1},.18) end
+        animate(window,{Size=UDim2.fromOffset(266,440)},.36)
+        animate(nova.shadow,{Size=UDim2.fromOffset(266,440)},.36)
+        animate(nova.playerCard,{Position=UDim2.fromOffset(0,0)},.36)
+        animate(nova.minimizeButton,{Position=UDim2.new(1,-98,0,14)},.32)
+        task.delay(.24,function()
+            if transition==nova.compactTransition then
+                nova.nav.Visible=false;nova.browser.Visible=false
+                nova.brandTitle.Visible=false;nova.brandSubtitle.Visible=false
+                settingsButton.Visible=false
+            end
+        end)
     else
-        window.Size=UDim2.fromOffset(760,440)
-        nova.shadow.Size=UDim2.fromOffset(760,440)
-        nova.playerCard.Position=UDim2.fromOffset(494,0)
-        nova.minimizeButton.Position=UDim2.new(1,-144,0,14)
+        nova.nav.GroupTransparency=1;nova.browser.GroupTransparency=1
+        nova.brandTitle.TextTransparency=1;nova.brandSubtitle.TextTransparency=1
+        settingsButton.BackgroundTransparency=1
+        if settingsGlyph then
+            if settingsGlyph:IsA("ImageLabel") then settingsGlyph.ImageTransparency=1 else settingsGlyph.TextTransparency=1 end
+        end
+        animate(window,{Size=UDim2.fromOffset(760,440)},.38)
+        animate(nova.shadow,{Size=UDim2.fromOffset(760,440)},.38)
+        animate(nova.playerCard,{Position=UDim2.fromOffset(494,0)},.38)
+        animate(nova.minimizeButton,{Position=UDim2.new(1,-144,0,14)},.34)
+        task.delay(.08,function()
+            if transition==nova.compactTransition then
+                animate(nova.nav,{GroupTransparency=0},.26)
+                animate(nova.browser,{GroupTransparency=0},.26)
+                animate(nova.brandTitle,{TextTransparency=0},.24)
+                animate(nova.brandSubtitle,{TextTransparency=0},.24)
+                animate(settingsButton,{BackgroundTransparency=.24},.24)
+                if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=0} or {TextTransparency=0},.24) end
+            end
+        end)
     end
-    fitViewport()
+    fitViewport(.34)
 end
 
 nova.minimizeButton.MouseButton1Click:Connect(function() nova.setCompactMode(not nova.compactMode) end)
@@ -1718,13 +1844,14 @@ local function chooseFilter(name)
     nova.resultTitle.Text=string.upper(name)
     for filter,button in pairs(navButtons) do
         local selected=filter==name
-        animate(button,{BackgroundTransparency=selected and 0 or 1,TextColor3=selected and P.Text or P.Sub})
+        animate(button,{BackgroundTransparency=selected and .16 or .78,TextColor3=selected and P.Text or P.Sub},.20)
     end
     refreshList()
 end
 
 for index,name in ipairs(nova.categories) do
-    local button=radius(make("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=Color3.fromRGB(73,57,111),BackgroundTransparency=index==1 and 0 or 1,BorderSizePixel=0,AutoButtonColor=false,Font=Enum.Font.BuilderSansMedium,Text="   "..name,TextSize=11,TextColor3=index==1 and P.Text or P.Sub,TextXAlignment=Enum.TextXAlignment.Left},nova.navList),11)
+    local button=radius(make("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=Color3.fromRGB(73,57,111),BackgroundTransparency=index==1 and .16 or .78,BorderSizePixel=0,AutoButtonColor=false,Font=Enum.Font.BuilderSansMedium,Text="   "..name,TextSize=11,TextColor3=index==1 and P.Text or P.Sub,TextXAlignment=Enum.TextXAlignment.Left},nova.navList),11)
+    nova.glassify(button,index==1 and .16 or .78,P.Violet)
     navButtons[name]=button
     button.MouseButton1Click:Connect(function() chooseFilter(name) end)
 end
@@ -1769,13 +1896,14 @@ refreshList=function()
                 Text="",
             },nova.songList),15)
             edge(card,selected and P.Violet or Color3.fromRGB(86,77,117),selected and .16 or .68,selected and 1.4 or 1)
-            nova.palette=songPalette(index)
+            nova.glassify(card,selected and .10 or .22,P.Violet)
+            local songColors=songPalette(index)
             local tile=radius(gradient(make("Frame",{
                 Position=UDim2.fromOffset(9,7),
                 Size=UDim2.fromOffset(47,47),
-                BackgroundColor3=nova.palette[1],
+                BackgroundColor3=songColors[1],
                 BorderSizePixel=0,
-            },card),nova.palette[1],nova.palette[2],45),13)
+            },card),songColors[1],songColors[2],45),13)
             if selected then
                 edge(tile,P.Text,.62,1)
             end
@@ -1971,7 +2099,20 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 UserInputService.InputEnded:Connect(function(input) if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then nova.dragging=false end end)
 UserInputService.InputBegan:Connect(function(input,processed) if not processed and input.KeyCode==Enum.KeyCode.RightShift then nova.gui.Enabled=not nova.gui.Enabled end end)
-nova.close.MouseButton1Click:Connect(function() saveFavorites(state.Favorites);API:Stop();nova.gui:Destroy() end)
+function nova.dismiss()
+    if nova.closing then return end
+    nova.closing=true
+    saveFavorites(state.Favorites)
+    API:Stop()
+    if nova.reveal then animate(nova.reveal,{GroupTransparency=1},.20) end
+    animate(nova.windowScale,{Scale=nova.windowScale.Scale*.96},.20)
+    if nova.blur then animate(nova.blur,{Size=0},.20) end
+    task.delay(.21,function()
+        nova.disposeVisuals()
+        if nova.gui then nova.gui:Destroy() end
+    end)
+end
+nova.close.MouseButton1Click:Connect(nova.dismiss)
 
 nova.lastRender=0
 nova.renderConnection=RunService.RenderStepped:Connect(function()
@@ -1983,19 +2124,33 @@ nova.renderConnection=RunService.RenderStepped:Connect(function()
         render()
     end
 end)
-nova.gui.AncestryChanged:Connect(function(_,parent) if not parent and nova.renderConnection then nova.renderConnection:Disconnect() end end)
+nova.gui.AncestryChanged:Connect(function(_,parent)
+    if not parent then
+        if nova.renderConnection then nova.renderConnection:Disconnect() end
+        nova.disposeVisuals()
+    end
+end)
 
 API.UI={Gui=nova.gui,Window=window}
 API.State=state
 function API:Show() nova.gui.Enabled=true end
 function API:Hide() nova.gui.Enabled=false end
-function API:Destroy() saveFavorites(state.Favorites);API:Stop();nova.gui:Destroy() end
+function API:Destroy() nova.dismiss() end
 
 refreshList()
 if state.Registry[1] and not state.CurrentEntry then API:LoadSong(state.Registry[1].Id,false) end
 render()
-window.Size=UDim2.fromOffset(710,400);nova.shadow.Size=UDim2.fromOffset(710,400)
-animate(window,{Size=UDim2.fromOffset(760,440)},.2)
+nova.reveal=make("CanvasGroup",{Name="GlassReveal",Size=UDim2.fromScale(1,1),BackgroundTransparency=1,GroupTransparency=1,BorderSizePixel=0},window)
+for _,child in ipairs(window:GetChildren()) do
+    if child~=nova.reveal and child:IsA("GuiObject") then child.Parent=nova.reveal end
+end
+nova.loadScale=nova.windowScale.Scale
+nova.windowScale.Scale=nova.loadScale*.94
+window.BackgroundTransparency=1
+animate(nova.windowScale,{Scale=nova.loadScale},.42)
+animate(window,{BackgroundTransparency=.18},.36)
+animate(nova.reveal,{GroupTransparency=0},.36)
+if nova.blur then animate(nova.blur,{Size=14},.42) end
 
 _G.Velora=API
 pcall(function() if type(getgenv)=="function" then getgenv().Velora=API end end)
