@@ -135,16 +135,9 @@ return function(API)
         end
     end
 
-    local function softenProgressScrubber(scrubber)
+    local function hideProgressScrubber(scrubber)
         if not isProgressScrubber(scrubber) then return end
-        scrubber.BackgroundColor3 = Color3.fromRGB(224, 196, 202)
-        scrubber.BackgroundTransparency = 0.10
-        local stroke = scrubber:FindFirstChildOfClass("UIStroke")
-        if stroke then
-            stroke.Color = RUBY
-            stroke.Transparency = 0.34
-            stroke.Thickness = 1
-        end
+        scrubber.Visible = false
     end
 
     local function tuneStroke(stroke)
@@ -192,7 +185,7 @@ return function(API)
         if object:IsA("UIStroke") then
             tuneStroke(object)
         elseif isProgressScrubber(object) then
-            softenProgressScrubber(object)
+            hideProgressScrubber(object)
         elseif isBpmPill(object) then
             local stroke = object:FindFirstChild("VeloraPremiumInsetEdge")
             if stroke then tuneStroke(stroke) end
@@ -233,7 +226,7 @@ return function(API)
     end)
 
     API.PremiumGlassBorderTune = {
-        Version = "0.2.1-test",
+        Version = "0.2.2-test",
         Default = "DarkSmokedRuby",
     }
     return true
