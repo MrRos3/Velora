@@ -37,17 +37,17 @@ local WAVE2_URLS = {
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VELORA_REF .. "/upgrade_wave2.lua",
 }
 
--- Visual test layer. Keep this branch reference out of main until the user
--- has approved the smoked-glass redesign in Roblox.
-local GLASS_TEST_REF = "glassmorphism-redesign-test"
+-- Approved production glass theme. Pin both visual modules so the public
+-- loader always receives the exact manually tested build.
+local GLASS_REF = "9ab80ff40b3f2cdd7608dbc8324ca1653ceaeaec"
 local GLASS_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-6",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-6",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_REF .. "/glassmorphism.lua?v=velora-main-glass-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_REF .. "/glassmorphism.lua?v=velora-main-glass-1",
 }
 local GLASS_TUNE_REF = "e601528d90373a12e9fefde9428d08c701421e16"
 local GLASS_TUNE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TUNE_REF .. "/glass_border_tune.lua?v=ruby-edges-6",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TUNE_REF .. "/glass_border_tune.lua?v=ruby-edges-6",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TUNE_REF .. "/glass_border_tune.lua?v=velora-main-ruby-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TUNE_REF .. "/glass_border_tune.lua?v=velora-main-ruby-1",
 }
 
 local function fail(reason)
