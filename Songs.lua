@@ -1,4 +1,4 @@
--- Velora 0.10.11 Nova — responsive compact-player release.
+-- Velora 0.10.12 Nova — executor-safe compact-player release.
 return {
     {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
