@@ -4,6 +4,7 @@ return {
     {Id="la-petite-fille-de-la-mer",Name="La petite fille de la mer",Artist="Vangelis",BPM=80,Categories={"Famous","Soundtrack","Ambient","Piano","Emotional","Complete"},File="songs/LaPetiteFilleDeLaMer.lua"},
     {Id="salvatore-lana-del-rey",Name="Salvatore",Artist="Lana Del Rey",BPM=58,Categories={"Famous","Lana Del Rey","Pop","Piano","Cinematic","Emotional","Complete"},File="songs/Salvatore.lua"},
     {Id="idea-22",Name="Idea 22",Artist="Gibran Alcocer",BPM=104,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Complete"},File="songs/Idea22.lua"},
+    {Id="dans-le-vide-velora-tribute",Name="Dans le Vide — Velora Tribute",Artist="Velora Original",BPM=92,Categories={"Original","French Pop","Dramatic","Piano","Emotional","Complete"},File="songs/DansLeVideTribute.lua"},
     {Id="swan-lake",Name="Swan Lake",Artist="Pyotr Ilyich Tchaikovsky",BPM=100,Categories={"Famous","Classical","Ballet","Dramatic","Piano","Complete"},File="songs/SwanLake.lua"},
     {Id="gnossienne-no-1",Name="Gnossienne No. 1",Artist="Erik Satie",BPM=100,Categories={"Famous","Classical","Piano","Calm","Haunting","Complete"},File="songs/GnossienneNo1.lua"},
     {Id="hungarian-dance-no-5",Name="Hungarian Dance No. 5",Artist="Johannes Brahms",BPM=130,Categories={"Famous","Classical","Dance","Dramatic","Piano","Complete"},File="songs/HungarianDanceNo5.lua"},
