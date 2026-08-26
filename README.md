@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.12 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.13 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,8 +18,9 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.12
+## Nova 0.10.13
 
+- Lucide control icons are bundled into Velora, so a missing external repository cannot leave blank buttons.
 - Executor-safe UI state with a much lower compiler register footprint.
 - Compact player-only mode with a Lucide minimize/restore control.
 - Long song titles and metadata stay clipped and move in a smooth loop.
