@@ -1,121 +1,47 @@
--- Velora 0.10.20 Nova — corrected MIDI conversion from the file supplied by the repository owner.
--- Supplied file: Idea 22.mid
--- Supplied file SHA-256: BE8ABADB28C25112D59318894F433D8DB58DC015ECF08E96C34F65DD5E7487BC
--- MIDI: 104 BPM, 384 PPQ, 3/4 time, exact 4 Velora steps/beat.
--- Corrected piano-key mapping: natural E→F and B→C gaps are preserved, fixing the upper-register melody.
--- Single piano track retained; simultaneous duplicate pitches are merged.
+-- Velora 0.10.20 Nova — complete arrangement converted from a MIDI supplied by the repository owner.
+-- Supplied file: idea-22-gibran-alcocer.mid
+-- Supplied file SHA-256: 8E33964198816047A5CD412EA582CD5BBFEA1E60EAADF165BDD587910B1DBF01
+-- MIDI: 480 PPQ, 7 tempo events, time-normalized at 120 BPM / 48 Velora steps per beat.
+-- Both piano tracks retained; simultaneous duplicate pitches are merged.
+-- 0 out-of-range note-on events were folded by octave into Velora's C2-C7 keyboard range.
+
+local DATA = [=[
+0:[%O] 23:D 23:[WtYD] 47:[WtY] 47:[WtYD] 47:[WtY] 47:[WtY] 47:[8s] 23:h 23:[wtYh] 47:[wtY] 47:[wtYh] 47:[wtY] 47:[wtY] 47:[%O] 23:D 23:[WtYD] 47:[WtY] 47:[WtYD] 47:[WtY] 47:[WtY] 47:[8s] 23:h 23:[wtYh] 47:[wtY] 47:[wtYh] 47:[wtY] 47:[wtY] 47:[4s] 47:[qWt] 47:[qWts] 23:O
+11:D 11:[8d] 47:[wtY] 47:[wtYd] 23:s 11:D 11:[^d] 47:[qEys] 47:[qEy] 23:P 23:[%s] 47:[WtYD] 47:[WtYh] 47:[4s] 23:h 23:[qWth] 47:[qWtD] 47:[8d] 47:[wtY] 47:[wtYd] 23:s 11:D 11:[^d] 47:[qEys] 47:[qEyP] 47:[%s] 47:[WtY] 47:[WtY] 47:[WtYs] 47:[WtY] 47:[WtY] 47:[WtYs]
+143:[%s] 47:[WtY] 47:[WtY] 47:[4h] 47:[qWt] 47:[qWth] 23:s 11:J 11:[8H] 47:[wtYh] 47:[wtYD] 47:[^d] 47:[qEyh] 47:[qEyd] 47:[%s] 47:[WtY] 47:[WtYs] 47:[4h] 47:[qWt] 47:[qWth] 23:s 11:J 11:[8H] 47:[wtYh] 47:[wtYD] 47:[^d] 47:[qEyh] 47:[qEyd] 47:[%s] 47:[WtYD] 47:[WtYs] 47:[4O]
+47:[qWt] 47:[qWtO] 23:O 23:[8D] 47:[wtY] 23:d 23:[wtYD] 23:d 23:[^d] 47:[qEys] 47:[qEyP] 47:[%s] 47:[WtYD] 47:[WtYs] 47:[4O] 47:[qWt] 47:[qWtO] 23:O 23:[8D] 47:[wtY] 23:d 23:[wtYD] 23:d 23:[^d] 47:[qEy] 47:[qEy] 47:[qEyd] 47:[qEy] 47:[qEy] 47:[qEyd] 143:[%s] 47:[WtY]
+47:[WtY] 47:[Ws] 47:[WtY] 47:[WtY] 47:[8h] 47:[wtY] 47:[wtY] 47:[wD] 47:[wtY] 47:[wtYD] 23:d 23:[%s] 47:[WtY] 47:[WtY] 47:[Ws] 47:[WtY] 47:[WtYs] 23:D 23:[8h] 47:[wtY] 47:[wtY] 47:[wD] 47:[wtY] 47:[wtYD] 23:d 23:[%s] 47:[WtYh] 47:[WtYh] 47:[Ws] 47:[WtYh] 47:[WtYh] 47:[8s]
+47:[wtYh] 47:[wtYh] 47:[wD] 47:[wtY] 23:d 23:[wtYD] 23:d 23:[%s] 47:[WtYh] 47:[WtYh] 47:[Ws] 47:[WtYh] 47:[WtYh] 47:[8s] 47:[wtYh] 47:[wtYh] 47:[wD] 95:D 23:d 23:[4s] 47:[qWt] 47:[qWts] 23:O 11:D 11:[8d] 47:[wtY] 47:[wtYd] 23:s 11:D 11:[^g] 47:[qEyD] 47:[qEy]
+23:d 23:[%D] 47:[WtYh] 47:[WtYH] 47:[4D] 23:J 23:[qWt] 47:[qWth] 47:[8g] 47:[wtY] 47:[wtYg] 23:D 11:h 11:[^g] 47:[qEyD] 47:[qEyd] 47:[%s] 47:[WtY] 47:[WtY] 47:[WtYs] 47:[WtY] 47:[WtY] 47:[%h] 47:[WtYh] 47:[WtYh] 47:[WtYh] 47:[WtYh] 47:[WtYh] 47:[%s] 47:[WtY] 47:[WtY] 47:[4h]
+47:[qWt] 47:[qWth] 23:s 11:J 11:[8H] 47:[wtYh] 47:[wtYD] 47:[^d] 47:[qEyh] 47:[qEyd] 47:[%s] 47:[WtY] 47:[WtYs] 47:[4h] 47:[qWt] 47:[qWth] 23:s 11:J 11:[8H] 47:[wtYh] 47:[wtYD] 47:[^d] 47:[qEyh] 47:[qEyJ] 47:[%l] 47:[WtY] 47:[WtY] 47:[4Z] 47:[qWt] 47:[qWt] 47:[8Z] 47:[wtY]
+23:z 23:[wtYZ] 23:z 23:[^z] 47:[qEyl] 47:[qEyJ] 47:[%l] 47:[WtYZ] 47:[WtYl] 47:[4H] 47:[qWt] 47:[qWtH] 23:H 23:[8Z] 47:[wtY] 23:z 23:[wtYZ] 23:z 23:[^z] 47:[qEy] 47:[qEy] 47:[qEyz] 47:[qEy] 47:[qEy] 47:[%D] 23:s 23:[WtY] 23:s 23:[WtYd] 23:D 23:[4g] 23:s
+23:[qWtO] 23:g 23:[qWts] 23:O 23:[8h] 23:D 23:[wtYs] 23:h 23:[wtYD] 23:s 23:[^h] 23:d 23:[qEyP] 23:h 23:[qEyd] 23:P 23:[%D] 23:s 23:[WtYO] 23:s 23:[WtYd] 23:D 23:[4g] 23:s 23:[qWtO] 23:g 23:[qWts] 23:O 23:[8h] 23:D 23:[wtYs] 23:h
+23:[wtYD] 23:s 23:[^J] 23:h 23:[qEyd] 23:J 23:[qEyh] 23:d 23:[%l] 23:h 23:[WtYD] 23:l 23:[WtYh] 23:D 23:[4l] 23:h 23:[qWtD] 23:l 23:[qWth] 23:D 23:[8l] 23:h 23:[wtYD] 23:l 23:[wtYh] 23:D 23:[^l] 23:h 23:[qEyD] 23:l 23:[qEyh] 23:D
+23:[%l] 23:h 23:[WtYD] 23:l 23:[WtYh] 23:D 23:[4l] 23:h 23:[qWtD] 23:l 23:[qWth] 23:D 23:[8l] 23:h 23:[wtYD] 23:l 23:[wtYh] 24:D 24:[^l] 25:h 25:[qEyD] 24:l 27:[qEyh] 26:D 26:[^D] 55:[qEy] 58:[qEy] 59:[^D] 63:[qEy] 63:[qEy] 63:[qEy] 191:[qEy]
+191:[qEy]
+]=]
+
+local sheet = {}
+for encoded in DATA:gmatch("%S+") do
+    local gap, token = encoded:match("^(%d+):(.+)$")
+    gap = tonumber(gap)
+    if gap and token then
+        for _ = 1, gap do
+            sheet[#sheet + 1] = "-"
+        end
+        sheet[#sheet + 1] = token
+    end
+end
+
 return {
     Id="idea-22",
     Name="Idea 22",
     Artist="Gibran Alcocer",
-    BPM=104,
-    StepsPerBeat=4,
+    BPM=120,
+    StepsPerBeat=48,
     Complete=true,
     Source="User-supplied MIDI",
     SourceLicense="User-provided source file; arrangement converted for Velora.",
-    Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Complete"},
-    Notes=[=[
-- - - - | - - - - | - - - -
-[%O] - D - | [WtY] - - - | [WtY] - - -
-[WtY] - - - | [WtY] - - - | [WtY] - - -
-[8s] - h - | [wtY] - - - | [wtY] - - -
-[wtY] - - - | [wtY] - - - | [wtY] - - -
-[%O] - D - | [WtY] - - - | [WtY] - - -
-[WtY] - - - | [WtY] - - - | [WtY] - - -
-[8s] - h - | [wtY] - - - | [wtY] - - -
-[wtY] - - - | [wtY] - - - | [wtY] - - -
-[4s] - - - | [qWt] - - - | [qWt] - O D
-[8d] - - - | [wtY] - - - | [wtY] - s D
-[^d] - - - | [qEys] - - - | [qEy] - P -
-[%s] - - - | [WtYD] - - - | [WtYh] - - -
-[4s] - h - | [qWt] - - - | [qWtD] - - -
-[8d] - - - | [wtY] - - - | [wtY] - s D
-[^d] - - - | [qEys] - - - | [qEyP] - - -
-[%s] - - - | [WtY] - - - | [WtY] - - -
-[WtY] - - - | [WtY] - - - | [WtY] - - -
-[WtY] - - - | - - - - | - - - -
-[%s] - - - | [WtY] - - - | [WtY] - - -
-[4h] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYh] - - - | [wtYD] - - -
-[^d] - - - | [qEyh] - - - | [qEyd] - - -
-[%s] - - - | [WtY] - - - | [WtYs] - - -
-[4h] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYh] - - - | [wtYD] - - -
-[^d] - - - | [qEyh] - - - | [qEyd] - - -
-[%s] - - - | [WtYD] - - - | [WtYs] - - -
-[4O] - - - | [qWt] - - - | [qWt] - O -
-[8D] - - - | [wtY] - d - | [wtYD] - d -
-^ - - - | [qEys] - - - | [qEyP] - - -
-[%s] - - - | [WtYD] - - - | [WtYs] - - -
-[4O] - - - | [qWt] - - - | [qWt] - O -
-[8D] - - - | [wtY] - d - | [wtYD] - d -
-^ - - - | [qEy] - - - | [qEy] - - -
-[qEy] - - - | [qEy] - - - | [qEy] - - -
-[qEy] - - - | - - - - | - - - -
-[%s] - - - | [WtY] - - - | [WtY] - - -
-W - - - | [WtY] - - - | [WtY] - - -
-[8h] - - - | [wtY] - - - | [wtY] - - -
-[wD] - - - | [wtY] - - - | [wtY] - d -
-[%s] - - - | [WtY] - - - | [WtY] - - -
-W - - - | [WtY] - - - | [WtY] - D -
-[8h] - - - | [wtY] - - - | [wtY] - - -
-[wD] - - - | [wtY] - - - | [wtY] - d -
-[%s] - - - | [WtYh] - - - | [WtYh] - - -
-[Ws] - - - | [WtYh] - - - | [WtYh] - - -
-[8s] - - - | [wtYh] - - - | [wtYh] - - -
-[wD] - - - | [wtY] - d - | [wtYD] - d -
-[%s] - - - | [WtYh] - - - | [WtYh] - - -
-[Ws] - - - | [WtYh] - - - | [WtYh] - - -
-[8s] - - - | [wtYh] - - - | [wtYh] - - -
-[wtYD] - - - | - - - - | - - d -
-[4s] - - - | [qWt] - - - | [qWt] - O D
-[8d] - - - | [wtY] - - - | [wtY] - s D
-[^d] - - - | [qEys] - - - | [qEy] - P -
-[%s] - - - | [WtYD] - - - | [WtYh] - - -
-[4s] - h - | [qWt] - - - | [qWtD] - - -
-[8d] - - - | [wtY] - - - | [wtY] - s D
-[^d] - - - | [qEys] - - - | [qEyP] - - -
-[%s] - - - | [WtY] - - - | [WtY] - - -
-[WtY] - - - | [WtY] - - - | [WtY] - - -
-[%oh] - - - | [WtYoh] - - - | [WtYoh] - - -
-[WtYoh] - - - | [WtYoh] - - - | [WtYoh] - - -
-[%s] - - - | [WtY] - - - | [WtY] - - -
-[4h] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYh] - - - | [wtYD] - - -
-[^d] - - - | [qEyh] - - - | [qEyd] - - -
-[%s] - - - | [WtY] - - - | [WtYs] - - -
-[4h] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYh] - - - | [wtYD] - - -
-[^d] - - - | [qEyh] - - - | [qEyj] - - -
-[%L] - - - | [WtY] - - - | [WtY] - - -
-[4Z] - - - | [qWt] - - - | [qWt] - - -
-[8Z] - - - | [wtY] - L - | [wtYZ] - L -
-^ - - - | [qEyL] - - - | [qEyj] - - -
-[%L] - - - | [WtYZ] - - - | [WtYL] - - -
-[4h] - - - | [qWt] - - - | [qWt] - h -
-[8Z] - - - | [wtY] - L - | [wtYZ] - L -
-^ - - - | [qEy] - - - | [qEy] - - -
-[qEy] - - - | [qEy] - - - | [qEy] - - -
-[%D] - s - | [WtYO] - s - | [WtYd] - D -
-[4g] - s - | [qWtO] - g - | [qWts] - O -
-[8h] - D - | [wtYs] - h - | [wtYD] - s -
-[^h] - d - | [qEyP] - h - | [qEyd] - P -
-[%D] - s - | [WtYO] - s - | [WtYd] - D -
-[4g] - s - | [qWtO] - g - | [qWts] - O -
-[8h] - D - | [wtYs] - h - | [wtYD] - s -
-[^j] - h - | [qEyd] - j - | [qEyh] - d -
-[%L] - h - | [WtYD] - L - | [WtYh] - D -
-[4L] - h - | [qWtD] - L - | [qWth] - D -
-[8L] - h - | [wtYD] - L - | [wtYh] - D -
-[^L] - h - | [qEyD] - L - | [qEyh] - D -
-[%L] - h - | [WtYD] - L - | [WtYh] - D -
-[4L] - h - | [qWtD] - L - | [qWth] - D -
-[8L] - h - | [wtYD] - L - | [wtYh] - D -
-[^L] - h - | [qEyD] - L - | [qEyh] - D -
-^ - - - | [qEy] - - - | [qEy] - - -
-^ - - - | [qEy] - - - | [qEy] - - -
-[qEy] - - - | - - - - | - - - -
-- - - - | - - - - | - - - -
-- - - - | - - - - | - - - -
-]=],
+    Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Gibran Alcocer","Complete"},
+    Notes=table.concat(sheet, " "),
 }
