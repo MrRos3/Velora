@@ -1,7 +1,7 @@
--- Velora 0.10.16 Nova glassmorphism loader.
+-- Velora 0.10.17 Nova glassmorphism loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/7fdb95f7f16b8d13a63228c215f63e8cf44bb442/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@7fdb95f7f16b8d13a63228c215f63e8cf44bb442/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/255c89220d46840e4c4f4230a02b44bcb81f782a/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@255c89220d46840e4c4f4230a02b44bcb81f782a/release.lua",
 }
 
 local function fail(reason)
