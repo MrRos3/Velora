@@ -110,8 +110,7 @@ if not started then
     fail("runtime error - " .. tostring(result))
 end
 
--- Keep the ordinary UI tap very quiet in the Upgrade Lab build so action-specific
--- sound design layered by upgrade_fixes.lua is clearly audible instead of being masked.
+-- Cleaner Creator Store UI click for the Upgrade Lab test build.
 local function bindClickSounds(api)
     local gui = type(api) == "table" and api.UI and api.UI.Gui
     if not gui then return end
@@ -120,15 +119,15 @@ local function bindClickSounds(api)
     local function playClick()
         local sound = Instance.new("Sound")
         sound.Name = "VeloraClick"
-        sound.SoundId = "rbxassetid://17582213219"
-        sound.Volume = 0.035
-        sound.PlaybackSpeed = 1.02
+        sound.SoundId = "rbxassetid://113397864512278"
+        sound.Volume = 0.09
+        sound.PlaybackSpeed = 1
         sound.Parent = SoundService
         sound:Play()
         sound.Ended:Connect(function()
             if sound.Parent then sound:Destroy() end
         end)
-        task.delay(3, function()
+        task.delay(2, function()
             if sound.Parent then sound:Destroy() end
         end)
     end
