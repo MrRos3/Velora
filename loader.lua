@@ -1,6 +1,6 @@
 -- Velora Upgrade Lab test loader.
 -- Test branch only. Main is intentionally untouched.
-local LAB_REF = "3390164d27b34e0ace4ed19ab4c1a38297483f80"
+local LAB_REF = "3f9fa65b21109777fdc9d654433f28e773871bdc"
 
 local SMOOTH_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/smooth.lua",
@@ -20,6 +20,11 @@ local FIX_URLS = {
 local CLEANUP_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/upgrade_cleanup.lua",
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. LAB_REF .. "/upgrade_cleanup.lua",
+}
+
+local GLOW_TRIM_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/upgrade_glow_trim.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. LAB_REF .. "/upgrade_glow_trim.lua",
 }
 
 local function fail(reason)
@@ -102,7 +107,7 @@ if ok ~= true then
 end
 
 local fixSource = download(FIX_URLS, "upgrade polish")
--- Use the new clean Creator Store click for the action-specific sound layer too.
+-- Use the clean Creator Store click for the action-specific sound layer too.
 fixSource = string.gsub(fixSource, "17582213219", "113397864512278")
 
 local fixChunk, fixCompileError = loadstring(fixSource)
@@ -140,6 +145,25 @@ if not cleaned then
 end
 if cleanupOk ~= true then
     fail("upgrade cleanup install failed - " .. tostring(cleanupError or cleanupOk))
+end
+
+local glowTrimSource = download(GLOW_TRIM_URLS, "glow trim")
+local glowTrimChunk, glowTrimCompileError = loadstring(glowTrimSource)
+if type(glowTrimChunk) ~= "function" then
+    fail("glow trim compile failed - " .. tostring(glowTrimCompileError))
+end
+
+local glowTrimLoaded, glowTrimInstaller = pcall(glowTrimChunk)
+if not glowTrimLoaded or type(glowTrimInstaller) ~= "function" then
+    fail("glow trim startup failed - " .. tostring(glowTrimInstaller))
+end
+
+local trimmed, trimOk, trimError = pcall(glowTrimInstaller, api)
+if not trimmed then
+    fail("glow trim runtime failed - " .. tostring(trimOk))
+end
+if trimOk ~= true then
+    fail("glow trim install failed - " .. tostring(trimError or trimOk))
 end
 
 return api
