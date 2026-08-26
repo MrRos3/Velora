@@ -120,24 +120,24 @@ return function(API)
 
         local gradient = stroke:FindFirstChild("VeloraPremiumEdgeReflection")
         if gradient and gradient:IsA("UIGradient") then
-            gradient.Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, RUBY_DARK),
-                ColorSequenceKeypoint.new(0.24, RUBY_GLASS),
-                ColorSequenceKeypoint.new(0.52, RUBY),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(63, 20, 27)),
-            })
-            gradient.Transparency = NumberSequence.new({
-                NumberSequenceKeypoint.new(0, 0.66),
-                NumberSequenceKeypoint.new(0.24, 0.30),
-                NumberSequenceKeypoint.new(0.55, 0.56),
-                NumberSequenceKeypoint.new(1, 0.82),
-            })
+            -- A uniform tint keeps the track glassy without the small moving-
+            -- looking flare created by the previous directional reflection.
+            gradient.Color = ColorSequence.new(RUBY, RUBY)
+            gradient.Transparency = NumberSequence.new(0.35)
         end
     end
 
-    local function hideProgressScrubber(scrubber)
+    local function restoreProgressScrubber(scrubber)
         if not isProgressScrubber(scrubber) then return end
-        scrubber.Visible = false
+        scrubber.Visible = true
+        scrubber.BackgroundColor3 = Color3.fromRGB(224, 196, 202)
+        scrubber.BackgroundTransparency = 0.10
+        local stroke = scrubber:FindFirstChildOfClass("UIStroke")
+        if stroke then
+            stroke.Color = RUBY
+            stroke.Transparency = 0.34
+            stroke.Thickness = 1
+        end
     end
 
     local function tuneStroke(stroke)
@@ -185,7 +185,7 @@ return function(API)
         if object:IsA("UIStroke") then
             tuneStroke(object)
         elseif isProgressScrubber(object) then
-            hideProgressScrubber(object)
+            restoreProgressScrubber(object)
         elseif isBpmPill(object) then
             local stroke = object:FindFirstChild("VeloraPremiumInsetEdge")
             if stroke then tuneStroke(stroke) end
@@ -226,7 +226,7 @@ return function(API)
     end)
 
     API.PremiumGlassBorderTune = {
-        Version = "0.2.2-test",
+        Version = "0.2.3-test",
         Default = "DarkSmokedRuby",
     }
     return true
