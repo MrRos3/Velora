@@ -1,6 +1,6 @@
 -- Velora Upgrade Lab test loader.
 -- Test branch only. Main is intentionally untouched.
-local LAB_REF = "20b1dc3a135fbdda4e3ce8802a1016c1abe508f7"
+local LAB_REF = "3a232ef592b9594703eef8440272cf58b8e04dec"
 
 local SMOOTH_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/smooth.lua",
@@ -25,6 +25,11 @@ local CLEANUP_URLS = {
 local GLOW_TRIM_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/upgrade_glow_trim.lua",
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. LAB_REF .. "/upgrade_glow_trim.lua",
+}
+
+local COMPACT_FIX_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/upgrade_compact_fix.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. LAB_REF .. "/upgrade_compact_fix.lua",
 }
 
 local function fail(reason)
@@ -164,6 +169,25 @@ if not trimmed then
 end
 if trimOk ~= true then
     fail("glow trim install failed - " .. tostring(trimError or trimOk))
+end
+
+local compactFixSource = download(COMPACT_FIX_URLS, "compact fix")
+local compactFixChunk, compactFixCompileError = loadstring(compactFixSource)
+if type(compactFixChunk) ~= "function" then
+    fail("compact fix compile failed - " .. tostring(compactFixCompileError))
+end
+
+local compactFixLoaded, compactFixInstaller = pcall(compactFixChunk)
+if not compactFixLoaded or type(compactFixInstaller) ~= "function" then
+    fail("compact fix startup failed - " .. tostring(compactFixInstaller))
+end
+
+local compactFixed, compactOk, compactError = pcall(compactFixInstaller, api)
+if not compactFixed then
+    fail("compact fix runtime failed - " .. tostring(compactOk))
+end
+if compactOk ~= true then
+    fail("compact fix install failed - " .. tostring(compactError or compactOk))
 end
 
 return api
