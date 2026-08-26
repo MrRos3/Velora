@@ -1,7 +1,7 @@
--- Velora 0.10.15 Nova glassmorphism boot.
+-- Velora 0.10.16 Nova glassmorphism boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/020e0617de4eec1de6018cf7ae20e119d9c35dfc/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@020e0617de4eec1de6018cf7ae20e119d9c35dfc/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/7fdb95f7f16b8d13a63228c215f63e8cf44bb442/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@7fdb95f7f16b8d13a63228c215f63e8cf44bb442/release.lua",
 }
 
 local function fail(reason)
