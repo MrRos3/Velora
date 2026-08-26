@@ -1,7 +1,5 @@
 # Velora🥀
 
-Velora v0.10.18 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
-
 ## Run Velora
 
 ```lua
