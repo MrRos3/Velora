@@ -127,6 +127,18 @@ end)
 installModule(CLEANUP_URLS, "upgrade cleanup", api)
 installModule(GLOW_TRIM_URLS, "glow trim", api)
 installModule(COMPACT_FIX_URLS, "compact fix", api)
-installModule(WAVE2_URLS, "wave 2", api)
+installModule(WAVE2_URLS, "wave 2", api, function(source)
+    -- Luau does not allow an outer vararg to be referenced from the nested countdown coroutine.
+    -- Capture it once, then unpack it when the countdown completes.
+    source = replaceOncePlain(source,
+        "            local startId = pickedId(snap)\n            countdownActive = true",
+        "            local packedArgs = table.pack(...)\n            local startId = pickedId(snap)\n            countdownActive = true"
+    )
+    source = replaceOncePlain(source,
+        "                rawPlay(self, ...)\n            end)",
+        "                rawPlay(self, table.unpack(packedArgs, 1, packedArgs.n))\n            end)"
+    )
+    return source
+end)
 
 return api
