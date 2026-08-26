@@ -1,12 +1,14 @@
--- Velora 0.10.20 Nova loader.
+-- Velora 0.10.20 Nova loader (smooth public build, sound refresh).
+local BUILD_REF = "204289be27d87e3c9e9e5acfddeab0518ded4e33"
+
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/release.lua?v=0.10.20",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/release.lua?v=0.10.20",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. BUILD_REF .. "/release.lua?v=0.10.20-sound1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. BUILD_REF .. "/release.lua?v=0.10.20-sound1",
 }
 
 local PATCH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/patches.lua?v=0.10.20",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/patches.lua?v=0.10.20",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. BUILD_REF .. "/patches.lua?v=0.10.20-sound1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. BUILD_REF .. "/patches.lua?v=0.10.20-sound1",
 }
 
 local function fail(reason)
