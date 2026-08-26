@@ -33,12 +33,12 @@ return function(API)
         Ink = Color3.fromRGB(4, 3, 4),
         Smoke = Color3.fromRGB(10, 6, 8),
         Wine = Color3.fromRGB(24, 9, 13),
-        WineLift = Color3.fromRGB(48, 18, 24),
+        WineLift = Color3.fromRGB(42, 13, 23),
         RubyDark = Color3.fromRGB(91, 18, 31),
         Ruby = Color3.fromRGB(211, 56, 76),
         RubyBright = Color3.fromRGB(241, 91, 108),
-        Reflection = Color3.fromRGB(255, 210, 216),
-        ReflectionSoft = Color3.fromRGB(228, 154, 164),
+        Reflection = Color3.fromRGB(245, 196, 210),
+        ReflectionSoft = Color3.fromRGB(200, 126, 144),
     }
 
     local function make(className, properties, parent)
@@ -95,16 +95,16 @@ return function(API)
             gradient = make("UIGradient", {Name = "VeloraPremiumEdgeReflection"}, stroke)
         end
         gradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, COLORS.RubyDark),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(54, 9, 25)),
             ColorSequenceKeypoint.new(0.24, COLORS.Reflection),
-            ColorSequenceKeypoint.new(0.52, COLORS.RubyBright),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(61, 13, 23)),
+            ColorSequenceKeypoint.new(0.52, Color3.fromRGB(218, 52, 86)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(39, 7, 20)),
         })
         gradient.Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.34),
-            NumberSequenceKeypoint.new(0.24, 0.02),
-            NumberSequenceKeypoint.new(0.55, 0.28),
-            NumberSequenceKeypoint.new(1, 0.52),
+            NumberSequenceKeypoint.new(0, 0.58),
+            NumberSequenceKeypoint.new(0.24, 0.12),
+            NumberSequenceKeypoint.new(0.55, 0.46),
+            NumberSequenceKeypoint.new(1, 0.75),
         })
         gradient.Rotation = rotation or 28
         return gradient
@@ -146,7 +146,7 @@ return function(API)
         return gradient
     end
 
-    local function addTopReflection(object, inset, transparency)
+    local function addPanelReflections(object, inset, transparency)
         local reflection = object:FindFirstChild("VeloraPremiumTopReflection")
         if not reflection then
             reflection = make("Frame", {
@@ -154,7 +154,7 @@ return function(API)
                 Position = UDim2.new(0, inset or 12, 0, 2),
                 Size = UDim2.new(1, -(inset or 12) * 2, 0, 1),
                 BackgroundColor3 = COLORS.Reflection,
-                BackgroundTransparency = transparency or 0.28,
+                BackgroundTransparency = transparency or 0.76,
                 BorderSizePixel = 0,
                 Active = false,
                 Selectable = false,
@@ -164,12 +164,38 @@ return function(API)
             make("UIGradient", {
                 Transparency = NumberSequence.new({
                     NumberSequenceKeypoint.new(0, 1),
-                    NumberSequenceKeypoint.new(0.18, 0.58),
-                    NumberSequenceKeypoint.new(0.50, 0.06),
-                    NumberSequenceKeypoint.new(0.82, 0.58),
+                    NumberSequenceKeypoint.new(0.18, 0.72),
+                    NumberSequenceKeypoint.new(0.50, 0.28),
+                    NumberSequenceKeypoint.new(0.82, 0.72),
                     NumberSequenceKeypoint.new(1, 1),
                 }),
             }, reflection)
+        end
+
+        local leftReflection = object:FindFirstChild("VeloraPremiumLeftReflection")
+        if not leftReflection then
+            leftReflection = make("Frame", {
+                Name = "VeloraPremiumLeftReflection",
+                Position = UDim2.new(0, 2, 0, inset or 12),
+                Size = UDim2.new(0, 1, 1, -(inset or 12) * 2),
+                BackgroundColor3 = COLORS.ReflectionSoft,
+                BackgroundTransparency = math.min(0.98, (transparency or 0.76) + 0.04),
+                BorderSizePixel = 0,
+                Active = false,
+                Selectable = false,
+                ZIndex = object.ZIndex + 1,
+            }, object)
+            make("UICorner", {CornerRadius = UDim.new(1, 0)}, leftReflection)
+            make("UIGradient", {
+                Transparency = NumberSequence.new({
+                    NumberSequenceKeypoint.new(0, 1),
+                    NumberSequenceKeypoint.new(0.20, 0.74),
+                    NumberSequenceKeypoint.new(0.50, 0.36),
+                    NumberSequenceKeypoint.new(0.80, 0.74),
+                    NumberSequenceKeypoint.new(1, 1),
+                }),
+                Rotation = 90,
+            }, leftReflection)
         end
         return reflection
     end
@@ -183,8 +209,8 @@ return function(API)
         outer.Name = "VeloraPremiumGlassOuterEdge"
         outer.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         outer.Color = spec.EdgeColor or COLORS.Ruby
-        outer.Transparency = spec.EdgeTransparency or 0.40
-        outer.Thickness = spec.EdgeThickness or 1.65
+        outer.Transparency = spec.EdgeTransparency or 0.74
+        outer.Thickness = spec.EdgeThickness or 1
         ensureEdgeGradient(outer, spec.EdgeRotation or 28)
 
         local inner = object:FindFirstChild("GlowRim")
@@ -192,35 +218,35 @@ return function(API)
             inner = ensureStroke(object, "VeloraPremiumGlassInnerEdge")
         end
         inner.Color = spec.InnerColor or COLORS.ReflectionSoft
-        inner.Transparency = spec.InnerTransparency or 0.58
-        inner.Thickness = spec.InnerThickness or 0.9
+        inner.Transparency = spec.InnerTransparency or 0.84
+        inner.Thickness = spec.InnerThickness or 0.75
         inner.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         ensureEdgeGradient(inner, (spec.EdgeRotation or 28) + 180)
 
         local halo = object:FindFirstChild("GlowHalo")
         if halo and halo:IsA("UIStroke") then
-            halo.Color = spec.HaloColor or COLORS.RubyDark
-            halo.Transparency = spec.HaloTransparency or 0.91
-            halo.Thickness = spec.HaloThickness or 3
+            halo.Color = spec.HaloColor or Color3.fromRGB(20, 5, 10)
+            halo.Transparency = spec.HaloTransparency or 0.98
+            halo.Thickness = spec.HaloThickness or 2.2
         end
 
-        addTopReflection(object, spec.ReflectionInset, spec.ReflectionTransparency)
+        addPanelReflections(object, spec.ReflectionInset, spec.ReflectionTransparency)
     end
 
     local function styleInset(object, stronger)
         if not object or not object:IsA("GuiObject") then return end
         setSurface(object, {
-            BackgroundColor = stronger and COLORS.Wine or Color3.fromRGB(20, 10, 13),
-            BackgroundTransparency = stronger and 0.08 or 0.16,
+            BackgroundColor = stronger and Color3.fromRGB(20, 7, 13) or Color3.fromRGB(16, 8, 11),
+            BackgroundTransparency = stronger and 0.15 or 0.24,
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, stronger and Color3.fromRGB(61, 23, 31) or Color3.fromRGB(47, 24, 29)),
-                ColorSequenceKeypoint.new(0.36, Color3.fromRGB(25, 11, 15)),
-                ColorSequenceKeypoint.new(1, COLORS.Smoke),
+                ColorSequenceKeypoint.new(0, stronger and Color3.fromRGB(49, 14, 26) or Color3.fromRGB(32, 15, 21)),
+                ColorSequenceKeypoint.new(0.36, Color3.fromRGB(20, 9, 14)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 5, 7)),
             }),
             Transparency = NumberSequence.new({
-                NumberSequenceKeypoint.new(0, 0.16),
-                NumberSequenceKeypoint.new(0.52, 0.38),
-                NumberSequenceKeypoint.new(1, 0.18),
+                NumberSequenceKeypoint.new(0, 0.30),
+                NumberSequenceKeypoint.new(0.52, 0.52),
+                NumberSequenceKeypoint.new(1, 0.32),
             }),
             Rotation = 108,
         })
@@ -229,10 +255,23 @@ return function(API)
         if not edge then edge = ensureStroke(object, "VeloraPremiumInsetEdge") end
         edge.Name = "VeloraPremiumInsetEdge"
         edge.Color = stronger and COLORS.RubyBright or COLORS.ReflectionSoft
-        edge.Transparency = stronger and 0.33 or 0.52
-        edge.Thickness = stronger and 1.25 or 1
+        edge.Transparency = stronger and 0.62 or 0.84
+        edge.Thickness = stronger and 1.1 or 0.75
         edge.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         ensureEdgeGradient(edge, 34)
+
+        local rim = object:FindFirstChild("GlowRim")
+        if rim and rim:IsA("UIStroke") then
+            rim.Color = COLORS.ReflectionSoft
+            rim.Transparency = stronger and 0.72 or 0.92
+            rim.Thickness = 0.8
+        end
+        local halo = object:FindFirstChild("GlowHalo")
+        if halo and halo:IsA("UIStroke") then
+            halo.Color = Color3.fromRGB(24, 5, 11)
+            halo.Transparency = stronger and 0.92 or 0.98
+            halo.Thickness = stronger and 2.4 or 1.8
+        end
     end
 
     local buttonHoverState = setmetatable({}, {__mode = "k"})
@@ -244,20 +283,21 @@ return function(API)
         local isPlay = kind == "play"
         local isCard = kind == "card"
         local isHeader = kind == "header"
+        local isDrawer = kind == "drawer"
         local hasOwnText = button.Text ~= ""
 
         if isPlay then
             button.BackgroundColor3 = COLORS.Ruby
-            button.BackgroundTransparency = 0.02
+            button.BackgroundTransparency = 0.03
         elseif isCard then
-            button.BackgroundColor3 = Color3.fromRGB(27, 12, 16)
-            button.BackgroundTransparency = math.min(button.BackgroundTransparency, 0.14)
+            button.BackgroundColor3 = Color3.fromRGB(22, 9, 14)
+            button.BackgroundTransparency = math.max(button.BackgroundTransparency, 0.24)
         elseif isHeader then
-            button.BackgroundColor3 = Color3.fromRGB(23, 10, 13)
-            button.BackgroundTransparency = 0.12
+            button.BackgroundColor3 = Color3.fromRGB(19, 8, 12)
+            button.BackgroundTransparency = 0.20
         else
-            button.BackgroundColor3 = Color3.fromRGB(29, 12, 17)
-            button.BackgroundTransparency = math.min(button.BackgroundTransparency, 0.16)
+            button.BackgroundColor3 = Color3.fromRGB(24, 9, 15)
+            button.BackgroundTransparency = isDrawer and 0.22 or 0.20
         end
 
         -- Icon-only buttons can carry a true glossy surface gradient without
@@ -279,14 +319,14 @@ return function(API)
                 surface.Rotation = 118
             else
                 surface.Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0, Color3.fromRGB(64, 31, 38)),
-                    ColorSequenceKeypoint.new(0.38, Color3.fromRGB(33, 15, 20)),
-                    ColorSequenceKeypoint.new(1, Color3.fromRGB(12, 7, 9)),
+                    ColorSequenceKeypoint.new(0, Color3.fromRGB(43, 18, 27)),
+                    ColorSequenceKeypoint.new(0.38, Color3.fromRGB(25, 10, 16)),
+                    ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 6, 8)),
                 })
                 surface.Transparency = NumberSequence.new({
-                    NumberSequenceKeypoint.new(0, 0.16),
-                    NumberSequenceKeypoint.new(0.48, 0.36),
-                    NumberSequenceKeypoint.new(1, 0.16),
+                    NumberSequenceKeypoint.new(0, 0.28),
+                    NumberSequenceKeypoint.new(0.48, 0.48),
+                    NumberSequenceKeypoint.new(1, 0.26),
                 })
                 surface.Rotation = 112
             end
@@ -294,34 +334,55 @@ return function(API)
 
         local edge = findPrimaryStroke(button, "VeloraPremiumButtonEdge", "VeloraPremiumButtonOuter")
         if not edge then edge = ensureStroke(button, "VeloraPremiumButtonEdge") end
+        local selectedCard = false
+        if isCard then
+            selectedCard = button:GetAttribute("VeloraPremiumSelectedCard")
+            if selectedCard == nil then
+                selectedCard = edge.Transparency <= 0.40
+                button:SetAttribute("VeloraPremiumSelectedCard", selectedCard)
+            end
+        end
         edge.Name = "VeloraPremiumButtonEdge"
         edge.Color = isPlay and COLORS.Reflection or COLORS.ReflectionSoft
-        edge.Transparency = isPlay and 0.17 or (isCard and math.min(edge.Transparency, 0.50) or 0.43)
-        edge.Thickness = isPlay and 1.55 or (isCard and 1 or 1.2)
+        edge.Transparency = isPlay and 0.25
+            or (isCard and (selectedCard and 0.40 or 0.88))
+            or (isHeader and 0.76)
+            or (isDrawer and 0.80)
+            or 0.72
+        edge.Thickness = isPlay and 1.45 or (isCard and (selectedCard and 1.1 or 0.75) or 0.9)
         edge.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         ensureEdgeGradient(edge, isPlay and 18 or 34)
 
         local outer
-        if not isCard then
+        if isPlay then
             outer = ensureStroke(button, "VeloraPremiumButtonOuter")
-            outer.Color = isPlay and COLORS.RubyBright or COLORS.RubyDark
-            outer.Transparency = isPlay and 0.70 or 0.86
-            outer.Thickness = isPlay and 4.4 or 2.2
+            outer.Color = COLORS.RubyBright
+            outer.Transparency = 0.74
+            outer.Thickness = 4.2
             outer.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        else
+            local oldOuter = button:FindFirstChild("VeloraPremiumButtonOuter")
+            if oldOuter and oldOuter:IsA("UIStroke") then oldOuter.Enabled = false end
         end
 
         local glowRim = button:FindFirstChild("GlowRim")
         if glowRim and glowRim:IsA("UIStroke") then
             glowRim.Color = isPlay and COLORS.Reflection or COLORS.RubyBright
-            glowRim.Transparency = isPlay and 0.16 or 0.62
-            glowRim.Thickness = isPlay and 1.25 or 1
+            glowRim.Transparency = isPlay and 0.24 or 0.90
+            glowRim.Thickness = isPlay and 1.2 or 0.8
         end
         local glowHalo = button:FindFirstChild("GlowHalo")
         if glowHalo and glowHalo:IsA("UIStroke") then
             glowHalo.Color = COLORS.Ruby
-            glowHalo.Transparency = isPlay and 0.76 or 0.93
-            glowHalo.Thickness = isPlay and 5.2 or 2.8
+            glowHalo.Transparency = isPlay and 0.80 or 0.98
+            glowHalo.Thickness = isPlay and 5 or 1.8
         end
+
+        local hoverTransparency = isPlay and 0.12
+            or (isCard and (selectedCard and 0.24 or 0.62))
+            or (isHeader and 0.58)
+            or (isDrawer and 0.64)
+            or 0.54
 
         local existingHover = buttonHoverState[button]
         if existingHover then
@@ -329,18 +390,20 @@ return function(API)
             existingHover.Outer = outer
             existingHover.EdgeRest = edge.Transparency
             existingHover.OuterRest = outer and outer.Transparency
+            existingHover.EdgeHover = hoverTransparency
         else
             buttonHoverState[button] = {
                 Edge = edge,
                 Outer = outer,
                 EdgeRest = edge.Transparency,
                 OuterRest = outer and outer.Transparency,
+                EdgeHover = hoverTransparency,
             }
             button.MouseEnter:Connect(function()
                 local state = buttonHoverState[button]
                 if not state or not state.Edge.Parent then return end
                 TweenService:Create(state.Edge, TweenInfo.new(0.13), {
-                    Transparency = math.max(0.10, state.EdgeRest - 0.18),
+                    Transparency = state.EdgeHover,
                 }):Play()
                 if state.Outer and state.Outer.Parent then
                     TweenService:Create(state.Outer, TweenInfo.new(0.13), {
@@ -361,23 +424,20 @@ return function(API)
 
     local function styleInput(input)
         if not input or not input:IsA("TextBox") or input.BackgroundTransparency >= 0.90 then return end
-        input.BackgroundColor3 = Color3.fromRGB(21, 9, 13)
-        input.BackgroundTransparency = 0.13
+        input.BackgroundColor3 = Color3.fromRGB(18, 7, 12)
+        input.BackgroundTransparency = 0.22
 
         local edge = findPrimaryStroke(input, "VeloraPremiumInputEdge", "VeloraPremiumInputOuter")
         if not edge then edge = ensureStroke(input, "VeloraPremiumInputEdge") end
         edge.Name = "VeloraPremiumInputEdge"
         edge.Color = COLORS.ReflectionSoft
-        edge.Transparency = 0.38
-        edge.Thickness = 1.25
+        edge.Transparency = 0.74
+        edge.Thickness = 0.9
         edge.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         ensureEdgeGradient(edge, 26)
 
-        local outer = ensureStroke(input, "VeloraPremiumInputOuter")
-        outer.Color = COLORS.RubyDark
-        outer.Transparency = 0.86
-        outer.Thickness = 2.3
-        outer.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        local oldOuter = input:FindFirstChild("VeloraPremiumInputOuter")
+        if oldOuter and oldOuter:IsA("UIStroke") then oldOuter.Enabled = false end
     end
 
     local header = findParentByLabel(gui, "VELORA")
@@ -399,100 +459,102 @@ return function(API)
 
     styleGlassPanel(window, {
         BackgroundColor = COLORS.Ink,
-        BackgroundTransparency = 0.035,
+        BackgroundTransparency = 0.04,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(39, 15, 21)),
-            ColorSequenceKeypoint.new(0.28, Color3.fromRGB(16, 7, 10)),
-            ColorSequenceKeypoint.new(0.72, Color3.fromRGB(7, 4, 5)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(27, 8, 16)),
+            ColorSequenceKeypoint.new(0.28, Color3.fromRGB(12, 5, 8)),
+            ColorSequenceKeypoint.new(0.72, Color3.fromRGB(5, 4, 5)),
             ColorSequenceKeypoint.new(1, Color3.fromRGB(3, 2, 3)),
         }),
         Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.08),
-            NumberSequenceKeypoint.new(0.44, 0.24),
-            NumberSequenceKeypoint.new(1, 0.04),
+            NumberSequenceKeypoint.new(0, 0.15),
+            NumberSequenceKeypoint.new(0.44, 0.28),
+            NumberSequenceKeypoint.new(1, 0.09),
         }),
-        Rotation = 116,
+        Rotation = 118,
         EdgeColor = COLORS.RubyDark,
-        EdgeTransparency = 0.31,
-        EdgeThickness = 2.25,
-        InnerTransparency = 0.47,
-        InnerThickness = 0.85,
+        EdgeTransparency = 0.40,
+        EdgeThickness = 2.15,
+        InnerTransparency = 0.76,
+        InnerThickness = 0.75,
         ReflectionInset = 22,
-        ReflectionTransparency = 0.42,
+        ReflectionTransparency = 0.74,
     })
 
     styleGlassPanel(header, {
-        BackgroundColor = Color3.fromRGB(15, 7, 10),
-        BackgroundTransparency = 0.10,
+        BackgroundColor = Color3.fromRGB(12, 6, 9),
+        BackgroundTransparency = 0.16,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(61, 23, 31)),
-            ColorSequenceKeypoint.new(0.24, Color3.fromRGB(31, 12, 17)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 6, 8)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(37, 13, 22)),
+            ColorSequenceKeypoint.new(0.24, Color3.fromRGB(20, 8, 13)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 5, 7)),
         }),
         Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.13),
-            NumberSequenceKeypoint.new(0.50, 0.35),
-            NumberSequenceKeypoint.new(1, 0.17),
+            NumberSequenceKeypoint.new(0, 0.24),
+            NumberSequenceKeypoint.new(0.50, 0.44),
+            NumberSequenceKeypoint.new(1, 0.25),
         }),
         Rotation = 104,
-        EdgeTransparency = 0.36,
-        EdgeThickness = 1.7,
-        InnerTransparency = 0.50,
-        HaloTransparency = 0.91,
+        EdgeTransparency = 0.70,
+        EdgeThickness = 1.1,
+        InnerTransparency = 0.82,
+        InnerThickness = 0.7,
+        HaloTransparency = 0.98,
+        HaloThickness = 2,
         ReflectionInset = 15,
-        ReflectionTransparency = 0.36,
+        ReflectionTransparency = 0.82,
     })
 
     local panelSpec = {
-        BackgroundColor = Color3.fromRGB(12, 7, 9),
-        BackgroundTransparency = 0.12,
+        BackgroundColor = Color3.fromRGB(10, 6, 8),
+        BackgroundTransparency = 0.20,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(48, 23, 29)),
-            ColorSequenceKeypoint.new(0.34, Color3.fromRGB(23, 11, 15)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(7, 5, 6)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(34, 15, 21)),
+            ColorSequenceKeypoint.new(0.34, Color3.fromRGB(19, 9, 12)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(8, 5, 7)),
         }),
         Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.18),
-            NumberSequenceKeypoint.new(0.48, 0.40),
-            NumberSequenceKeypoint.new(1, 0.20),
+            NumberSequenceKeypoint.new(0, 0.28),
+            NumberSequenceKeypoint.new(0.48, 0.50),
+            NumberSequenceKeypoint.new(1, 0.30),
         }),
         Rotation = 112,
-        EdgeTransparency = 0.42,
-        EdgeThickness = 1.55,
-        InnerTransparency = 0.58,
-        InnerThickness = 0.85,
-        HaloTransparency = 0.93,
-        HaloThickness = 2.7,
+        EdgeTransparency = 0.76,
+        EdgeThickness = 0.9,
+        InnerTransparency = 0.86,
+        InnerThickness = 0.7,
+        HaloTransparency = 0.985,
+        HaloThickness = 2,
         ReflectionInset = 13,
-        ReflectionTransparency = 0.47,
+        ReflectionTransparency = 0.88,
     }
     styleGlassPanel(nav, panelSpec)
     styleGlassPanel(browser, panelSpec)
 
     styleGlassPanel(playerCard, {
-        BackgroundColor = Color3.fromRGB(16, 7, 11),
-        BackgroundTransparency = 0.075,
+        BackgroundColor = Color3.fromRGB(14, 6, 10),
+        BackgroundTransparency = 0.13,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(73, 25, 35)),
-            ColorSequenceKeypoint.new(0.25, Color3.fromRGB(38, 12, 19)),
-            ColorSequenceKeypoint.new(0.62, Color3.fromRGB(17, 8, 11)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 15, 26)),
+            ColorSequenceKeypoint.new(0.25, Color3.fromRGB(30, 9, 17)),
+            ColorSequenceKeypoint.new(0.62, Color3.fromRGB(13, 6, 9)),
             ColorSequenceKeypoint.new(1, Color3.fromRGB(7, 4, 6)),
         }),
         Transparency = NumberSequence.new({
-            NumberSequenceKeypoint.new(0, 0.10),
-            NumberSequenceKeypoint.new(0.40, 0.31),
-            NumberSequenceKeypoint.new(1, 0.13),
+            NumberSequenceKeypoint.new(0, 0.18),
+            NumberSequenceKeypoint.new(0.40, 0.38),
+            NumberSequenceKeypoint.new(1, 0.22),
         }),
         Rotation = 118,
         EdgeColor = COLORS.Ruby,
-        EdgeTransparency = 0.30,
-        EdgeThickness = 1.85,
-        InnerTransparency = 0.40,
-        InnerThickness = 1.05,
-        HaloTransparency = 0.89,
-        HaloThickness = 3.2,
+        EdgeTransparency = 0.68,
+        EdgeThickness = 1.15,
+        InnerTransparency = 0.78,
+        InnerThickness = 0.8,
+        HaloTransparency = 0.96,
+        HaloThickness = 2.6,
         ReflectionInset = 14,
-        ReflectionTransparency = 0.30,
+        ReflectionTransparency = 0.74,
     })
 
     styleInput(searchBox)
@@ -532,7 +594,7 @@ return function(API)
             if descendant:IsA("Frame") and descendant.BackgroundTransparency < 0.90
                 and descendant.Size.Y.Offset >= 45 and descendant.Size.Y.Offset <= 58
             then
-                styleInset(descendant, true)
+                styleInset(descendant, false)
             end
         end
     end
@@ -542,24 +604,26 @@ return function(API)
     if drawer then
         styleGlassPanel(drawer, {
             BackgroundColor = Color3.fromRGB(8, 4, 6),
-            BackgroundTransparency = 0.035,
+            BackgroundTransparency = 0.08,
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(54, 18, 27)),
-                ColorSequenceKeypoint.new(0.30, Color3.fromRGB(21, 8, 12)),
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(38, 11, 21)),
+                ColorSequenceKeypoint.new(0.30, Color3.fromRGB(18, 7, 11)),
                 ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 3, 4)),
             }),
             Transparency = NumberSequence.new({
-                NumberSequenceKeypoint.new(0, 0.12),
-                NumberSequenceKeypoint.new(0.50, 0.30),
-                NumberSequenceKeypoint.new(1, 0.10),
+                NumberSequenceKeypoint.new(0, 0.22),
+                NumberSequenceKeypoint.new(0.50, 0.42),
+                NumberSequenceKeypoint.new(1, 0.20),
             }),
             Rotation = 112,
-            EdgeTransparency = 0.27,
-            EdgeThickness = 1.8,
-            InnerTransparency = 0.42,
-            HaloTransparency = 0.88,
+            EdgeTransparency = 0.66,
+            EdgeThickness = 1.15,
+            InnerTransparency = 0.78,
+            InnerThickness = 0.8,
+            HaloTransparency = 0.96,
+            HaloThickness = 2.2,
             ReflectionInset = 17,
-            ReflectionTransparency = 0.34,
+            ReflectionTransparency = 0.76,
         })
 
         for _, descendant in ipairs(drawer:GetDescendants()) do
@@ -690,7 +754,7 @@ return function(API)
     end)
 
     API.PremiumGlass = {
-        Version = "0.1.0-test",
+        Version = "0.2.0-test",
         Branch = "glassmorphism-redesign-test",
     }
     return true
