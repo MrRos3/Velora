@@ -1,7 +1,7 @@
--- Velora 0.10.11 Nova compact player boot.
+-- Velora 0.10.12 Nova executor-safe compact player boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/5e1cfeaf90558faf4b01a01b4151e89b32ab9367/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@5e1cfeaf90558faf4b01a01b4151e89b32ab9367/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/722a82fdff763869a79dc86b39670ccbaebc5315/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@722a82fdff763869a79dc86b39670ccbaebc5315/release.lua",
 }
 
 local function fail(reason)
