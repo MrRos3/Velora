@@ -2,6 +2,7 @@
 return {
     {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
     {Id="la-petite-fille-de-la-mer",Name="La petite fille de la mer",Artist="Vangelis",BPM=80,Categories={"Famous","Soundtrack","Ambient","Piano","Emotional","Complete"},File="songs/LaPetiteFilleDeLaMer.lua"},
+    {Id="still-dre",Name="Still D.R.E.",Artist="Dr. Dre feat. Snoop Dogg",BPM=96,Categories={"Famous","Hip-Hop","Rap","Piano","Complete"},File="songs/StillDRE.lua"},
     {Id="hit-the-road-jack-tribute",Name="Hit The Road Jack — Velora Blues Tribute",Artist="Velora tribute to Ray Charles",BPM=86,Categories={"Famous","Blues","Piano","Groove","Tribute","Complete"},File="songs/HitTheRoadJackTribute.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
