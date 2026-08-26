@@ -119,8 +119,8 @@ local function bindClickSounds(api)
     local function playClick()
         local sound = Instance.new("Sound")
         sound.Name = "VeloraClick"
-        sound.SoundId = "rbxassetid://4307186075"
-        sound.Volume = 0.22
+        sound.SoundId = "rbxassetid://17582213219"
+        sound.Volume = 0.12
         sound.Parent = SoundService
         sound:Play()
         sound.Ended:Connect(function()
