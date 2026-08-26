@@ -17,24 +17,6 @@ loadstring(game:HttpGet(
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/loader.lua"
 ))()
 ```
-
-## Nova 0.10.18
-
-- Velora now uses a smoked soft-black glass palette with restrained crimson accents.
-- Discover, search, metadata, and navigation labels render without dark gradients and remain fully readable.
-- The palette is opaque smoked black, so controls behind it cannot bleed through.
-- Album tiles and the title icon use subdued black-and-red treatments instead of bright violet blocks.
-- Minimize and restore keep the stationary library beneath the moving player, producing one continuous reveal without an empty shell or sudden pop.
-- Velora does not blur the Roblox world behind the interface.
-- Opening and closing use a soft scale-and-fade transition.
-- The header now reads MADE BY SALTY and the Nova interface badge has been removed.
-- Lucide control icons are bundled into Velora, so a missing external repository cannot leave blank buttons.
-- Executor-safe UI state with a much lower compiler register footprint.
-- Compact player-only mode with a Lucide minimize/restore control.
-- Long song titles and metadata stay clipped and move in a smooth loop.
-- Playback status borders size themselves to READY, PLAYING, PAUSED, or DONE.
-- Hover scaling and hover motion have been removed from buttons and song cards.
-
 ## Music sources
 
 Arrangements are generated from credited MIDI editions and scores. Source and licensing details are stored inside each song file. Love Story now uses Anastazja Szczepiek's complete five-page piano score. Owner-supplied MIDI conversions include Ievan Polkka, Kamado Tanjiro no Uta, Erika, Anlatamam, and the opening section of Succession.
