@@ -4,7 +4,7 @@ return {
     {Id="la-petite-fille-de-la-mer",Name="La petite fille de la mer",Artist="Vangelis",BPM=80,Categories={"Famous","Soundtrack","Ambient","Piano","Emotional","Complete"},File="songs/LaPetiteFilleDeLaMer.lua"},
     {Id="salvatore-lana-del-rey",Name="Salvatore",Artist="Lana Del Rey",BPM=58,Categories={"Famous","Lana Del Rey","Pop","Piano","Cinematic","Emotional","Complete"},File="songs/Salvatore.lua"},
     {Id="idea-22",Name="Idea 22",Artist="Gibran Alcocer",BPM=104,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Complete"},File="songs/Idea22.lua"},
-    {Id="old-doll-mad-father",Name="Old Doll — Mad Father OST #14",Artist="Mad Father OST",BPM=105,Categories={"Famous","Game OST","Horror","Mad Father","Piano","Emotional","Complete"},File="songs/OldDollMadFather.lua"},
+    {Id="la-foule-edith-piaf",Name="La Foule",Artist="Édith Piaf",BPM=170,Categories={"Famous","French","Chanson","Waltz","Édith Piaf","Piano","Dramatic","Complete"},File="songs/LaFoule.lua"},
     {Id="uae-national-anthem",Name="Ishy Bilady — UAE National Anthem",Artist="United Arab Emirates",BPM=125,Categories={"Famous","National Anthem","UAE","Patriotic","Piano","Complete"},File="songs/UAENationalAnthem.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
