@@ -1,95 +1,123 @@
--- Velora 0.10.6 complete 50-measure Succession piano arrangement.
--- Measures 1-16 preserve the repository owner's supplied MIDI conversion.
--- Measures 17-50 were transcribed from the complete three-page piano score.
+-- Velora 0.10.20 conversion from a MIDI supplied by the repository owner.
+-- Source file: succession-piano-version.mid
+-- Source SHA-256: CD5F119B559F625FB49510291B9FB760FFBBE02D8A7F45B571193C5F5C13F6B9
+-- Corrected 61-key mapping; all non-percussion piano layers are retained.
+-- Tempo changes are baked into the timing grid; simultaneous duplicate pitches are merged.
 return {
     Id="succession-main-title",
     Name="Succession — Main Title Theme",
     Artist="Nicholas Britell",
-    BPM=72,
-    StepsPerBeat=12,
+    BPM=144,
+    StepsPerBeat=8,
     Complete=true,
-    Measures=50,
-    DurationSeconds=83.33,
-    Arranger="Fionn Murphy",
-    Source="https://musescore.com/finnstrike7/scores/7385645",
-    SourceLicense="All rights reserved",
-    Categories={"Famous","Soundtrack","TV","Dark","Complete"},
+    DurationSeconds=83.281,
+    OriginalDurationSeconds=83.271,
+    TempoEvents=1,
+    TimeSignatures={"2/2"},
+    Source="User-supplied MIDI export from MuseScore.com",
+    SourceFile="succession-piano-version.mid",
+    SourceLicense="User-provided source file; converted for Velora at the repository owner's request.",
+    Categories={"Famous","Soundtrack","TV","Dark","Piano","Complete"},
     Notes=[=[
-[671$] - - $ | - - [$80xVb] - | - $ - - | [2$80e] - - $
-- - [$80e] - | - [$H] j - | [47$%k] - - [$j] | - - [$8qeh] -
-- [$g] - - | [2$8qeD] - - [$f] | - - [$8qeg] - | - [$f] - -
-[274$] - - [$x] | - - [$9qez] - | - [$l] - - | [2$9qeJ] - - [$k]
-- - [$9qel] - | - [$k] - - | [37$5n] - - [$b] | - - [$70WV] -
-- [$c] - - | [2$70Wx] - - [$z] | - - [$70Wl] - | - [$k] - -
-[671$] - - $ | - - [$80xVb] - | - $ - - | [2$80e] - - $
-- - [$80e] - | - [$H] j - | [47$%k] - - [$j] | - - [$8qeh] -
-- [$g] - - | [2$8qeD] - - [$f] | - - [$8qeg] - | - [$f] - -
-[274$] - - [$x] | - - [$9qez] - | - [$l] - - | [2$9qeJ] - - [$k]
-- - [$9qel] - | - [$k] - - | [37$5n] - - [$b] | - - [$WruV] -
-- [$c] - - | [2$Wrux] - - [2$z] | - - [2$Wrul] - | - [2$k] - -
-[671$] - - $ | - - [$80xVb] - | - $ - - | [2$5Yos] - - $
-- - [$80e] - | - $ - - | [4%7$] - - $ | - - [$8qe] -
-- $ - - | [2@$tYO] - - $ | - - [$8qe] - | - $ - -
-[274$] - - $ | - - [$9qe] - | - $ - - | [2$8Osd] - - $
-- - [$9qe] - | - $ - - | [37$5] - - $ | - - [$70W] -
-- $ - - | [2$7oad] - - $ | - - [$70W] - | - $ - -
-[6^780e] - - $ | - - [$80e] - | - $ - - | [2$5Yos] - - $
-- - [$80e] - | - [$k] l - | [47Wez] - - [$l] | - - [$8qeJ] -
-- [$H] - - | [2$8tYG] - - [$h] | - - [$8qeH] - | - [$h] - -
-[27eti] - - [$v] | - - [$9qec] - | - [$Z] - - | [2$9tyL] - - [$z]
-- - [$9qeZ] - | - [$z] - - | [37Wyo] - - [$z] | - - [$70Wl] -
-- [$k] - - | [2$7ryH] - - [$h] | - - [$70Wg] - | - [$D] - -
-[158t] - - - | - - - - | - - - - | t - - y
-- - Y - | - - - - | [158Y] - - - | - - t -
-- - - - | Y - - i | - - o - | - - - -
-[148i] - - - | - - W - | - - - - | i - - o
-- - O - | - - - - | [158o] - - - | - - - -
-- - - - | - - - o | - - s - | - - - -
-[148yiP] - - - | - - - - | - - - - | - - - -
-- - O - | - - - - | [158to] - - - | - - - -
-- - - - | - - - o | - - s - | - - - -
-[148yiP] - - - | - - - - | - - - - | - - - -
-- - [iPd] - | - - - - | [158tos] - - - | - - - -
-- - - - | - - - - | - - i - | - Y - -
-[%to] - - - | - - i - | - - - - | Y - - -
-- - - - | - - - - | [%Os] - - - | - - - -
-- - - - | [Pd] - - - | - - - - | - - - -
-[%sD] - - - | - - - - | - - - - | [sDH] - - -
-- - - - | - - - - | [5osdh] - - - | - - - -
-- - - - | [5oadh] - - - | - - - - | - [5oh] - -
-[1DhlZ] - - 5 | - - 8 - | - 5 - - | 1 - - 5
-- - 8 - | - 5 - - | [1DhlZ] - - 5 | - - 8 -
-- 5 - - | 1 - - 5 | - - 8 - | - 5 - -
-[1Hlc] - - 5 | - - 8 - | - 5 - - | 1 - - 5
-- - 8 - | - 5 - - | [1hJZv] - - 5 | - - 8 -
-- 5 - - | 1 - - 5 | - - 8 - | - 5 - -
-[1PdghJ] - - 5 | - - 8 - | - 5 - - | 1 - - 5
-- - 8 - | - 5 - - | [1sDhl] - - 5 | - - 8 -
-- 5 - - | 1 - - 5 | - - 8 - | - 5 - -
-[1dgJ] - - 5 | - - 8 - | - 5 - - | 1 - - 5
-- - 8 - | - 5 - - | [1sDh] - - 5 | - - 8 -
-- 5 - - | ^ - - 4 | - - ^ - | - 4 - -
-[%sDH] - - @ | - - % - | - @ - - | % - - @
-- - % - | - @ - - | [%DHl] - - @ | - - % -
-- @ - - | % - - @ | - - % - | - @ - -
-[%HlZ] - - @ | - - % - | - @ - - | % - - @
-- - % - | - @ - - | [5dhlz] - - 2 | - - 5 -
-- 2 - - | [5dhkz] - - 2 | - - 5 - | - 2 - -
-[18] - - - | - - [sDhl] - | - - - - | [18] - - -
-- - [sDhl] - | - - - - | [18sDhl] - - - | - - [sDhl] -
-- - - - | [18] - - - | - - [sDhl] - | - k l -
-[%z] - - l | - - [WtYJ] - | - H - - | [WtYG] - - h
-- - [WtYH] - | - h - - | 4 - - v | - - [qWtyc] -
-- Z - - | [qWtyL] - - z | - - [qWtyZ] - | - z - -
-[5z] - - l | - - [wtyok] - | - H - - | [wtyoh] - - g
-- - [wryoD] - | - d - - | [18Gh] - - - | - - [wtYDhl] -
-- - - - | [wtYDhl] - - - | - - [wtY] - | - k l -
-[%z] - - l | - - [WtYJ] - | - H - - | [WtYG] - - h
-- - [WtYH] - | - h - - | 4 - - v | - - [qWtyc] -
-- Z - - | [qWtyL] - - z | - - [qWtyZ] - | - z - -
-[5z] - - l | - - [wtyok] - | - H - - | [wtyoh] - - g
-- - [wryoD] - | - d - - | [518Gh] - - - | - - [(wtDhl] -
-- - - - | - - - - | - - - - | - - - -
+1 - - - | - - - - | [wtYlZvm] - - - | - - - -
+[wtY] - - - | - - - - | [wtY] - - - | k - l -
+[%z] - - - | l - - - | [WtYJ] - - - | H - - -
+[WtYG] - - - | h - - - | [WtYH] - - - | h - - -
+4 - - - | v - - - | [qWtyc] - - - | Z - - -
+[qWtyL] - - - | z - - - | [qWtyZ] - - - | z - - -
+[5z] - - - | m - - - | [wtyon] - - - | V - - -
+[wtyov] - - - | c - - - | [wryoZ] - - - | z - - -
+[1C] v - - | - - - - | [wtYlZvm] - - - | - - - -
+[wtY] - - - | - - - - | [wtY] - - - | k - l -
+[%z] - - - | l - - - | [WtYJ] - - - | H - - -
+[WtYG] - - - | h - - - | [WtYH] - - - | h - - -
+4 - - - | v - - - | [qWtyc] - - - | Z - - -
+[qWtyL] - - - | z - - - | [qWtyZ] - - - | z - - -
+[5z] - - - | m - - - | [wtyon] - - - | V - - -
+[wtyov] - - - | c - - - | [wryoZ] - - - | z - - -
+1 - - - | - - - - | [wtYlZvm] - - - | - - - -
+[wtYsDhl] - - - | - - - - | [wtY] - - - | - - - -
+% - - - | - - - - | [WtY] - - - | - - - -
+[WtYOsDH] - - - | - - - - | [WtY] - - - | - - - -
+4 - - - | - - - - | [qWty] - - - | - - - -
+[qWtyHlcV] - - - | - - - - | [qWty] - - - | - - - -
+5 - - - | - - - - | [wtyo] - - - | - - - -
+[wtyohlzv] - - - | - - - - | [wryo] - - - | - - - -
+1 - - - | - - - - | [wtY] - - - | - - - -
+[wtYsDhl] - - - | - - - - | [wtY] - - - | k - l -
+[%z] - - - | l - - - | J - - - | H - - -
+[YOsDG] - - - | h - - - | H - - - | h - - -
+[4i] - - - | v - - - | c - - - | Z - - -
+[iOsdL] - - - | z - - - | Z - - - | z - - -
+[5o] - - - | z - - - | l - - - | k - - -
+[yosdH] - - - | h - - - | g - - - | D - - -
+[158t] - - - | t - - - | y - - - | Y - - -
+t - - - | [ty] - - - | [yY] - - - | Y - - -
+[158tY] - - - | t - - - | [ty] - - - | Y - - -
+[tY] - - - | [ti] - - - | [yo] - - - | Y - - -
+[148ti] - - - | t - - - | [Wy] - - - | Y - - -
+[ti] - - - | [to] - - - | [yO] - - - | Y - - -
+[158to] - - - | t - - - | y - - - | Y - - -
+t - - - | [to] - - - | [ys] - - - | Y - - -
+[148tyiP] - - - | t - - - | y - - - | Y - - -
+t - - - | t - - - | [yO] - - - | Y - - -
+[158to] - - - | t - - - | y - - - | Y - - -
+t - - - | [to] - - - | [ys] - - - | Y - - -
+[148tyiP] - - - | t - - - | y - - - | Y - - -
+t - - - | t - - - | [yiPd] - - - | Y - - -
+[158tos] - - - | t - - - | y - - - | Y - - -
+t - - - | t - - - | [yi] - - - | Y - - -
+[%to] - - - | t - - - | [ti] - - - | t - - -
+[tY] - - - | t - - - | [tY] - - - | t - - -
+[%tYOs] - - - | t - - - | [ty] - - - | t - - -
+[tPd] - - - | t - - - | t - - - | t - - -
+[%tsD] - - - | - - - - | E - - - | - - - -
+[WsDH] - - - | - - - - | - - - - | - - - -
+[5wosdh] - - - | w - - - | t - - - | w - - -
+[5woadh] - - - | w - - - | t - - - | [5woh] - - -
+[158tDhlZ] - - - | t - - - | y - - - | Y - - -
+t - - - | t - - - | y - - - | Y - - -
+[158tDhlZ] - - - | t - - - | y - - - | Y - - -
+t - - - | t - - - | y - - - | Y - - -
+[158igHlc] - - - | i - - - | o - - - | O - - -
+[iO] - - - | i - - - | o - - - | O - - -
+[158tohlZv] - - - | t - - - | y - - - | Y - - -
+[to] - - - | t - - - | [ys] - - - | Y - - -
+[158yiPghJ] - - - | [yi] - - - | [yi] - - - | [yi] - - -
+[yi] - - - | [yi] - - - | [yiO] - - - | [yi] - - -
+[158tosDhl] - - - | t - - - | y - - - | Y - - -
+[to] - - - | t - - - | [ys] - - - | Y - - -
+[158yiPgJz] - - - | [yi] - - - | [yi] - - - | [yi] - - -
+[yi] - - - | [yi] - - - | [yid] - - - | [yi] - - -
+[158YoshlZ] - - - | [Yo] - - - | [Yo] - - - | [Yo] - - -
+[%^Yo] - - - | [Yo] - - - | [Yiog] - - - | [YoD] - - -
+[%tohlZ] - - - | t - - - | [tig] - - - | t - - -
+[tYD] - - - | t - - - | t - - - | t - - -
+[@%tYDHlZ] - - - | [tY] - - - | [tyYd] - - - | [tY] - - -
+[tYs] - - - | [tY] - - - | [tY] - - - | [tY] - - -
+[%tYOsHlZV] - - - | [tYO] - - - | [EtYOP] - - - | [tYO] - - -
+[WtYO] - - - | [tYO] - - - | [tYO] - - - | [tYO] - - -
+[5wtyodhlz] - - - | [tyo] - - - | [tyo] - - - | [tyo] - - -
+[5wryodhkz] - - - | [ryo] - - - | [ryo] - - - | [ryo] - - -
+[18] - - - | - - - - | [lZvm] - - - | - - - -
+[18] - - - | - - - - | [lZvm] - - - | - - - -
+[18] - - - | - - - - | [lZvm] - - - | - - - -
+[18] - - - | - - - - | - - - - | k - l -
+[%z] - - - | l - - - | [WtYJ] - - - | H - - -
+[WtYG] - - - | h - - - | [WtYH] - - - | h - - -
+4 - - - | v - - - | [qWtyc] - - - | Z - - -
+[qWtyL] - - - | z - - - | [qWtyZ] - - - | z - - -
+[5z] - - - | m - - - | [wtyon] - - - | V - - -
+[wtyov] - - - | c - - - | [wryoZ] - - - | z - - -
+[1C] v - - | - - - - | [wtYlZvm] - - - | - - - -
+[wtY] - - - | - - - - | [wtY] - - - | k - l -
+[%z] - - - | l - - - | [WtYJ] - - - | H - - -
+[WtYG] - - - | h - - - | [WtYH] - - - | h - - -
+4 - - - | v - - - | [qWtyc] - - - | Z - - -
+[qWtyL] - - - | z - - - | [qWtyZ] - - - | z - - -
+[5z] - - - | m - - - | [wtyon] - - - | V - - -
+[wtyov] - - - | c - - - | [wryoZ] - - - | z - - -
+[1C] v - - | - - - - | [(wtlZvm] - - - | - - - -
+- - - - | - - - - | - - - - | - - -
 ]=],
 }
-
