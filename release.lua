@@ -2,10 +2,6 @@
     Velora v0.10.18 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
-    This implementation is independently written. It does not copy or adapt
-    source code from TALENTLESS. Its design focuses on the same broad product
-    category: a polished piano-song browser and playback workstation.
-
     Client behavior:
     - In environments with keypress/keyrelease or VirtualInputManager access,
       Velora can optionally send piano keyboard input.
