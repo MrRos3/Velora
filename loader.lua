@@ -1,12 +1,12 @@
--- Velora 0.10.19 Nova loader.
+-- Velora 0.10.20 Nova loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/release.lua?v=0.10.19",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/release.lua?v=0.10.19",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/release.lua?v=0.10.20",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/release.lua?v=0.10.20",
 }
 
 local PATCH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/patches.lua?v=0.10.19",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/patches.lua?v=0.10.19",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/patches.lua?v=0.10.20",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/patches.lua?v=0.10.20",
 }
 
 local function fail(reason)
