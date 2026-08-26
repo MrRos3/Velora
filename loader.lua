@@ -41,8 +41,12 @@ local WAVE2_URLS = {
 -- has approved the smoked-glass redesign in Roblox.
 local GLASS_TEST_REF = "glassmorphism-redesign-test"
 local GLASS_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-3",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-3",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-4",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-4",
+}
+local GLASS_TUNE_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-1",
 }
 
 local function fail(reason)
@@ -178,8 +182,9 @@ installModule(WAVE2_URLS, "wave 2", api, function(source)
     return source
 end)
 
--- Load last so the premium glass treatment sits above every existing visual
--- upgrade without replacing the layout or playback implementation.
+-- Load the glass treatment last, then apply a small ruby-edge visibility pass.
+-- This keeps the approved dark default while making every control boundary readable.
 installModule(GLASS_URLS, "premium glass visual layer", api)
+installModule(GLASS_TUNE_URLS, "premium ruby border tune", api)
 
 return api
