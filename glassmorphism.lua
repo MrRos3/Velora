@@ -31,9 +31,9 @@ return function(API)
 
     local COLORS = {
         Ink = Color3.fromRGB(4, 3, 4),
-        Smoke = Color3.fromRGB(8, 4, 7),
-        Wine = Color3.fromRGB(20, 6, 12),
-        WineLift = Color3.fromRGB(36, 9, 20),
+        Smoke = Color3.fromRGB(6, 3, 5),
+        Wine = Color3.fromRGB(17, 5, 10),
+        WineLift = Color3.fromRGB(31, 7, 17),
         RubyDark = Color3.fromRGB(92, 12, 31),
         Ruby = Color3.fromRGB(198, 38, 68),
         RubyBright = Color3.fromRGB(226, 70, 96),
@@ -236,12 +236,12 @@ return function(API)
     local function styleInset(object, stronger)
         if not object or not object:IsA("GuiObject") then return end
         setSurface(object, {
-            BackgroundColor = stronger and Color3.fromRGB(16, 5, 10) or Color3.fromRGB(13, 5, 9),
+            BackgroundColor = stronger and Color3.fromRGB(13, 4, 8) or Color3.fromRGB(10, 4, 7),
             BackgroundTransparency = stronger and 0.13 or 0.21,
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, stronger and Color3.fromRGB(42, 10, 24) or Color3.fromRGB(27, 10, 18)),
-                ColorSequenceKeypoint.new(0.36, Color3.fromRGB(16, 6, 12)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(6, 3, 6)),
+                ColorSequenceKeypoint.new(0, stronger and Color3.fromRGB(34, 7, 20) or Color3.fromRGB(21, 7, 15)),
+                ColorSequenceKeypoint.new(0.36, Color3.fromRGB(12, 4, 9)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(4, 2, 4)),
             }),
             Transparency = NumberSequence.new({
                 NumberSequenceKeypoint.new(0, 0.30),
@@ -458,13 +458,13 @@ return function(API)
     local browser = searchBox and searchBox.Parent
 
     styleGlassPanel(window, {
-        BackgroundColor = Color3.fromRGB(3, 2, 4),
+        BackgroundColor = Color3.fromRGB(2, 1, 3),
         BackgroundTransparency = 0.025,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(22, 5, 13)),
-            ColorSequenceKeypoint.new(0.28, Color3.fromRGB(9, 3, 7)),
-            ColorSequenceKeypoint.new(0.72, Color3.fromRGB(4, 3, 5)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(2, 2, 3)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(17, 3, 10)),
+            ColorSequenceKeypoint.new(0.28, Color3.fromRGB(6, 2, 5)),
+            ColorSequenceKeypoint.new(0.72, Color3.fromRGB(3, 2, 4)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(1, 1, 2)),
         }),
         Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.15),
@@ -482,12 +482,12 @@ return function(API)
     })
 
     styleGlassPanel(header, {
-        BackgroundColor = Color3.fromRGB(9, 4, 7),
+        BackgroundColor = Color3.fromRGB(7, 3, 6),
         BackgroundTransparency = 0.13,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(31, 9, 20)),
-            ColorSequenceKeypoint.new(0.24, Color3.fromRGB(16, 5, 11)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(6, 3, 6)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 6, 16)),
+            ColorSequenceKeypoint.new(0.24, Color3.fromRGB(12, 3, 8)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(4, 2, 4)),
         }),
         Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.24),
@@ -506,12 +506,12 @@ return function(API)
     })
 
     local panelSpec = {
-        BackgroundColor = Color3.fromRGB(8, 4, 7),
+        BackgroundColor = Color3.fromRGB(6, 3, 5),
         BackgroundTransparency = 0.17,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(28, 10, 19)),
-            ColorSequenceKeypoint.new(0.34, Color3.fromRGB(15, 6, 11)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(6, 3, 6)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(22, 7, 15)),
+            ColorSequenceKeypoint.new(0.34, Color3.fromRGB(11, 4, 8)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(4, 2, 4)),
         }),
         Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.28),
@@ -532,13 +532,13 @@ return function(API)
     styleGlassPanel(browser, panelSpec)
 
     styleGlassPanel(playerCard, {
-        BackgroundColor = Color3.fromRGB(11, 4, 8),
+        BackgroundColor = Color3.fromRGB(8, 3, 6),
         BackgroundTransparency = 0.10,
         Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(43, 10, 24)),
-            ColorSequenceKeypoint.new(0.25, Color3.fromRGB(25, 6, 15)),
-            ColorSequenceKeypoint.new(0.62, Color3.fromRGB(10, 4, 8)),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 3, 5)),
+            ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 7, 20)),
+            ColorSequenceKeypoint.new(0.25, Color3.fromRGB(19, 4, 12)),
+            ColorSequenceKeypoint.new(0.62, Color3.fromRGB(7, 3, 6)),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(3, 2, 4)),
         }),
         Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.18),
@@ -603,12 +603,12 @@ return function(API)
     local drawerScroller = drawer and drawer:FindFirstChildWhichIsA("ScrollingFrame", true)
     if drawer then
         styleGlassPanel(drawer, {
-            BackgroundColor = Color3.fromRGB(6, 3, 5),
+            BackgroundColor = Color3.fromRGB(4, 2, 4),
             BackgroundTransparency = 0.06,
             Color = ColorSequence.new({
-                ColorSequenceKeypoint.new(0, Color3.fromRGB(32, 7, 19)),
-                ColorSequenceKeypoint.new(0.30, Color3.fromRGB(14, 4, 10)),
-                ColorSequenceKeypoint.new(1, Color3.fromRGB(4, 2, 4)),
+                ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 5, 15)),
+                ColorSequenceKeypoint.new(0.30, Color3.fromRGB(10, 3, 7)),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(2, 1, 3)),
             }),
             Transparency = NumberSequence.new({
                 NumberSequenceKeypoint.new(0, 0.22),
@@ -754,7 +754,7 @@ return function(API)
     end)
 
     API.PremiumGlass = {
-        Version = "0.2.1-test",
+        Version = "0.2.2-test",
         Branch = "glassmorphism-redesign-test",
     }
     return true

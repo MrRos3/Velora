@@ -44,21 +44,21 @@ return function(API)
 
     -- Lock in the approved default dark smoked-glass base.
     if window:IsA("GuiObject") then
-        window.BackgroundColor3 = Color3.fromRGB(3, 2, 4)
+        window.BackgroundColor3 = Color3.fromRGB(2, 1, 3)
         window.BackgroundTransparency = 0.025
     end
     if header and header:IsA("GuiObject") then
-        header.BackgroundColor3 = Color3.fromRGB(9, 4, 7)
+        header.BackgroundColor3 = Color3.fromRGB(7, 3, 6)
         header.BackgroundTransparency = 0.13
     end
     for _, panel in ipairs({nav, browser}) do
         if panel and panel:IsA("GuiObject") then
-            panel.BackgroundColor3 = Color3.fromRGB(8, 4, 7)
+            panel.BackgroundColor3 = Color3.fromRGB(6, 3, 5)
             panel.BackgroundTransparency = 0.17
         end
     end
     if playerCard and playerCard:IsA("GuiObject") then
-        playerCard.BackgroundColor3 = Color3.fromRGB(11, 4, 8)
+        playerCard.BackgroundColor3 = Color3.fromRGB(8, 3, 6)
         playerCard.BackgroundTransparency = 0.10
     end
 
@@ -178,7 +178,7 @@ return function(API)
     end)
 
     API.PremiumGlassBorderTune = {
-        Version = "0.1-test",
+        Version = "0.1.1-test",
         Default = "DarkSmokedRuby",
     }
     return true
