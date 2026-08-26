@@ -67,6 +67,9 @@ end
 local source = download(RELEASE_URLS, "latest UI release")
 local patchSource = download(PATCH_URLS, "latest UI patch")
 
+-- Velora owns its library branding everywhere in the promoted build.
+source = string.gsub(source, "AURORA LIBRARY", "VELORA LIBRARY")
+
 -- Keep the new UI, but point its registry/song loading to this isolated test branch.
 source = replaceOnce(
     source,
