@@ -1,6 +1,7 @@
--- Velora 0.10.18 Nova — contrast and continuous compact reveal.
+-- Velora 0.10.20 Nova — contrast and continuous compact reveal.
 return {
     {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
+    {Id="la-petite-fille-de-la-mer",Name="La petite fille de la mer",Artist="Vangelis",BPM=80,Categories={"Famous","Soundtrack","Ambient","Piano","Emotional","Complete"},File="songs/LaPetiteFilleDeLaMer.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
     {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=85,Categories={"Famous","TikTok","Pop","Romantic","Complete"},File="songs/LoveStoryIndila.lua"},
