@@ -85,6 +85,30 @@ source = replaceBetween(
     "protected playback block"
 )
 
+-- Expose a truthful touch/sustain profile for keyboard-style output backends.
+-- Roblox piano keys do not expose real MIDI velocity here, so this changes the
+-- press-hold characteristic only and reports the active profile through the API.
+source = replaceOnce(
+    source,
+    "function API:SetAutoInput(enabled)",
+[[function API:SetOutputProfile(profile)
+    profile = string.upper(tostring(profile or "NORMAL"))
+    local holds = {
+        SOFT = 0.010,
+        NORMAL = 0.015,
+        STRONG = 0.028,
+    }
+    if not holds[profile] then profile = "NORMAL" end
+    CONFIG.InputHold = holds[profile]
+    state.OutputProfile = profile
+    emit("output-profile")
+    return profile
+end
+
+function API:SetAutoInput(enabled)]],
+    "output touch profile hook"
+)
+
 local patchChunk, patchCompileError = loadstring(patchSource)
 if type(patchChunk) ~= "function" then
     fail("patch compile failed - " .. tostring(patchCompileError))
