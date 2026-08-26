@@ -41,12 +41,12 @@ local WAVE2_URLS = {
 -- has approved the smoked-glass redesign in Roblox.
 local GLASS_TEST_REF = "glassmorphism-redesign-test"
 local GLASS_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-5",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-5",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-6",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-6",
 }
 local GLASS_TUNE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-2",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-2",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-3",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-3",
 }
 
 local function fail(reason)

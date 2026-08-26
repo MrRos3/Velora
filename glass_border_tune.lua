@@ -17,10 +17,10 @@ return function(API)
     local window = (API.UI and API.UI.Window) or gui:FindFirstChild("Aurora", true)
     if not window then return false, "Velora window not found" end
 
-    local RUBY_DARK = Color3.fromRGB(112, 15, 38)
-    local RUBY = Color3.fromRGB(218, 45, 79)
-    local RUBY_BRIGHT = Color3.fromRGB(242, 82, 110)
-    local RUBY_GLASS = Color3.fromRGB(211, 111, 139)
+    local RUBY_DARK = Color3.fromRGB(106, 38, 45)
+    local RUBY = Color3.fromRGB(211, 76, 90) -- #D34C5A
+    local RUBY_BRIGHT = Color3.fromRGB(230, 112, 124)
+    local RUBY_GLASS = Color3.fromRGB(211, 130, 140)
 
     local function findParentByLabel(wanted)
         for _, descendant in ipairs(gui:GetDescendants()) do
@@ -45,31 +45,31 @@ return function(API)
     -- Lock in the approved default dark smoked-glass base.
     if window:IsA("GuiObject") then
         window.BackgroundColor3 = Color3.fromRGB(2, 1, 3)
-        window.BackgroundTransparency = 0.025
+        window.BackgroundTransparency = 0.015
     end
     if header and header:IsA("GuiObject") then
         header.BackgroundColor3 = Color3.fromRGB(7, 3, 6)
-        header.BackgroundTransparency = 0.13
+        header.BackgroundTransparency = 0.08
     end
     for _, panel in ipairs({nav, browser}) do
         if panel and panel:IsA("GuiObject") then
             panel.BackgroundColor3 = Color3.fromRGB(6, 3, 5)
-            panel.BackgroundTransparency = 0.17
+            panel.BackgroundTransparency = 0.10
         end
     end
     if playerCard and playerCard:IsA("GuiObject") then
         playerCard.BackgroundColor3 = Color3.fromRGB(8, 3, 6)
-        playerCard.BackgroundTransparency = 0.10
+        playerCard.BackgroundTransparency = 0.06
     end
 
     local function brightenEdgeGradient(stroke)
         local gradient = stroke:FindFirstChild("VeloraPremiumEdgeReflection")
         if not gradient or not gradient:IsA("UIGradient") then return end
         gradient.Color = ColorSequence.new({
-            ColorSequenceKeypoint.new(0, Color3.fromRGB(91, 10, 34)),
+            ColorSequenceKeypoint.new(0, RUBY_DARK),
             ColorSequenceKeypoint.new(0.24, RUBY_GLASS),
-            ColorSequenceKeypoint.new(0.52, RUBY_BRIGHT),
-            ColorSequenceKeypoint.new(1, Color3.fromRGB(65, 7, 28)),
+            ColorSequenceKeypoint.new(0.52, RUBY),
+            ColorSequenceKeypoint.new(1, Color3.fromRGB(63, 20, 27)),
         })
         gradient.Transparency = NumberSequence.new({
             NumberSequenceKeypoint.new(0, 0.42),
@@ -103,7 +103,7 @@ return function(API)
 
         if name == "VeloraPremiumGlassOuterEdge" then
             if parent == window then
-                brighten(stroke, 0.24, 2.2, RUBY_DARK)
+                brighten(stroke, 0.24, 2.2, RUBY)
             elseif parent == playerCard then
                 brighten(stroke, 0.38, 1.2, RUBY)
             elseif parent == header then
@@ -117,7 +117,7 @@ return function(API)
             brighten(stroke, 0.66, 0.8, RUBY_GLASS)
         elseif name == "VeloraPremiumInsetEdge" then
             if isBpmPill(parent) then
-                brighten(stroke, 0.34, 1.15, RUBY_BRIGHT)
+                brighten(stroke, 0.34, 1.15, RUBY)
             else
                 brighten(stroke, 0.48, 0.95, RUBY)
             end
@@ -129,9 +129,9 @@ return function(API)
                 if playerCard and parent:IsDescendantOf(playerCard) then target = 0.40 end
                 if parent.Parent and isBpmPill(parent.Parent) then target = 0.30 end
             end
-            brighten(stroke, target, 1.0, RUBY_BRIGHT)
+            brighten(stroke, target, 1.0, RUBY)
         elseif name == "VeloraPremiumInputEdge" then
-            brighten(stroke, 0.42, 1.0, RUBY_BRIGHT)
+            brighten(stroke, 0.42, 1.0, RUBY)
         end
     end
 
@@ -178,7 +178,7 @@ return function(API)
     end)
 
     API.PremiumGlassBorderTune = {
-        Version = "0.1.1-test",
+        Version = "0.2.0-test",
         Default = "DarkSmokedRuby",
     }
     return true
