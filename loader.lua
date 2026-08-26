@@ -125,7 +125,37 @@ installModule(FIX_URLS, "upgrade polish", api, function(source)
 end)
 
 installModule(CLEANUP_URLS, "upgrade cleanup", api)
-installModule(GLOW_TRIM_URLS, "glow trim", api)
+
+installModule(GLOW_TRIM_URLS, "glow trim", api, function(source)
+    -- Strong-but-classy Now Playing bloom. Keep the rim crisp while allowing
+    -- the softer outer stroke to read as a real glow instead of a faint border.
+    source = replaceOncePlain(source,
+        "            inner.Thickness = 1.35 + breath * 0.25 + noteKick * 0.25",
+        "            inner.Thickness = 1.70 + breath * 0.25 + noteKick * 0.20"
+    )
+    source = replaceOncePlain(source,
+        "            outer.Thickness = 2.15 + breath * 0.35 + noteKick * 0.30",
+        "            outer.Thickness = 3.20 + breath * 0.60 + noteKick * 0.50"
+    )
+    source = replaceOncePlain(source,
+        "            inner.Transparency = math.clamp(0.44 - breath * 0.13 - noteKick * 0.12, 0.18, 0.48)",
+        "            inner.Transparency = math.clamp(0.30 - breath * 0.08 - noteKick * 0.08, 0.12, 0.32)"
+    )
+    source = replaceOncePlain(source,
+        "            outer.Transparency = math.clamp(0.80 - breath * 0.08 - noteKick * 0.08, 0.62, 0.82)",
+        "            outer.Transparency = math.clamp(0.62 - breath * 0.10 - noteKick * 0.10, 0.42, 0.64)"
+    )
+    source = replaceOncePlain(source,
+        "            inner.Thickness = 1.25\n            outer.Thickness = 2.0\n            inner.Transparency = 0.66\n            outer.Transparency = 0.86",
+        "            inner.Thickness = 1.45\n            outer.Thickness = 2.70\n            inner.Transparency = 0.58\n            outer.Transparency = 0.80"
+    )
+    source = replaceOncePlain(source,
+        "            inner.Thickness = 1.0\n            outer.Thickness = 1.75\n            inner.Transparency = 0.92\n            outer.Transparency = 0.97",
+        "            inner.Thickness = 1.0\n            outer.Thickness = 1.70\n            inner.Transparency = 0.94\n            outer.Transparency = 0.98"
+    )
+    return source
+end)
+
 installModule(COMPACT_FIX_URLS, "compact fix", api)
 installModule(WAVE2_URLS, "wave 2", api, function(source)
     -- Capture Play varargs before the optional countdown coroutine.
