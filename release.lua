@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.12 "Nova"
+    Velora v0.10.13 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -28,10 +28,9 @@ end
 
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
-local ICONS_URL = "https://raw.githubusercontent.com/MrRos3/Icons/main/lucide/dist/Icons.lua"
 
 local CONFIG = {
-    Version = "0.10.12",
+    Version = "0.10.13",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -86,7 +85,27 @@ local function safeLoadTable(url)
     return nil
 end
 
-local Icons = safeLoadTable(ICONS_URL) or {}
+-- Bundled LucideBlox mappings keep the interface independent of an external icon repository.
+local Icons = {
+    ["sparkles"] = "rbxassetid://8997388430",
+    ["settings"] = "rbxassetid://7734053495",
+    ["minimize-2"] = "rbxassetid://7733997870",
+    ["maximize-2"] = "rbxassetid://7733992901",
+    ["x"] = "rbxassetid://7743878857",
+    ["search"] = "rbxassetid://7734052925",
+    ["music-2"] = "rbxassetid://7734020554",
+    ["square"] = "rbxassetid://7743872181",
+    ["play"] = "rbxassetid://7743871480",
+    ["pause"] = "rbxassetid://7734021897",
+    ["heart"] = "rbxassetid://7733956134",
+    ["chevron-left"] = "rbxassetid://7733717651",
+    ["chevron-right"] = "rbxassetid://7733717755",
+    ["repeat-2"] = "rbxassetid://7734051454",
+    ["rotate-ccw"] = "rbxassetid://7734051861",
+    ["library"] = "rbxassetid://7743869054",
+    ["check"] = "rbxassetid://7733715400",
+    ["volume-2"] = "rbxassetid://7743877250",
+}
 
 local function create(className, properties, parent)
     local object = Instance.new(className)
