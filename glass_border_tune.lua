@@ -96,6 +96,57 @@ return function(API)
             and playerCard and object.Parent == playerCard
     end
 
+    local function isProgressTrack(object)
+        return object and object:IsA("Frame")
+            and object.Size.X.Offset == 206
+            and object.Size.Y.Offset == 8
+            and playerCard and object.Parent == playerCard
+    end
+
+    local function isProgressScrubber(object)
+        return object and object:IsA("Frame")
+            and object.Size.X.Offset == 15
+            and object.Size.Y.Offset == 15
+            and isProgressTrack(object.Parent)
+    end
+
+    local function softenProgressEdge(stroke)
+        if not stroke or not stroke:IsA("UIStroke") then return end
+        stroke.Enabled = true
+        stroke.Color = RUBY
+        stroke.Transparency = 0.70
+        stroke.Thickness = 0.75
+        stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+        local gradient = stroke:FindFirstChild("VeloraPremiumEdgeReflection")
+        if gradient and gradient:IsA("UIGradient") then
+            gradient.Color = ColorSequence.new({
+                ColorSequenceKeypoint.new(0, RUBY_DARK),
+                ColorSequenceKeypoint.new(0.24, RUBY_GLASS),
+                ColorSequenceKeypoint.new(0.52, RUBY),
+                ColorSequenceKeypoint.new(1, Color3.fromRGB(63, 20, 27)),
+            })
+            gradient.Transparency = NumberSequence.new({
+                NumberSequenceKeypoint.new(0, 0.66),
+                NumberSequenceKeypoint.new(0.24, 0.30),
+                NumberSequenceKeypoint.new(0.55, 0.56),
+                NumberSequenceKeypoint.new(1, 0.82),
+            })
+        end
+    end
+
+    local function softenProgressScrubber(scrubber)
+        if not isProgressScrubber(scrubber) then return end
+        scrubber.BackgroundColor3 = Color3.fromRGB(224, 196, 202)
+        scrubber.BackgroundTransparency = 0.10
+        local stroke = scrubber:FindFirstChildOfClass("UIStroke")
+        if stroke then
+            stroke.Color = RUBY
+            stroke.Transparency = 0.34
+            stroke.Thickness = 1
+        end
+    end
+
     local function tuneStroke(stroke)
         if not stroke:IsA("UIStroke") then return end
         local parent = stroke.Parent
@@ -116,7 +167,9 @@ return function(API)
         elseif name == "VeloraPremiumGlassInnerEdge" then
             brighten(stroke, 0.66, 0.8, RUBY_GLASS)
         elseif name == "VeloraPremiumInsetEdge" then
-            if isBpmPill(parent) then
+            if isProgressTrack(parent) then
+                softenProgressEdge(stroke)
+            elseif isBpmPill(parent) then
                 brighten(stroke, 0.34, 1.15, RUBY)
             else
                 brighten(stroke, 0.48, 0.95, RUBY)
@@ -138,6 +191,8 @@ return function(API)
     local function tuneObject(object)
         if object:IsA("UIStroke") then
             tuneStroke(object)
+        elseif isProgressScrubber(object) then
+            softenProgressScrubber(object)
         elseif isBpmPill(object) then
             local stroke = object:FindFirstChild("VeloraPremiumInsetEdge")
             if stroke then tuneStroke(stroke) end
@@ -178,7 +233,7 @@ return function(API)
     end)
 
     API.PremiumGlassBorderTune = {
-        Version = "0.2.0-test",
+        Version = "0.2.1-test",
         Default = "DarkSmokedRuby",
     }
     return true

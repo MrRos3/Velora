@@ -45,8 +45,8 @@ local GLASS_URLS = {
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-6",
 }
 local GLASS_TUNE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-3",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-3",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-4",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glass_border_tune.lua?v=ruby-edges-4",
 }
 
 local function fail(reason)
