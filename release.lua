@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.17 "Nova"
+    Velora v0.10.18 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 
 local CONFIG = {
-    Version = "0.10.17",
+    Version = "0.10.18",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(211, 76, 90),
@@ -1505,10 +1505,9 @@ local searchQuery=""
 local navButtons={}
 local refreshList
 
-nova.search=radius(edge(make("TextBox",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,38),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,PlaceholderText="Search the library",PlaceholderColor3=Color3.fromRGB(218,198,202),Text="",TextSize=12,TextColor3=P.Text,Font=Enum.Font.BuilderSansMedium,TextXAlignment=Enum.TextXAlignment.Left},nova.browser),Color3.fromRGB(87,78,119),.64),12)
+nova.search=radius(edge(make("TextBox",{Position=UDim2.fromOffset(14,14),Size=UDim2.new(1,-28,0,38),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,PlaceholderText="Search the library",PlaceholderColor3=Color3.fromRGB(245,230,233),Text="",TextSize=12,TextColor3=P.Text,Font=Enum.Font.BuilderSansBold,TextXAlignment=Enum.TextXAlignment.Left},nova.browser),Color3.fromRGB(126,58,67),.48),12)
 nova.searchBorder=nova.search:FindFirstChildOfClass("UIStroke")
 nova.searchGlow,nova.searchRim=glowEdge(nova.search,P.Violet,.95,.68,2.6)
-nova.glassify(nova.search,.10,P.Violet)
 padding(nova.search,39,13,0,0)
 nova.searchIcon=icon(nova.browser,"search",15,P.Sub,"");nova.searchIcon.Position=UDim2.fromOffset(27,26)
 nova.search.Focused:Connect(function() animate(nova.searchGlow,{Transparency=.78});animate(nova.searchRim,{Transparency=.18}) end)
@@ -1612,8 +1611,8 @@ nova.libraryIcon=icon(nova.libraryCount,"library",16,P.Cyan,"");nova.libraryIcon
 label(nova.libraryCount,"AURORA LIBRARY",UDim2.fromOffset(33,8),UDim2.fromOffset(86,12),Enum.Font.BuilderSansBold,8,P.Sub)
 nova.countText=label(nova.libraryCount,tostring(#state.Registry).." SONGS",UDim2.fromOffset(33,24),UDim2.fromOffset(86,16),Enum.Font.BuilderSansExtraBold,10,P.Text)
 
-nova.paletteDim=radius(make("TextButton",{Visible=false,Position=UDim2.fromOffset(0,0),Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=.38,BorderSizePixel=0,Text="",AutoButtonColor=false,ZIndex=40},window),24)
-nova.palette=radius(edge(make("Frame",{Visible=false,AnchorPoint=Vector2.new(1,0),Position=UDim2.new(1,-18,0,88),Size=UDim2.fromOffset(280,322),BackgroundColor3=Color3.fromRGB(18,12,14),BorderSizePixel=0,ZIndex=50},window),Color3.fromRGB(151,66,76),.25,1.2),20)
+nova.paletteDim=radius(make("TextButton",{Visible=false,Position=UDim2.fromOffset(0,0),Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=.10,BorderSizePixel=0,Text="",AutoButtonColor=false,ZIndex=40},window),24)
+nova.palette=radius(edge(make("Frame",{Visible=false,AnchorPoint=Vector2.new(1,0),Position=UDim2.new(1,-18,0,88),Size=UDim2.fromOffset(280,322),BackgroundColor3=Color3.fromRGB(10,7,8),BackgroundTransparency=0,BorderSizePixel=0,ZIndex=50},window),Color3.fromRGB(151,66,76),.25,1.2),20)
 label(nova.palette,"PALETTE STUDIO",UDim2.fromOffset(18,16),UDim2.fromOffset(190,22),Enum.Font.BuilderSansExtraBold,13,P.Text).ZIndex=51
 label(nova.palette,"Shape Velora around your favorite color.",UDim2.fromOffset(18,39),UDim2.fromOffset(235,16),Enum.Font.BuilderSans,8,P.Sub).ZIndex=51
 nova.paletteClose=radius(make("TextButton",{Position=UDim2.new(1,-45,0,12),Size=UDim2.fromOffset(31,31),BackgroundColor3=P.Card,BorderSizePixel=0,Text="",ZIndex=52},nova.palette),10)
@@ -1633,13 +1632,10 @@ end
 label(nova.palette,"HEX",UDim2.fromOffset(18,202),UDim2.fromOffset(35,16),Enum.Font.BuilderSansBold,8,P.Muted).ZIndex=51
 nova.hexInput=radius(make("TextBox",{Position=UDim2.fromOffset(18,221),Size=UDim2.fromOffset(158,40),BackgroundColor3=P.Card,BorderSizePixel=0,ClearTextOnFocus=false,Text="#D34C5A",Font=Enum.Font.Code,TextSize=11,TextColor3=P.Text,ZIndex=51},nova.palette),12)
 nova.preview=radius(make("Frame",{Position=UDim2.fromOffset(188,221),Size=UDim2.fromOffset(74,40),BackgroundColor3=P.Violet,BorderSizePixel=0,ZIndex=51},nova.palette),12)
-nova.applyColorButton=radius(gradient(make("TextButton",{Position=UDim2.fromOffset(18,276),Size=UDim2.fromOffset(244,31),BackgroundColor3=P.Violet,BorderSizePixel=0,Text="APPLY COLOR",Font=Enum.Font.BuilderSansExtraBold,TextSize=9,TextColor3=P.Text,ZIndex=51},nova.palette),P.Violet,P.Pink,0),11)
+nova.applyColorButton=radius(make("TextButton",{Position=UDim2.fromOffset(18,276),Size=UDim2.fromOffset(244,31),BackgroundColor3=P.Violet,BorderSizePixel=0,Text="APPLY COLOR",Font=Enum.Font.BuilderSansExtraBold,TextSize=10,TextColor3=P.Text,ZIndex=51},nova.palette),11)
 nova.glassify(nova.libraryCount,.24,P.Violet)
-nova.glassify(nova.palette,.16,P.Violet)
+gradient(nova.palette,Color3.fromRGB(22,12,14),Color3.fromRGB(7,6,7),90)
 nova.glassify(nova.paletteClose,.24,P.Violet)
-nova.glassify(nova.hexInput,.24,P.Violet)
-nova.glassify(nova.applyColorButton,.08,P.Violet)
-for _,object in ipairs(nova.rgbInputs) do nova.glassify(object,.24,P.Violet) end
 bindButtonMotion(nova.paletteClose)
 bindButtonMotion(nova.applyColorButton)
 
@@ -1749,8 +1745,9 @@ local function applyAccent(color)
         end
     end
     for filter,button in pairs(navButtons) do
-        button.BackgroundColor3=color:Lerp(P.Ink,.62)
-        if filter==activeFilter then button.BackgroundTransparency=.16 end
+        button.BackgroundColor3=color:Lerp(P.Ink,.76)
+        button.TextColor3=filter==activeFilter and P.Text or Color3.fromRGB(232,214,217)
+        button.BackgroundTransparency=filter==activeFilter and .06 or .34
     end
     refreshList()
 end
@@ -1793,26 +1790,38 @@ function nova.setCompactMode(enabled)
     nova.minimizeButton.Active=false
     nova.minimizeIcon.Visible=not enabled
     nova.restoreIcon.Visible=enabled
+    nova.nav.Position=UDim2.fromOffset(0,0)
+    nova.browser.Position=UDim2.fromOffset(158,0)
+    nova.nav.Visible=true
+    nova.browser.Visible=true
 
     if enabled then
-        animate(nova.brandTitle,{TextTransparency=1},.14)
-        animate(nova.brandSubtitle,{TextTransparency=1},.14)
-        animate(settingsButton,{BackgroundTransparency=1},.14)
-        if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=1} or {TextTransparency=1},.14) end
-        nova.nav.Visible=false
-        nova.browser.Visible=false
-        animate(window,{Size=UDim2.fromOffset(266,440)},.36)
-        animate(nova.shadow,{Size=UDim2.fromOffset(266,440)},.36)
-        animate(nova.playerCard,{Position=UDim2.fromOffset(0,0)},.36)
+        nova.navScale.Scale=1
+        nova.browserScale.Scale=1
+        animate(nova.brandTitle,{TextTransparency=1},.16)
+        animate(nova.brandSubtitle,{TextTransparency=1},.16)
+        animate(settingsButton,{BackgroundTransparency=1},.16)
+        if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=1} or {TextTransparency=1},.16) end
+        animate(window,{Size=UDim2.fromOffset(266,440)},.38)
+        animate(nova.shadow,{Size=UDim2.fromOffset(266,440)},.38)
+        animate(nova.playerCard,{Position=UDim2.fromOffset(0,0)},.38)
         animate(nova.minimizeButton,{Position=UDim2.new(1,-98,0,14)},.34)
-        task.delay(.16,function()
+        task.delay(.17,function()
             if transition==nova.compactTransition then
                 nova.brandTitle.Visible=false
                 nova.brandSubtitle.Visible=false
                 settingsButton.Visible=false
             end
         end)
+        task.delay(.39,function()
+            if transition==nova.compactTransition then
+                nova.nav.Visible=false
+                nova.browser.Visible=false
+            end
+        end)
     else
+        nova.navScale.Scale=.985
+        nova.browserScale.Scale=.985
         nova.brandTitle.Visible=true
         nova.brandSubtitle.Visible=true
         settingsButton.Visible=true
@@ -1822,31 +1831,23 @@ function nova.setCompactMode(enabled)
         if settingsGlyph then
             if settingsGlyph:IsA("ImageLabel") then settingsGlyph.ImageTransparency=1 else settingsGlyph.TextTransparency=1 end
         end
-        nova.nav.Visible=false
-        nova.browser.Visible=false
-        nova.nav.Position=UDim2.fromOffset(0,0)
-        nova.browser.Position=UDim2.fromOffset(158,0)
-        nova.navScale.Scale=.97
-        nova.browserScale.Scale=.97
-        animate(window,{Size=UDim2.fromOffset(760,440)},.38)
-        animate(nova.shadow,{Size=UDim2.fromOffset(760,440)},.38)
-        animate(nova.playerCard,{Position=UDim2.fromOffset(494,0)},.38)
+        animate(window,{Size=UDim2.fromOffset(760,440)},.40)
+        animate(nova.shadow,{Size=UDim2.fromOffset(760,440)},.40)
+        animate(nova.playerCard,{Position=UDim2.fromOffset(494,0)},.40)
+        animate(nova.navScale,{Scale=1},.32)
+        animate(nova.browserScale,{Scale=1},.32)
         animate(nova.minimizeButton,{Position=UDim2.new(1,-144,0,14)},.34)
-        task.delay(.19,function()
+        task.delay(.06,function()
             if transition==nova.compactTransition then
-                nova.nav.Visible=true
-                nova.browser.Visible=true
-                animate(nova.navScale,{Scale=1},.18)
-                animate(nova.browserScale,{Scale=1},.18)
-                animate(nova.brandTitle,{TextTransparency=0},.20)
-                animate(nova.brandSubtitle,{TextTransparency=0},.20)
-                animate(settingsButton,{BackgroundTransparency=.16},.20)
-                if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=0} or {TextTransparency=0},.20) end
+                animate(nova.brandTitle,{TextTransparency=0},.22)
+                animate(nova.brandSubtitle,{TextTransparency=0},.22)
+                animate(settingsButton,{BackgroundTransparency=.16},.22)
+                if settingsGlyph then animate(settingsGlyph,settingsGlyph:IsA("ImageLabel") and {ImageTransparency=0} or {TextTransparency=0},.22) end
             end
         end)
     end
-    fitViewport(.34)
-    task.delay(.40,function()
+    fitViewport(.36)
+    task.delay(.42,function()
         if transition==nova.compactTransition then
             nova.compactBusy=false
             nova.minimizeButton.Active=true
@@ -1871,14 +1872,15 @@ local function chooseFilter(name)
     nova.resultTitle.Text=string.upper(name)
     for filter,button in pairs(navButtons) do
         local selected=filter==name
-        animate(button,{BackgroundTransparency=selected and .16 or .78,TextColor3=selected and P.Text or P.Sub},.20)
+        animate(button,{BackgroundTransparency=selected and .06 or .34,TextColor3=selected and P.Text or Color3.fromRGB(232,214,217)},.20)
     end
     refreshList()
 end
 
 for index,name in ipairs(nova.categories) do
-    local button=radius(make("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=Color3.fromRGB(73,57,111),BackgroundTransparency=index==1 and .16 or .78,BorderSizePixel=0,AutoButtonColor=false,Font=Enum.Font.BuilderSansMedium,Text="   "..name,TextSize=11,TextColor3=index==1 and P.Text or P.Sub,TextXAlignment=Enum.TextXAlignment.Left},nova.navList),11)
-    nova.glassify(button,index==1 and .16 or .78,P.Violet)
+    local button=radius(make("TextButton",{Size=UDim2.new(1,0,0,34),BackgroundColor3=Color3.fromRGB(73,57,111),BackgroundTransparency=index==1 and .16 or .78,BorderSizePixel=0,AutoButtonColor=false,Font=Enum.Font.BuilderSansMedium,Text="   "..name,TextSize=11,TextColor3=index==1 and P.Text or Color3.fromRGB(232,214,217),TextXAlignment=Enum.TextXAlignment.Left},nova.navList),11)
+    button.BackgroundTransparency=index==1 and .06 or .34
+    edge(button,P.Violet,index==1 and .34 or .72,1)
     navButtons[name]=button
     button.MouseButton1Click:Connect(function() chooseFilter(name) end)
 end
@@ -1949,7 +1951,7 @@ refreshList=function()
             marqueeLabel(card,(entry.Artist or "Velora").."  •  "..tostring(entry.BPM or 120).." BPM"..statusText,UDim2.fromOffset(68,32),UDim2.new(1,-112,0,15),Enum.Font.BuilderSansMedium,9,selected and P.Cyan or (playingCurrent and P.Green or P.Sub))
 
             local indicatorName=selected and "check" or (playingCurrent and "volume-2" or "chevron-right")
-            local indicatorColor=selected and P.Cyan or (playingCurrent and P.Green or Color3.fromRGB(188,172,255))
+            local indicatorColor=selected and P.Cyan or (playingCurrent and P.Green or P.Sub)
             local indicator=icon(card,indicatorName,17,indicatorColor,"")
             indicator.AnchorPoint=Vector2.new(.5,.5)
             indicator.Position=UDim2.new(1,-24,.5,0)
