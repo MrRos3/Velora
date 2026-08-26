@@ -1,8 +1,9 @@
--- Velora 0.10.20 Nova — complete arrangement converted from a MIDI supplied by the repository owner.
+-- Velora 0.10.20 Nova — corrected MIDI conversion from the file supplied by the repository owner.
 -- Supplied file: Idea 22.mid
 -- Supplied file SHA-256: BE8ABADB28C25112D59318894F433D8DB58DC015ECF08E96C34F65DD5E7487BC
--- MIDI: 104 BPM, 384 PPQ, 3/4 time, quantized to 4 Velora steps/beat.
--- Single piano track retained exactly; no duplicate layers were present.
+-- MIDI: 104 BPM, 384 PPQ, 3/4 time, exact 4 Velora steps/beat.
+-- Corrected piano-key mapping: natural E→F and B→C gaps are preserved, fixing the upper-register melody.
+-- Single piano track retained; simultaneous duplicate pitches are merged.
 return {
     Id="idea-22",
     Name="Idea 22",
@@ -17,30 +18,30 @@ return {
 - - - - | - - - - | - - - -
 [%O] - D - | [WtY] - - - | [WtY] - - -
 [WtY] - - - | [WtY] - - - | [WtY] - - -
-[8s] - G - | [wtY] - - - | [wtY] - - -
+[8s] - h - | [wtY] - - - | [wtY] - - -
 [wtY] - - - | [wtY] - - - | [wtY] - - -
 [%O] - D - | [WtY] - - - | [WtY] - - -
 [WtY] - - - | [WtY] - - - | [WtY] - - -
-[8s] - G - | [wtY] - - - | [wtY] - - -
+[8s] - h - | [wtY] - - - | [wtY] - - -
 [wtY] - - - | [wtY] - - - | [wtY] - - -
 [4s] - - - | [qWt] - - - | [qWt] - O D
 [8d] - - - | [wtY] - - - | [wtY] - s D
 [^d] - - - | [qEys] - - - | [qEy] - P -
-[%s] - - - | [WtYD] - - - | [WtYG] - - -
-[4s] - G - | [qWt] - - - | [qWtD] - - -
+[%s] - - - | [WtYD] - - - | [WtYh] - - -
+[4s] - h - | [qWt] - - - | [qWtD] - - -
 [8d] - - - | [wtY] - - - | [wtY] - s D
 [^d] - - - | [qEys] - - - | [qEyP] - - -
 [%s] - - - | [WtY] - - - | [WtY] - - -
 [WtY] - - - | [WtY] - - - | [WtY] - - -
 [WtY] - - - | - - - - | - - - -
 [%s] - - - | [WtY] - - - | [WtY] - - -
-[4G] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYG] - - - | [wtYD] - - -
-[^d] - - - | [qEyG] - - - | [qEyd] - - -
+[4h] - - - | [qWt] - - - | [qWt] - s j
+[8h] - - - | [wtYh] - - - | [wtYD] - - -
+[^d] - - - | [qEyh] - - - | [qEyd] - - -
 [%s] - - - | [WtY] - - - | [WtYs] - - -
-[4G] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYG] - - - | [wtYD] - - -
-[^d] - - - | [qEyG] - - - | [qEyd] - - -
+[4h] - - - | [qWt] - - - | [qWt] - s j
+[8h] - - - | [wtYh] - - - | [wtYD] - - -
+[^d] - - - | [qEyh] - - - | [qEyd] - - -
 [%s] - - - | [WtYD] - - - | [WtYs] - - -
 [4O] - - - | [qWt] - - - | [qWt] - O -
 [8D] - - - | [wtY] - d - | [wtYD] - d -
@@ -53,66 +54,68 @@ return {
 [qEy] - - - | - - - - | - - - -
 [%s] - - - | [WtY] - - - | [WtY] - - -
 W - - - | [WtY] - - - | [WtY] - - -
-[8G] - - - | [wtY] - - - | [wtY] - - -
+[8h] - - - | [wtY] - - - | [wtY] - - -
 [wD] - - - | [wtY] - - - | [wtY] - d -
 [%s] - - - | [WtY] - - - | [WtY] - - -
 W - - - | [WtY] - - - | [WtY] - D -
-[8G] - - - | [wtY] - - - | [wtY] - - -
+[8h] - - - | [wtY] - - - | [wtY] - - -
 [wD] - - - | [wtY] - - - | [wtY] - d -
-[%s] - - - | [WtYG] - - - | [WtYG] - - -
-[Ws] - - - | [WtYG] - - - | [WtYG] - - -
-[8s] - - - | [wtYG] - - - | [wtYG] - - -
+[%s] - - - | [WtYh] - - - | [WtYh] - - -
+[Ws] - - - | [WtYh] - - - | [WtYh] - - -
+[8s] - - - | [wtYh] - - - | [wtYh] - - -
 [wD] - - - | [wtY] - d - | [wtYD] - d -
-[%s] - - - | [WtYG] - - - | [WtYG] - - -
-[Ws] - - - | [WtYG] - - - | [WtYG] - - -
-[8s] - - - | [wtYG] - - - | [wtYG] - - -
+[%s] - - - | [WtYh] - - - | [WtYh] - - -
+[Ws] - - - | [WtYh] - - - | [WtYh] - - -
+[8s] - - - | [wtYh] - - - | [wtYh] - - -
 [wtYD] - - - | - - - - | - - d -
 [4s] - - - | [qWt] - - - | [qWt] - O D
 [8d] - - - | [wtY] - - - | [wtY] - s D
 [^d] - - - | [qEys] - - - | [qEy] - P -
-[%s] - - - | [WtYD] - - - | [WtYG] - - -
-[4s] - G - | [qWt] - - - | [qWtD] - - -
+[%s] - - - | [WtYD] - - - | [WtYh] - - -
+[4s] - h - | [qWt] - - - | [qWtD] - - -
 [8d] - - - | [wtY] - - - | [wtY] - s D
 [^d] - - - | [qEys] - - - | [qEyP] - - -
 [%s] - - - | [WtY] - - - | [WtY] - - -
 [WtY] - - - | [WtY] - - - | [WtY] - - -
-[%oG] - - - | [WtYoG] - - - | [WtYoG] - - -
-[WtYoG] - - - | [WtYoG] - - - | [WtYoG] - - -
+[%oh] - - - | [WtYoh] - - - | [WtYoh] - - -
+[WtYoh] - - - | [WtYoh] - - - | [WtYoh] - - -
 [%s] - - - | [WtY] - - - | [WtY] - - -
-[4G] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYG] - - - | [wtYD] - - -
-[^d] - - - | [qEyG] - - - | [qEyd] - - -
+[4h] - - - | [qWt] - - - | [qWt] - s j
+[8h] - - - | [wtYh] - - - | [wtYD] - - -
+[^d] - - - | [qEyh] - - - | [qEyd] - - -
 [%s] - - - | [WtY] - - - | [WtYs] - - -
-[4G] - - - | [qWt] - - - | [qWt] - s j
-[8h] - - - | [wtYG] - - - | [wtYD] - - -
-[^d] - - - | [qEyG] - - - | [qEyj] - - -
-[%K] - - - | [WtY] - - - | [WtY] - - -
-[4z] - - - | [qWt] - - - | [qWt] - - -
-[8z] - - - | [wtY] - L - | [wtYz] - L -
-^ - - - | [qEyK] - - - | [qEyj] - - -
-[%K] - - - | [WtYz] - - - | [WtYK] - - -
+[4h] - - - | [qWt] - - - | [qWt] - s j
+[8h] - - - | [wtYh] - - - | [wtYD] - - -
+[^d] - - - | [qEyh] - - - | [qEyj] - - -
+[%L] - - - | [WtY] - - - | [WtY] - - -
+[4Z] - - - | [qWt] - - - | [qWt] - - -
+[8Z] - - - | [wtY] - L - | [wtYZ] - L -
+^ - - - | [qEyL] - - - | [qEyj] - - -
+[%L] - - - | [WtYZ] - - - | [WtYL] - - -
 [4h] - - - | [qWt] - - - | [qWt] - h -
-[8z] - - - | [wtY] - L - | [wtYz] - L -
+[8Z] - - - | [wtY] - L - | [wtYZ] - L -
 ^ - - - | [qEy] - - - | [qEy] - - -
 [qEy] - - - | [qEy] - - - | [qEy] - - -
 [%D] - s - | [WtYO] - s - | [WtYd] - D -
-[4F] - s - | [qWtO] - F - | [qWts] - O -
-[8G] - D - | [wtYs] - G - | [wtYD] - s -
-[^G] - d - | [qEyP] - G - | [qEyd] - P -
+[4g] - s - | [qWtO] - g - | [qWts] - O -
+[8h] - D - | [wtYs] - h - | [wtYD] - s -
+[^h] - d - | [qEyP] - h - | [qEyd] - P -
 [%D] - s - | [WtYO] - s - | [WtYd] - D -
-[4F] - s - | [qWtO] - F - | [qWts] - O -
-[8G] - D - | [wtYs] - G - | [wtYD] - s -
-[^j] - G - | [qEyd] - j - | [qEyG] - d -
-[%K] - G - | [WtYD] - K - | [WtYG] - D -
-[4K] - G - | [qWtD] - K - | [qWtG] - D -
-[8K] - G - | [wtYD] - K - | [wtYG] - D -
-[^K] - G - | [qEyD] - K - | [qEyG] - D -
-[%K] - G - | [WtYD] - K - | [WtYG] - D -
-[4K] - G - | [qWtD] - K - | [qWtG] - D -
-[8K] - G - | [wtYD] - K - | [wtYG] - D -
-[^K] - G - | [qEyD] - K - | [qEyG] - D -
+[4g] - s - | [qWtO] - g - | [qWts] - O -
+[8h] - D - | [wtYs] - h - | [wtYD] - s -
+[^j] - h - | [qEyd] - j - | [qEyh] - d -
+[%L] - h - | [WtYD] - L - | [WtYh] - D -
+[4L] - h - | [qWtD] - L - | [qWth] - D -
+[8L] - h - | [wtYD] - L - | [wtYh] - D -
+[^L] - h - | [qEyD] - L - | [qEyh] - D -
+[%L] - h - | [WtYD] - L - | [WtYh] - D -
+[4L] - h - | [qWtD] - L - | [qWth] - D -
+[8L] - h - | [wtYD] - L - | [wtYh] - D -
+[^L] - h - | [qEyD] - L - | [qEyh] - D -
 ^ - - - | [qEy] - - - | [qEy] - - -
 ^ - - - | [qEy] - - - | [qEy] - - -
 [qEy] - - - | - - - - | - - - -
+- - - - | - - - - | - - - -
+- - - - | - - - - | - - - -
 ]=],
 }
