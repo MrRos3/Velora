@@ -37,6 +37,14 @@ local WAVE2_URLS = {
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VELORA_REF .. "/upgrade_wave2.lua",
 }
 
+-- Visual test layer. Keep this branch reference out of main until the user
+-- has approved the smoked-glass redesign in Roblox.
+local GLASS_TEST_REF = "glassmorphism-redesign-test"
+local GLASS_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TEST_REF .. "/glassmorphism.lua?v=premium-smoked-glass-1",
+}
+
 local function fail(reason)
     local message = "Velora could not start: " .. tostring(reason)
     warn(message)
@@ -169,5 +177,9 @@ installModule(WAVE2_URLS, "wave 2", api, function(source)
     )
     return source
 end)
+
+-- Load last so the premium glass treatment sits above every existing visual
+-- upgrade without replacing the layout or playback implementation.
+installModule(GLASS_URLS, "premium glass visual layer", api)
 
 return api
