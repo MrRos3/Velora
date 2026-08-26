@@ -1,7 +1,7 @@
--- Velora 0.10.14 Nova verified bundled Lucide boot.
+-- Velora 0.10.15 Nova glassmorphism boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/9535c3dcc6ffe0895eed7029b42ca6305f9b3364/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@9535c3dcc6ffe0895eed7029b42ca6305f9b3364/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/020e0617de4eec1de6018cf7ae20e119d9c35dfc/release.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@020e0617de4eec1de6018cf7ae20e119d9c35dfc/release.lua",
 }
 
 local function fail(reason)
