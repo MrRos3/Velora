@@ -81,11 +81,28 @@ function ProtectedPlayback:IsAvailable()
     return true
 end
 
-function ProtectedPlayback:Post(path, body, token)
+local function waitWithCancellation(seconds, shouldContinue)
+    local remaining = math.max(0, tonumber(seconds) or 0)
+    while remaining > 0 do
+        if type(shouldContinue) == "function" and not shouldContinue() then
+            return false
+        end
+        local interval = math.min(0.25, remaining)
+        task.wait(interval)
+        remaining -= interval
+    end
+    return type(shouldContinue) ~= "function" or shouldContinue()
+end
+
+function ProtectedPlayback:Post(path, body, token, options)
     local available, availabilityError = self:IsAvailable()
     if not available then
         return nil, availabilityError, "unavailable"
     end
+
+    options = type(options) == "table" and options or {}
+    local shouldContinue = options.ShouldContinue
+    local retryCount = math.clamp(tonumber(options.RetryCount) or self.RetryCount, 1, 4)
 
     local encodedBody = self.HttpService:JSONEncode(body)
     local headers = {
@@ -98,7 +115,10 @@ function ProtectedPlayback:Post(path, body, token)
     end
 
     local lastError = "Protected playback request failed"
-    for attempt = 1, self.RetryCount do
+    for attempt = 1, retryCount do
+        if type(shouldContinue) == "function" and not shouldContinue() then
+            return nil, "Protected playback request was cancelled", "cancelled"
+        end
         local ok, response = pcall(self.Request, {
             Url = self.ApiBase .. path,
             Method = "POST",
@@ -129,17 +149,22 @@ function ProtectedPlayback:Post(path, body, token)
             end
 
             local retryAfter = type(decoded) == "table" and tonumber(decoded.retryAfterMs) or nil
-            if (status == 429 or status >= 500) and attempt < self.RetryCount then
-                task.wait(math.clamp((retryAfter or (attempt * 350)) / 1000, 0.15, 3))
+            if (status == 429 or status >= 500) and attempt < retryCount then
+                local waitSeconds = status == 429
+                    and math.clamp((retryAfter or 1000) / 1000, 0.15, 30)
+                    or math.clamp((retryAfter or (attempt * 350)) / 1000, 0.15, 3)
+                if not waitWithCancellation(waitSeconds, shouldContinue) then
+                    return nil, "Protected playback request was cancelled", "cancelled"
+                end
             else
                 lastError = status == 429 and "Protected playback is busy; please wait a moment"
                     or "Protected playback service is unavailable"
-                break
+                return nil, lastError, status == 429 and "rate_limited" or "network", retryAfter
             end
         else
             lastError = tostring(response or lastError)
-            if attempt < self.RetryCount then
-                task.wait(attempt * 0.35)
+            if attempt < retryCount and not waitWithCancellation(attempt * 0.35, shouldContinue) then
+                return nil, "Protected playback request was cancelled", "cancelled"
             end
         end
     end
@@ -147,17 +172,24 @@ function ProtectedPlayback:Post(path, body, token)
     return nil, lastError, "network"
 end
 
-function ProtectedPlayback:Open(entry, startSeconds)
+function ProtectedPlayback:Open(entry, startSeconds, replaceStream, shouldContinue)
     local protected = type(entry) == "table" and entry.Protected or nil
     if type(protected) ~= "table" or type(protected.Id) ~= "string" then
         return nil, "Song is missing protected playback metadata", "invalid"
     end
 
-    local result, requestError, errorKind = self:Post("/sessions", {
+    local requestBody = {
         song = protected.Id,
         startMs = math.max(0, math.floor((tonumber(startSeconds) or 0) * 1000)),
         clientId = self.ClientId,
         version = self.Version,
+    }
+    if type(replaceStream) == "table" and type(replaceStream.Token) == "string" then
+        requestBody.replaceToken = replaceStream.Token
+    end
+
+    local result, requestError, errorKind = self:Post("/sessions", requestBody, nil, {
+        ShouldContinue = shouldContinue,
     })
     if not result then
         return nil, requestError, errorKind
@@ -178,10 +210,11 @@ function ProtectedPlayback:Open(entry, startSeconds)
         Ended = false,
         Fetching = false,
         Generation = 0,
+        PendingReplacement = type(replaceStream) == "table",
     }
 end
 
-function ProtectedPlayback:Next(stream)
+function ProtectedPlayback:Next(stream, shouldContinue)
     if type(stream) ~= "table" or stream.Ended then
         return nil, "Protected playback stream has ended", "ended"
     end
@@ -191,7 +224,7 @@ function ProtectedPlayback:Next(stream)
 
     local result, requestError, errorKind = self:Post("/chunks", {
         cursor = stream.Cursor,
-    }, stream.Token)
+    }, stream.Token, { ShouldContinue = shouldContinue })
     if not result then
         return nil, requestError, errorKind
     end
@@ -206,22 +239,60 @@ function ProtectedPlayback:Next(stream)
     return result
 end
 
-function ProtectedPlayback:OpenAndPrime(entry, startSeconds)
-    local stream, openError, errorKind = self:Open(entry, startSeconds)
+function ProtectedPlayback:Abort(stream)
+    if type(stream) ~= "table" or not stream.PendingReplacement then
+        return true
+    end
+    local result = self:Post("/sessions/abort", {}, stream.Token, { RetryCount = 1 })
+    stream.PendingReplacement = false
+    return result ~= nil
+end
+
+function ProtectedPlayback:Activate(stream, shouldContinue)
+    if type(stream) ~= "table" or not stream.PendingReplacement then
+        return true
+    end
+    local result, activateError, errorKind = self:Post("/sessions/activate", {}, stream.Token, {
+        ShouldContinue = shouldContinue,
+    })
+    if not result then
+        return false, activateError, errorKind
+    end
+    stream.PendingReplacement = false
+    return true
+end
+
+function ProtectedPlayback:OpenAndPrime(entry, startSeconds, replaceStream, shouldContinue)
+    local stream, openError, errorKind = self:Open(entry, startSeconds, replaceStream, shouldContinue)
     if not stream then
         return nil, nil, openError, errorKind
     end
 
     local chunks = {}
     for _ = 1, self.InitialChunks do
-        local chunk, chunkError, chunkErrorKind = self:Next(stream)
+        if type(shouldContinue) == "function" and not shouldContinue() then
+            self:Abort(stream)
+            return nil, nil, "Protected playback request was cancelled", "cancelled"
+        end
+        local chunk, chunkError, chunkErrorKind = self:Next(stream, shouldContinue)
         if not chunk then
+            self:Abort(stream)
             return nil, nil, chunkError, chunkErrorKind
         end
         table.insert(chunks, chunk)
         if stream.Ended then
             break
         end
+    end
+
+    if type(shouldContinue) == "function" and not shouldContinue() then
+        self:Abort(stream)
+        return nil, nil, "Protected playback request was cancelled", "cancelled"
+    end
+    local activated, activateError, activateErrorKind = self:Activate(stream, shouldContinue)
+    if not activated then
+        self:Abort(stream)
+        return nil, nil, activateError, activateErrorKind
     end
     return stream, chunks
 end

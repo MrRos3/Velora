@@ -31,6 +31,7 @@ local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/protected-play
 
 local CONFIG = {
     Version = "0.10.21",
+    AssetRevision = "0.10.21-seekfix1",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(211, 76, 90),
@@ -86,8 +87,8 @@ local function safeLoadTable(url)
 end
 
 local ProtectedClient
-local protectedConfig = safeLoadTable(RAW_BASE .. "ProtectedConfig.lua?v=" .. CONFIG.Version)
-local protectedModule = safeLoadTable(RAW_BASE .. "ProtectedPlayback.lua?v=" .. CONFIG.Version)
+local protectedConfig = safeLoadTable(RAW_BASE .. "ProtectedConfig.lua?v=" .. CONFIG.AssetRevision)
+local protectedModule = safeLoadTable(RAW_BASE .. "ProtectedPlayback.lua?v=" .. CONFIG.AssetRevision)
 if type(protectedConfig) == "table" and type(protectedModule) == "table"
     and type(protectedModule.new) == "function" then
     local ok, client = pcall(protectedModule.new, {
@@ -664,7 +665,7 @@ local FALLBACK_SONGS = {
 }
 
 local function loadRegistry()
-    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=" .. CONFIG.Version)
+    local registry = safeLoadTable(RAW_BASE .. "Songs.lua?velora=" .. CONFIG.AssetRevision)
     if type(registry) == "table" and #registry > 0 then
         return registry
     end
@@ -781,9 +782,11 @@ local state = {
     StreamGeneration = 0,
     SeekGeneration = 0,
     SeekResumeMode = nil,
+    PendingSeekProgress = nil,
     PendingProtectedSource = nil,
     Buffering = false,
     StreamError = nil,
+    LastPlaybackError = nil,
     UI = nil,
     Destroyed = false,
 }
@@ -851,12 +854,17 @@ local function appendProtectedChunk(timeline, stream, chunk, bpm)
     timeline.BufferedUntil = ((tonumber(chunk and chunk.chunkEndMs) or 0) / 1000) * scale
 end
 
-local function openProtectedSession(entry, bpm, startSourceSeconds)
+local function openProtectedSession(entry, bpm, startSourceSeconds, replaceStream, shouldContinue)
     if not ProtectedClient then
         return nil, nil, nil, "Protected playback client could not load"
     end
 
-    local stream, chunks, openError = ProtectedClient:OpenAndPrime(entry, startSourceSeconds)
+    local stream, chunks, openError = ProtectedClient:OpenAndPrime(
+        entry,
+        startSourceSeconds,
+        replaceStream,
+        shouldContinue
+    )
     if not stream then
         return nil, nil, nil, openError
     end
@@ -907,7 +915,7 @@ local function loadSongData(entry)
     end
 
     local url = file:match("^https?://") and file or (RAW_BASE .. file)
-    local source = safeGet(url .. (url:find("?", 1, true) and "&" or "?") .. "v=" .. CONFIG.Version)
+    local source = safeGet(url .. (url:find("?", 1, true) and "&" or "?") .. "v=" .. CONFIG.AssetRevision)
     if not source then
         return nil, "Could not download " .. file
     end
@@ -955,6 +963,8 @@ local function installProtectedSession(song, timeline, stream, startSourceSecond
     state.NextEvent = 1
     state.Buffering = false
     state.StreamError = nil
+    state.LastPlaybackError = nil
+    state.PendingSeekProgress = nil
 end
 
 local function currentProtectedSourcePosition()
@@ -965,17 +975,19 @@ local function currentProtectedSourcePosition()
     return state.Position / protectedTimeScale(stream, state.CurrentBPM)
 end
 
-local function restartProtectedSession(startSourceSeconds)
+local function restartProtectedSession(startSourceSeconds, shouldContinue)
     if not isProtectedEntry(state.CurrentEntry) then
         return false, "Current song is not protected"
     end
+    local previousStream = state.ProtectedStream
     local song, timeline, stream, streamError = openProtectedSession(
         state.CurrentEntry,
         state.CurrentBPM or state.CurrentEntry.BPM,
-        startSourceSeconds
+        startSourceSeconds,
+        previousStream,
+        shouldContinue
     )
     if not stream then
-        state.StreamError = streamError
         return false, streamError
     end
     installProtectedSession(song, timeline, stream, startSourceSeconds)
@@ -993,10 +1005,10 @@ local function requestProtectedChunk()
     local generation = stream.Generation
     task.spawn(function()
         local chunk, chunkError, errorKind = ProtectedClient:Next(stream)
+        stream.Fetching = false
         if state.Destroyed or not state.ProtectedStream or state.ProtectedStream.Generation ~= generation then
             return
         end
-        stream.Fetching = false
 
         if chunk then
             appendProtectedChunk(state.Timeline, stream, chunk, state.CurrentBPM)
@@ -1012,7 +1024,12 @@ local function requestProtectedChunk()
             local song, timeline, recovered, recoveryError = openProtectedSession(
                 state.CurrentEntry,
                 state.CurrentBPM,
-                sourcePosition
+                sourcePosition,
+                stream,
+                function()
+                    return not state.Destroyed and state.ProtectedStream == stream
+                        and stream.Generation == generation
+                end
             )
             if state.Destroyed or not state.ProtectedStream or state.ProtectedStream.Generation ~= generation then
                 return
@@ -1156,10 +1173,26 @@ function API:LoadSong(id, autoplay)
         return false, "Unknown song: " .. tostring(id)
     end
 
+    state.SeekGeneration += 1
+    local loadGeneration = state.SeekGeneration
+    state.SeekResumeMode = nil
+    state.PendingSeekProgress = nil
+    state.Buffering = false
+    state.StreamError = nil
+
     local song, timeline, protectedStream, loadError
     local bpm = math.clamp(tonumber(entry.BPM) or 120, 30, 300)
     if isProtectedEntry(entry) then
-        song, timeline, protectedStream, loadError = openProtectedSession(entry, bpm, 0)
+        local previousStream = state.ProtectedStream
+        song, timeline, protectedStream, loadError = openProtectedSession(
+            entry,
+            bpm,
+            0,
+            previousStream,
+            function()
+                return not state.Destroyed and loadGeneration == state.SeekGeneration
+            end
+        )
     else
         song, loadError = loadSongData(entry)
         if song then
@@ -1168,15 +1201,22 @@ function API:LoadSong(id, autoplay)
         end
     end
 
+    if loadGeneration ~= state.SeekGeneration then
+        return false, "Protected song load was cancelled"
+    end
+
     if not song or not timeline then
         warn("[Velora] " .. tostring(loadError))
+        state.Buffering = false
+        state.StreamError = nil
+        state.LastPlaybackError = loadError
         emit("error")
         return false, loadError
     end
 
     stopConnection()
-    state.SeekGeneration += 1
     state.SeekResumeMode = nil
+    state.PendingSeekProgress = nil
     state.CurrentEntry = entry
     state.SelectedEntryId = entry.Id
     state.PendingEntryId = nil
@@ -1221,6 +1261,9 @@ function API:Play()
         state.SeekResumeMode = nil
         local restarted, restartError = restartProtectedSession(startSource)
         if not restarted then
+            state.Buffering = false
+            state.StreamError = nil
+            state.LastPlaybackError = restartError
             emit("stream-error")
             return false, restartError
         end
@@ -1241,14 +1284,21 @@ function API:Play()
 
     if state.Position >= state.Timeline.Duration then
         if state.Timeline.Protected then
-            state.StreamGeneration += 1
-            state.ProtectedStream = nil
-            state.PendingProtectedSource = 0
-            local restarted, restartError = restartProtectedSession(0)
-            if not restarted then
+            local previousStream = state.ProtectedStream
+            local song, timeline, replacement, restartError = openProtectedSession(
+                state.CurrentEntry,
+                state.CurrentBPM,
+                0,
+                previousStream
+            )
+            if not replacement then
+                state.StreamError = nil
+                state.LastPlaybackError = restartError
                 emit("stream-error")
                 return false, restartError
             end
+            installProtectedSession(song, timeline, replacement, 0)
+            state.PendingProtectedSource = nil
         else
             state.Position = 0
             state.NextEvent = 1
@@ -1318,25 +1368,8 @@ function API:Play()
         if state.Position >= state.Timeline.Duration then
             if state.Loop then
                 if state.Timeline.Protected then
-                    stopConnection()
-                    state.Playing = false
-                    state.Paused = false
-                    state.StreamGeneration += 1
-                    state.ProtectedStream = nil
-                    state.PendingProtectedSource = 0
                     emit("looped")
-                    task.spawn(function()
-                        if state.Destroyed then
-                            return
-                        end
-                        local restarted, restartError = restartProtectedSession(0)
-                        if restarted then
-                            self:Play()
-                        else
-                            state.StreamError = restartError
-                            emit("stream-error")
-                        end
-                    end)
+                    self:Seek(0)
                 else
                     state.Position = 0
                     state.NextEvent = 1
@@ -1381,14 +1414,20 @@ end
 
 function API:Stop()
     stopConnection()
+    local activeStream = state.ProtectedStream
+    if activeStream then
+        activeStream.Fetching = false
+    end
     state.SeekGeneration += 1
     state.SeekResumeMode = nil
-    local hadState = state.Playing or state.Paused or state.Position > 0
+    state.PendingSeekProgress = nil
+    local hadState = state.Playing or state.Paused or state.Buffering or state.Position > 0
     local protected = state.Timeline and state.Timeline.Protected
     state.Playing = false
     state.Paused = false
     state.Buffering = false
     state.StreamError = nil
+    state.LastPlaybackError = nil
     state.Position = 0
     state.NextEvent = 1
     if protected then
@@ -1415,40 +1454,62 @@ function API:Seek(progress)
         local sourceDuration = stream and (tonumber(stream.DurationMs) or 0) / 1000
             or tonumber(state.CurrentEntry.Protected.Duration) or 0
         local sourceTarget = sourceDuration * progress
-        local wasPlaying = state.Playing and not state.Paused
-        local wasPaused = state.Paused
-        if not state.SeekResumeMode then
-            state.SeekResumeMode = wasPlaying and "playing" or (wasPaused and "paused" or "ready")
-        end
+        local previousSource = currentProtectedSourcePosition()
+        local resumeMode = state.SeekResumeMode
+            or (state.Playing and not state.Paused and "playing")
+            or (state.Paused and "paused")
+            or "ready"
+        local previousPosition = state.Position
+        local previousEntry = state.CurrentEntry
+        local previousStream = state.ProtectedStream
 
         stopConnection()
         state.Playing = false
         state.Paused = false
         state.Buffering = true
         state.StreamError = nil
-        state.StreamGeneration += 1
-        state.ProtectedStream = nil
-        state.PendingProtectedSource = sourceTarget
-        state.Position = state.Timeline.Duration * progress
-        state.Timeline.Events = {}
-        state.Timeline.BufferedUntil = state.Position
-        state.NextEvent = 1
+        state.LastPlaybackError = nil
+        state.SeekResumeMode = resumeMode
+        state.PendingSeekProgress = progress
         state.SeekGeneration += 1
         local seekGeneration = state.SeekGeneration
 
-        task.delay(0.2, function()
-            if state.Destroyed or seekGeneration ~= state.SeekGeneration then
+        task.spawn(function()
+            local function seekIsCurrent()
+                return not state.Destroyed and seekGeneration == state.SeekGeneration
+                    and state.CurrentEntry == previousEntry
+            end
+
+            local song, timeline, replacement, seekError = openProtectedSession(
+                previousEntry,
+                state.CurrentBPM or previousEntry.BPM,
+                sourceTarget,
+                previousStream,
+                seekIsCurrent
+            )
+            if not seekIsCurrent() then
                 return
             end
-            local resumeMode = state.SeekResumeMode
+
             state.SeekResumeMode = nil
-            local restarted, restartError = restartProtectedSession(sourceTarget)
-            if not restarted then
-                state.Buffering = false
-                state.StreamError = restartError
-                emit("stream-error")
+            state.PendingSeekProgress = nil
+            state.Buffering = false
+            state.StreamError = nil
+            if not replacement then
+                state.Position = previousPosition
+                state.PendingProtectedSource = previousStream and nil or previousSource
+                state.LastPlaybackError = seekError or "Protected seek failed; the previous position was restored"
+                emit("seek-error")
+                if resumeMode == "playing" then
+                    self:Play()
+                elseif resumeMode == "paused" and self:Play() then
+                    self:Pause()
+                end
                 return
             end
+
+            installProtectedSession(song, timeline, replacement, sourceTarget)
+            state.PendingProtectedSource = nil
             emit("seek")
             if resumeMode == "playing" then
                 self:Play()
@@ -1496,15 +1557,24 @@ function API:SetBPM(value)
 
     if state.Timeline and state.Timeline.Protected and isProtectedEntry(state.CurrentEntry) then
         local sourcePosition = currentProtectedSourcePosition()
-        local song, timeline, stream, streamError = openProtectedSession(state.CurrentEntry, bpm, sourcePosition)
+        local song, timeline, stream, streamError = openProtectedSession(
+            state.CurrentEntry,
+            bpm,
+            sourcePosition,
+            state.ProtectedStream
+        )
         if not stream then
             warn("[Velora] " .. tostring(streamError))
+            state.Buffering = false
+            state.StreamError = nil
+            state.LastPlaybackError = streamError
             return nil
         end
 
         stopConnection()
         state.SeekGeneration += 1
         state.SeekResumeMode = nil
+        state.PendingSeekProgress = nil
         state.CurrentBPM = bpm
         state.Playing = false
         state.Paused = false
@@ -1650,6 +1720,7 @@ function API:GetSnapshot()
         Paused = state.Paused,
         Buffering = state.Buffering,
         StreamError = state.StreamError,
+        PendingSeekProgress = state.PendingSeekProgress,
         Protected = state.Timeline and state.Timeline.Protected == true,
         Position = state.Position,
         Duration = duration,
@@ -2380,11 +2451,15 @@ refreshList=function()
 end
 
 nova.seeking=false
-local function seekAt(screenX)
+nova.seekPreview=nil
+local function previewSeekAt(screenX)
     local ratio=math.clamp((screenX-nova.progress.AbsolutePosition.X)/math.max(1,nova.progress.AbsoluteSize.X),0,1)
+    nova.seekPreview=ratio
     fill.Size=UDim2.new(ratio,0,1,0)
     nova.scrubber.Position=UDim2.new(ratio,0,.5,0)
-    API:Seek(ratio)
+    local snap=API:GetSnapshot()
+    nova.timeLeft.Text=clock((snap.Duration or 0)*ratio)
+    return ratio
 end
 
 local function render()
@@ -2395,11 +2470,14 @@ local function render()
         if not nova.bpm:IsFocused() then nova.bpm.Text=tostring(math.floor(snap.BPM or 120)) end
         recolorIcon(nova.favoriteIcon,API:IsFavorite(snap.Entry.Id) and P.Pink or P.Sub)
     end
+    local displayProgress=snap.PendingSeekProgress or snap.Progress
     if not nova.seeking then
-        fill.Size=UDim2.new(snap.Progress,0,1,0)
-        nova.scrubber.Position=UDim2.new(snap.Progress,0,.5,0)
+        fill.Size=UDim2.new(displayProgress,0,1,0)
+        nova.scrubber.Position=UDim2.new(displayProgress,0,.5,0)
     end
-    nova.timeLeft.Text=clock(snap.Position);nova.timeRight.Text=clock(snap.Duration)
+    local displayPosition=snap.PendingSeekProgress and (snap.Duration*snap.PendingSeekProgress) or snap.Position
+    if nova.seeking and nova.seekPreview then displayPosition=snap.Duration*nova.seekPreview end
+    nova.timeLeft.Text=clock(displayPosition);nova.timeRight.Text=clock(snap.Duration)
     local showPause=snap.Playing and not snap.Paused
     nova.playIcon.Visible=not showPause;nova.pauseIcon.Visible=showPause
     nova.loop.BackgroundColor3=snap.Loop and P.Violet:Lerp(P.Ink,.58) or P.Card
@@ -2424,13 +2502,18 @@ end
 
 nova.search:GetPropertyChangedSignal("Text"):Connect(function() searchQuery=string.lower(nova.search.Text);refreshList() end)
 nova.seekHit.InputBegan:Connect(function(input)
-    if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then nova.seeking=true;seekAt(input.Position.X) end
+    if input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch then nova.seeking=true;previewSeekAt(input.Position.X) end
 end)
 UserInputService.InputChanged:Connect(function(input)
-    if nova.seeking and (input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then seekAt(input.Position.X) end
+    if nova.seeking and (input.UserInputType==Enum.UserInputType.MouseMovement or input.UserInputType==Enum.UserInputType.Touch) then previewSeekAt(input.Position.X) end
 end)
 UserInputService.InputEnded:Connect(function(input)
-    if nova.seeking and (input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch) then seekAt(input.Position.X);nova.seeking=false end
+    if nova.seeking and (input.UserInputType==Enum.UserInputType.MouseButton1 or input.UserInputType==Enum.UserInputType.Touch) then
+        local ratio=previewSeekAt(input.Position.X)
+        nova.seeking=false
+        nova.seekPreview=nil
+        API:Seek(ratio)
+    end
 end)
 nova.bpmDown.MouseButton1Click:Connect(function() local snap=API:GetSnapshot();API:SetBPM((snap.BPM or 120)-5);render() end)
 nova.bpmUp.MouseButton1Click:Connect(function() local snap=API:GetSnapshot();API:SetBPM((snap.BPM or 120)+5);render() end)
@@ -2508,7 +2591,9 @@ API.Changed:Connect(function(reason)
     elseif reason=="stream-warning" then
         nova.feedback.Text="Connection interrupted. Velora will stop safely if the buffer runs out."
     elseif reason=="stream-error" then
-        nova.feedback.Text=tostring(state.StreamError or "Protected playback is unavailable. Try again shortly.")
+        nova.feedback.Text=tostring(state.StreamError or state.LastPlaybackError or "Protected playback is unavailable. Try again shortly.")
+    elseif reason=="seek-error" then
+        nova.feedback.Text=tostring(state.LastPlaybackError or "Seek failed safely. Press Play to continue.")
     elseif reason=="selection" then
         animate(art,{Rotation=3})
         task.delay(.09,function() if art.Parent then animate(art,{Rotation=0},.1) end end)

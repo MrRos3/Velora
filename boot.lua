@@ -1,12 +1,12 @@
 -- Velora 0.10.21 Nova boot.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/protected-playback-test/release.lua?v=0.10.21",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/release.lua?v=0.10.21",
+    "https://raw.githubusercontent.com/MrRos3/Velora/protected-playback-test/release.lua?v=0.10.21-seekfix1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@protected-playback-test/release.lua?v=0.10.21-seekfix1",
 }
 
 local PATCH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/protected-playback-test/patches.lua?v=0.10.21",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/patches.lua?v=0.10.21",
+    "https://raw.githubusercontent.com/MrRos3/Velora/protected-playback-test/patches.lua?v=0.10.21-seekfix1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@protected-playback-test/patches.lua?v=0.10.21-seekfix1",
 }
 
 local function fail(reason)

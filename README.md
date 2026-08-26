@@ -14,7 +14,7 @@ If GitHub is blocked by an executor, use the CDN launcher:
 
 ```lua
 loadstring(game:HttpGet(
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/loader.lua"
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@protected-playback-test/loader.lua"
 ))()
 ```
 
