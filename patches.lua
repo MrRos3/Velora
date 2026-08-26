@@ -56,6 +56,12 @@ return function(source)
         'nova.minimizeButton=radius(make("TextButton",{Position=UDim2.new(1,-144,0,14),Size=UDim2.fromOffset(36,36),BackgroundColor3=Color3.fromRGB(27,19,21),BorderSizePixel=0,AutoButtonColor=false,Text=""},header),12)',
         "minimize border")
 
+    -- Add a subtle click sound to every current and future Velora TextButton.
+    source = replaceOnce(source,
+        'nova.gui=make("ScreenGui",{Name="Velora",ResetOnSpawn=false,IgnoreGuiInset=true,DisplayOrder=78,ZIndexBehavior=Enum.ZIndexBehavior.Sibling},PlayerGui)\n',
+        'nova.gui=make("ScreenGui",{Name="Velora",ResetOnSpawn=false,IgnoreGuiInset=true,DisplayOrder=78,ZIndexBehavior=Enum.ZIndexBehavior.Sibling},PlayerGui)\nlocal function attachVeloraClickSound(button)\n    if not button or not button:IsA("TextButton") or button:GetAttribute("VeloraClickSoundBound") then return end\n    button:SetAttribute("VeloraClickSoundBound",true)\n    button.Activated:Connect(function()\n        uiClick()\n    end)\nend\nnova.gui.DescendantAdded:Connect(function(descendant)\n    if descendant:IsA("TextButton") then\n        attachVeloraClickSound(descendant)\n    end\nend)\nfor _,descendant in ipairs(nova.gui:GetDescendants()) do\n    if descendant:IsA("TextButton") then\n        attachVeloraClickSound(descendant)\n    end\nend\n',
+        "global click sounds")
+
     -- Compact mode: hide library immediately so it never bleeds through while shrinking.
     source = replaceOnce(source,
         '    nova.nav.Visible=true\n    nova.browser.Visible=true\n\n    if enabled then\n',
