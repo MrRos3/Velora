@@ -17,6 +17,7 @@ return {
     {Id="gnossienne-no-1",Name="Gnossienne No. 1",Artist="Erik Satie",BPM=100,Categories={"Famous","Classical","Piano","Calm","Haunting","Complete"},File="songs/GnossienneNo1.lua"},
     {Id="hungarian-dance-no-5",Name="Hungarian Dance No. 5",Artist="Johannes Brahms",BPM=130,Categories={"Famous","Classical","Dance","Dramatic","Piano","Complete"},File="songs/HungarianDanceNo5.lua"},
     {Id="la-foule-edith-piaf",Name="La Foule",Artist="Édith Piaf",BPM=170,Categories={"Famous","French","Chanson","Waltz","Édith Piaf","Piano","Dramatic","Complete"},File="songs/LaFoule.lua"},
+    {Id="la-maritza-sylvie-vartan",Name="La Maritza",Artist="Sylvie Vartan",BPM=76,Categories={"Famous","French","Chanson","Pop","Piano","Sylvie Vartan","Complete"},File="songs/LaMaritza.lua"},
     {Id="uae-national-anthem",Name="Ishy Bilady — UAE National Anthem",Artist="United Arab Emirates",BPM=125,Categories={"Famous","National Anthem","UAE","Patriotic","Piano","Complete"},File="songs/UAENationalAnthem.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=144,Categories={"Famous","Soundtrack","TV","Dark","Piano","Complete"},File="songs/Succession.lua"},
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
