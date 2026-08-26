@@ -62,7 +62,6 @@ return function(API)
             end
         end
 
-        -- Pull the memory control closer after removing the shortcut control.
         for _, descendant in ipairs(drawer:GetDescendants()) do
             if descendant:IsA("TextButton") and (descendant.Text == "MEMORY ON" or descendant.Text == "MEMORY OFF") then
                 descendant.Position = UDim2.fromOffset(118, 28)
@@ -71,41 +70,32 @@ return function(API)
         end
     end
 
-    -- Make the Lab button visually match the existing header controls exactly.
-    local labButton = gui:FindFirstChild("VeloraUpgradeLab", true)
-    if labButton and labButton:IsA("TextButton") and header then
-        local reference
-        local bestX = -math.huge
-        for _, child in ipairs(header:GetChildren()) do
-            if child:IsA("TextButton") and child ~= labButton and child.Size.X.Offset == 36 and child.Size.Y.Offset == 36 then
-                if child.Position.X.Offset > bestX then
-                    reference = child
-                    bestX = child.Position.X.Offset
-                end
-            end
-        end
+    -- Rebuild the Lab trigger instead of recoloring the old button. The original Lab
+    -- button had hover connections from the prototype button helper that kept restoring
+    -- its reddish background, so replacing it is the only reliable way to match the
+    -- three dark header controls exactly.
+    local oldLabButton = gui:FindFirstChild("VeloraUpgradeLab", true)
+    if oldLabButton and oldLabButton:IsA("TextButton") and header then
+        oldLabButton:Destroy()
 
-        labButton.Parent = header
-        labButton.Text = ""
-        labButton.AutoButtonColor = false
+        local dark = Color3.fromRGB(8, 6, 7)
+        local darkHover = Color3.fromRGB(14, 10, 11)
+        local edge = Color3.fromRGB(118, 58, 65)
+        local iconNormal = Color3.fromRGB(218, 202, 205)
+        local iconHover = Color3.fromRGB(255, 248, 249)
+
+        local labButton = Instance.new("TextButton")
+        labButton.Name = "VeloraUpgradeLab"
         labButton.AnchorPoint = Vector2.new(0, 0)
-        labButton.Size = UDim2.fromOffset(36, 36)
         labButton.Position = UDim2.new(1, -190, 0, 14)
+        labButton.Size = UDim2.fromOffset(36, 36)
+        labButton.BackgroundColor3 = dark
+        labButton.BackgroundTransparency = 0
+        labButton.BorderSizePixel = 0
+        labButton.AutoButtonColor = false
+        labButton.Text = ""
         labButton.ZIndex = 40
-
-        if reference then
-            labButton.BackgroundColor3 = reference.BackgroundColor3
-            labButton.BackgroundTransparency = reference.BackgroundTransparency
-        else
-            labButton.BackgroundColor3 = Color3.fromRGB(27, 19, 21)
-            labButton.BackgroundTransparency = 0
-        end
-
-        for _, child in ipairs(labButton:GetChildren()) do
-            if child:IsA("UICorner") or child:IsA("UIStroke") or child:IsA("ImageLabel") then
-                child:Destroy()
-            end
-        end
+        labButton.Parent = header
 
         local corner = Instance.new("UICorner")
         corner.CornerRadius = UDim.new(0, 12)
@@ -113,17 +103,9 @@ return function(API)
 
         local stroke = Instance.new("UIStroke")
         stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-        stroke.Color = Color3.fromRGB(118, 58, 65)
+        stroke.Color = edge
         stroke.Transparency = 0.58
         stroke.Thickness = 1
-        if reference then
-            local refStroke = reference:FindFirstChildOfClass("UIStroke")
-            if refStroke then
-                stroke.Color = refStroke.Color
-                stroke.Transparency = refStroke.Transparency
-                stroke.Thickness = refStroke.Thickness
-            end
-        end
         stroke.Parent = labButton
 
         local icon = Instance.new("ImageLabel")
@@ -134,19 +116,26 @@ return function(API)
         icon.BackgroundTransparency = 1
         icon.BorderSizePixel = 0
         icon.Image = "rbxassetid://8997388430"
-        icon.ImageColor3 = Color3.fromRGB(218, 202, 205)
+        icon.ImageColor3 = iconNormal
         icon.ScaleType = Enum.ScaleType.Fit
         icon.ZIndex = 41
         icon.Parent = labButton
 
         labButton.MouseEnter:Connect(function()
-            TweenService:Create(icon, TweenInfo.new(0.12), {ImageColor3 = Color3.fromRGB(255, 248, 249)}):Play()
+            TweenService:Create(labButton, TweenInfo.new(0.12), {BackgroundColor3 = darkHover}):Play()
+            TweenService:Create(icon, TweenInfo.new(0.12), {ImageColor3 = iconHover}):Play()
+            TweenService:Create(stroke, TweenInfo.new(0.12), {Transparency = 0.34}):Play()
         end)
         labButton.MouseLeave:Connect(function()
-            TweenService:Create(icon, TweenInfo.new(0.12), {ImageColor3 = Color3.fromRGB(218, 202, 205)}):Play()
+            TweenService:Create(labButton, TweenInfo.new(0.12), {BackgroundColor3 = dark}):Play()
+            TweenService:Create(icon, TweenInfo.new(0.12), {ImageColor3 = iconNormal}):Play()
+            TweenService:Create(stroke, TweenInfo.new(0.12), {Transparency = 0.58}):Play()
+        end)
+        labButton.Activated:Connect(function()
+            if drawer then drawer.Visible = not drawer.Visible end
         end)
     end
 
-    API.UpgradeLabCleanup = {Version = "0.3-test"}
+    API.UpgradeLabCleanup = {Version = "0.4-test"}
     return true
 end
