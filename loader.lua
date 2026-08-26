@@ -1,9 +1,9 @@
 -- Velora public loader.
 -- Stable pointer to the current smooth hybrid build.
-local SMOOTH_REF = "5a8bf21baa686c1685e5d6ecc24cb60b6792b489"
+local SMOOTH_REF = "bed27c6ebba260d153f1aec7fe613aadf41c1652"
 local URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. SMOOTH_REF .. "/smooth.lua?v=public-smooth-ui1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. SMOOTH_REF .. "/smooth.lua?v=public-smooth-ui1",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. SMOOTH_REF .. "/smooth.lua?v=public-smooth-ui2",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. SMOOTH_REF .. "/smooth.lua?v=public-smooth-ui2",
 }
 
 local function fail(reason)
