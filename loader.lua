@@ -1,6 +1,6 @@
 -- Velora Upgrade Lab test loader.
 -- Test branch only. Main is intentionally untouched.
-local LAB_REF = "3f9fa65b21109777fdc9d654433f28e773871bdc"
+local LAB_REF = "20b1dc3a135fbdda4e3ce8802a1016c1abe508f7"
 
 local SMOOTH_URLS = {
     "https://raw.githubusercontent.com/MrRos3/Velora/" .. LAB_REF .. "/smooth.lua",
