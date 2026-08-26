@@ -1,5 +1,5 @@
 --[[
-    Velora v0.10.13 "Nova"
+    Velora v0.10.14 "Nova"
     Original Roblox piano player by MrRos3 / Velora.
 
     This implementation is independently written. It does not copy or adapt
@@ -30,7 +30,7 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local RAW_BASE = "https://raw.githubusercontent.com/MrRos3/Velora/main/"
 
 local CONFIG = {
-    Version = "0.10.13",
+    Version = "0.10.14",
     Codename = "Nova",
     ToggleKey = Enum.KeyCode.RightShift,
     Accent = Color3.fromRGB(164, 112, 255),
@@ -1448,7 +1448,7 @@ nova.search=radius(edge(make("TextBox",{Position=UDim2.fromOffset(14,14),Size=UD
 nova.searchBorder=nova.search:FindFirstChildOfClass("UIStroke")
 nova.searchGlow,nova.searchRim=glowEdge(nova.search,P.Violet,.95,.68,2.6)
 padding(nova.search,39,13,0,0)
-nova.searchIcon=icon(nova.browser,"nova.search",15,P.Muted,"");nova.searchIcon.Position=UDim2.fromOffset(27,26)
+nova.searchIcon=icon(nova.browser,"search",15,P.Muted,"");nova.searchIcon.Position=UDim2.fromOffset(27,26)
 nova.search.Focused:Connect(function() animate(nova.searchGlow,{Transparency=.78});animate(nova.searchRim,{Transparency=.18}) end)
 nova.search.FocusLost:Connect(function() animate(nova.searchGlow,{Transparency=.95});animate(nova.searchRim,{Transparency=.68}) end)
 nova.resultTitle=label(nova.browser,"ALL SONGS",UDim2.fromOffset(16,62),UDim2.fromOffset(200,20),Enum.Font.BuilderSansExtraBold,12,P.Text)
@@ -1545,7 +1545,7 @@ nova.countText=label(nova.libraryCount,tostring(#state.Registry).." SONGS",UDim2
 nova.paletteDim=radius(make("TextButton",{Visible=false,Position=UDim2.fromOffset(0,0),Size=UDim2.fromScale(1,1),BackgroundColor3=Color3.new(0,0,0),BackgroundTransparency=.38,BorderSizePixel=0,Text="",AutoButtonColor=false,ZIndex=40},window),24)
 nova.palette=radius(edge(make("Frame",{Visible=false,AnchorPoint=Vector2.new(1,0),Position=UDim2.new(1,-18,0,88),Size=UDim2.fromOffset(280,322),BackgroundColor3=Color3.fromRGB(27,23,42),BorderSizePixel=0,ZIndex=50},window),Color3.fromRGB(142,116,210),.25,1.2),20)
 label(nova.palette,"PALETTE STUDIO",UDim2.fromOffset(18,16),UDim2.fromOffset(190,22),Enum.Font.BuilderSansExtraBold,13,P.Text).ZIndex=51
-label(nova.palette,"Shape Velora around your nova.favorite color.",UDim2.fromOffset(18,39),UDim2.fromOffset(235,16),Enum.Font.BuilderSans,8,P.Sub).ZIndex=51
+label(nova.palette,"Shape Velora around your favorite color.",UDim2.fromOffset(18,39),UDim2.fromOffset(235,16),Enum.Font.BuilderSans,8,P.Sub).ZIndex=51
 nova.paletteClose=radius(make("TextButton",{Position=UDim2.new(1,-45,0,12),Size=UDim2.fromOffset(31,31),BackgroundColor3=P.Card,BorderSizePixel=0,Text="",ZIndex=52},nova.palette),10)
 nova.paletteCloseIcon=icon(nova.paletteClose,"x",16,P.Sub,"");nova.paletteCloseIcon.AnchorPoint=Vector2.new(.5,.5);nova.paletteCloseIcon.Position=UDim2.fromScale(.5,.5);nova.paletteCloseIcon.ZIndex=53
 
@@ -1895,7 +1895,7 @@ nova.stop.MouseButton1Click:Connect(function()
 end)
 nova.favorite.MouseButton1Click:Connect(function()
     if not state.CurrentEntry then
-        nova.feedback.Text="Choose a song before adding a nova.favorite."
+        nova.feedback.Text="Choose a song before adding a favorite."
         return
     end
 
