@@ -1,6 +1,6 @@
 # Velora — Nova 🥀
 
-Velora v0.10.17 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
+Velora v0.10.18 **Nova** is a rounded midnight-glass Roblox piano workstation with responsive controls, Lucide icons, complete arrangements, and reliable public loading.
 
 ## Run Velora
 
@@ -18,12 +18,13 @@ loadstring(game:HttpGet(
 ))()
 ```
 
-## Nova 0.10.17
+## Nova 0.10.18
 
 - Velora now uses a smoked soft-black glass palette with restrained crimson accents.
-- Discover, search, metadata, and navigation labels have stronger contrast and cleaner typography.
+- Discover, search, metadata, and navigation labels render without dark gradients and remain fully readable.
+- The palette is opaque smoked black, so controls behind it cannot bleed through.
 - Album tiles and the title icon use subdued black-and-red treatments instead of bright violet blocks.
-- Minimize cleanly clips the library before moving the player into its compact shell, preventing crossing panels and text bleed.
+- Minimize and restore keep the stationary library beneath the moving player, producing one continuous reveal without an empty shell or sudden pop.
 - Velora does not blur the Roblox world behind the interface.
 - Opening and closing use a soft scale-and-fade transition.
 - The header now reads MADE BY SALTY and the Nova interface badge has been removed.
