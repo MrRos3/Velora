@@ -110,7 +110,8 @@ if not started then
     fail("runtime error - " .. tostring(result))
 end
 
--- Add click audio outside the UI source so appearance/layout remain untouched.
+-- Keep the ordinary UI tap very quiet in the Upgrade Lab build so action-specific
+-- sound design layered by upgrade_fixes.lua is clearly audible instead of being masked.
 local function bindClickSounds(api)
     local gui = type(api) == "table" and api.UI and api.UI.Gui
     if not gui then return end
@@ -120,7 +121,8 @@ local function bindClickSounds(api)
         local sound = Instance.new("Sound")
         sound.Name = "VeloraClick"
         sound.SoundId = "rbxassetid://17582213219"
-        sound.Volume = 0.12
+        sound.Volume = 0.035
+        sound.PlaybackSpeed = 1.02
         sound.Parent = SoundService
         sound:Play()
         sound.Ended:Connect(function()
