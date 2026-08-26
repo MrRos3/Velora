@@ -1,4 +1,4 @@
--- Velora 0.10.16 Nova — readable glass without global blur.
+-- Velora 0.10.17 Nova — soft black and red glass release.
 return {
     {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
     {Id="succession-main-title",Name="Succession — Main Title Theme",Artist="Nicholas Britell",BPM=72,Categories={"Famous","Soundtrack","TV","Dark","Complete"},File="songs/Succession.lua"},
