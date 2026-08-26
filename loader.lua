@@ -1,7 +1,12 @@
--- Velora 0.10.18 Nova glassmorphism loader.
+-- Velora 0.10.19 Nova loader.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/dd416c135451aa10c3b3e3b2fe74da029ba48d20/release.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@dd416c135451aa10c3b3e3b2fe74da029ba48d20/release.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/release.lua?v=0.10.19",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/release.lua?v=0.10.19",
+}
+
+local PATCH_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/patches.lua?v=0.10.19",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/patches.lua?v=0.10.19",
 }
 
 local function fail(reason)
@@ -21,23 +26,39 @@ if type(loadstring) ~= "function" then
     fail("this executor does not provide loadstring")
 end
 
-local source
-local downloadError
-for _, url in ipairs(RELEASE_URLS) do
-    local downloaded, result = pcall(function()
-        return game:HttpGet(url)
-    end)
-    if downloaded and type(result) == "string" and result ~= "" then
-        source = result
-        break
+local function download(urls, label)
+    local lastError
+    for _, url in ipairs(urls) do
+        local ok, result = pcall(function()
+            return game:HttpGet(url)
+        end)
+        if ok and type(result) == "string" and result ~= "" then
+            return result
+        end
+        lastError = result
     end
-    downloadError = result
-end
-if not source then
-    fail("download failed - " .. tostring(downloadError))
+    fail(label .. " download failed - " .. tostring(lastError))
 end
 
-local chunk, compileError = loadstring(source)
+local source = download(RELEASE_URLS, "release")
+local patchSource = download(PATCH_URLS, "patch")
+
+local patchChunk, patchCompileError = loadstring(patchSource)
+if type(patchChunk) ~= "function" then
+    fail("patch compile failed - " .. tostring(patchCompileError))
+end
+
+local patchLoaded, patcher = pcall(patchChunk)
+if not patchLoaded or type(patcher) ~= "function" then
+    fail("patch startup failed - " .. tostring(patcher))
+end
+
+local patched, patchedSource = pcall(patcher, source)
+if not patched or type(patchedSource) ~= "string" then
+    fail("patch apply failed - " .. tostring(patchedSource))
+end
+
+local chunk, compileError = loadstring(patchedSource)
 if type(chunk) ~= "function" then
     fail("compile failed - " .. tostring(compileError))
 end
@@ -48,4 +69,3 @@ if not started then
 end
 
 return result
-
