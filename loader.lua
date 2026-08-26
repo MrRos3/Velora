@@ -1,12 +1,13 @@
--- Velora 0.10.20 Nova loader.
+-- Velora 0.10.21 Nova loader.
+-- Temporary bridge: the public main loader launches the latest protected-playback-test runtime.
 local RELEASE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/release.lua?v=0.10.20",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/release.lua?v=0.10.20",
+    "https://raw.githubusercontent.com/MrRos3/Velora/protected-playback-test/release.lua?v=0.10.21",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@protected-playback-test/release.lua?v=0.10.21",
 }
 
 local PATCH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/patches.lua?v=0.10.20",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/patches.lua?v=0.10.20",
+    "https://raw.githubusercontent.com/MrRos3/Velora/protected-playback-test/patches.lua?v=0.10.21",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@protected-playback-test/patches.lua?v=0.10.21",
 }
 
 local function fail(reason)
