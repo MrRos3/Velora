@@ -8,6 +8,8 @@ return {
     {Id="idea-10",Name="Idea 10",Artist="Gibran Alcocer",BPM=170,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Gibran Alcocer","Complete"},File="songs/Idea10.lua"},
     {Id="rain-tony-ann",Name="Rain",Artist="Tony Ann",BPM=77,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Tony Ann","Complete"},File="songs/RainTonyAnn.lua"},
     {Id="fluxxwave-clovis-reyes",Name="Fluxxwave",Artist="Clovis Reyes",BPM=150,Categories={"Famous","TikTok","Electronic","Dark","Piano","Clovis Reyes","Complete"},File="songs/Fluxxwave.lua"},
+    {Id="super-mario-bros-main-theme",Name="Super Mario Bros. Main Theme",Artist="Koji Kondo",BPM=180,Categories={"Famous","Game OST","Super Mario","Nintendo","Upbeat","Piano","Complete"},File="songs/SuperMarioBrosMainTheme.lua"},
+    {Id="golden-brown-the-stranglers",Name="Golden Brown",Artist="The Stranglers",BPM=80,Categories={"Famous","Rock","New Wave","The Stranglers","Piano","Vintage","Complete"},File="songs/GoldenBrown.lua"},
     {Id="great-fairy-fountain",Name="Great Fairy Fountain",Artist="The Legend of Zelda: Breath of the Wild",BPM=90,Categories={"Famous","Soundtrack","The Legend of Zelda","Nintendo","Fantasy","Piano","Dreamy","Complete"},File="songs/GreatFairyFountain.lua"},
     {Id="tourner-dans-le-vide-indila",Name="Tourner dans le vide",Artist="Indila",BPM=120,Categories={"Famous","French","Pop","Piano","Dramatic","Complete"},File="songs/TournerDansLeVide.lua"},
     {Id="derniere-danse-indila",Name="Dernière Danse",Artist="Indila",BPM=120,Categories={"Famous","French","Pop","Piano","Dramatic","Complete"},File="songs/DerniereDanse.lua"},
