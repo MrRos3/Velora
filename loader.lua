@@ -1,11 +1,40 @@
 -- Velora main loader.
 -- Permanent public entrypoint for the upgraded Velora workstation.
+
+local function setAtomicBoot(enabled)
+    local value = enabled and true or nil
+    rawset(_G, "VeloraAtomicBoot", value)
+    if type(getgenv) == "function" then
+        pcall(function()
+            local env = getgenv()
+            if type(env) == "table" then
+                env.VeloraAtomicBoot = value
+            end
+        end)
+    end
+end
+
+-- Start clean and invisible. This also removes a previously-open Velora before
+-- any network work begins, so the user never watches one build morph into another.
+setAtomicBoot(true)
+pcall(function()
+    local player = game:GetService("Players").LocalPlayer
+    local playerGui = player and player:FindFirstChildOfClass("PlayerGui")
+    local existing = playerGui and playerGui:FindFirstChild("Velora")
+    if existing then
+        if existing:IsA("ScreenGui") then existing.Enabled = false end
+        existing:Destroy()
+    end
+end)
+
 local VELORA_REF = "1ee440357b0448a01badba9b37df24e227c03d2c"
 
 -- Runtime stays live on main so newly added songs are picked up immediately.
+-- The version token is bumped whenever runtime boot behavior changes so CDN
+-- fallback cannot resurrect an older startup sequence.
 local RUNTIME_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-runtime-20260827-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-runtime-20260827-1",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-atomic-20260827-2",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-atomic-20260827-2",
 }
 
 local UPGRADE_URLS = {
@@ -49,6 +78,7 @@ local POLISH_URLS = {
 }
 
 local function fail(reason)
+    setAtomicBoot(false)
     local message = "Velora could not start: " .. tostring(reason)
     warn(message)
     pcall(function()
@@ -181,8 +211,31 @@ installModule(WAVE2_URLS, "wave 2", api, function(source)
     return source
 end)
 
--- Load the visual treatment last, then apply the ruby-edge readability pass.
+-- Build the final appearance while ScreenGui.Enabled is still false.
 installModule(VISUAL_URLS, "visual layer", api)
 installModule(POLISH_URLS, "polish layer", api)
+
+-- Allow deferred styling/layout work to settle off-screen, then reveal exactly once.
+local gui = api.UI and api.UI.Gui
+if not gui then
+    local player = game:GetService("Players").LocalPlayer
+    local playerGui = player and player:FindFirstChildOfClass("PlayerGui")
+    gui = playerGui and playerGui:FindFirstChild("Velora")
+end
+if not gui or not gui:IsA("ScreenGui") then
+    fail("final Velora ScreenGui was not created")
+end
+
+pcall(function()
+    task.wait(0.10)
+    local runService = game:GetService("RunService")
+    runService.RenderStepped:Wait()
+    runService.RenderStepped:Wait()
+end)
+
+if gui.Parent then
+    gui.Enabled = true
+end
+setAtomicBoot(false)
 
 return api
