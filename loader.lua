@@ -165,7 +165,28 @@ installModule(FIX_URLS, "upgrade polish", api, function(source)
     return string.gsub(source, "17582213219", "113397864512278")
 end)
 
-installModule(CLEANUP_URLS, "upgrade cleanup", api)
+installModule(CLEANUP_URLS, "upgrade cleanup", api, function(source)
+    -- The legacy Lab trigger sits at X = windowWidth - 190. That is correct in
+    -- full mode, but overlaps VELORA once the shell shrinks. Hide it before the
+    -- compact width reaches the title and restore it only in the full header.
+    source = replaceOncePlain(source,
+        "        labButton.Parent = header\n",
+[[        labButton.Parent = header
+
+        local function syncCompactLabVisibility()
+            if not labButton.Parent or not window.Parent then return end
+            local compact = window.Size.X.Offset < 400
+            labButton.Visible = not compact
+            if compact and drawer then
+                drawer.Visible = false
+            end
+        end
+
+        syncCompactLabVisibility()
+        window:GetPropertyChangedSignal("Size"):Connect(syncCompactLabVisibility)
+]])
+    return source
+end)
 
 installModule(GLOW_TRIM_URLS, "glow trim", api, function(source)
     -- Strong-but-classy Now Playing bloom. Keep the rim crisp while allowing
