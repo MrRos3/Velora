@@ -1,5 +1,6 @@
 -- Velora main loader.
--- Permanent public entrypoint for the upgraded Velora workstation.
+-- Fast atomic entrypoint: downloads independent layers concurrently, builds the
+-- complete UI off-screen, then reveals it exactly once.
 
 local function setAtomicBoot(enabled)
     local value = enabled and true or nil
@@ -14,8 +15,6 @@ local function setAtomicBoot(enabled)
     end
 end
 
--- Start clean and invisible. This also removes a previously-open Velora before
--- any network work begins, so the user never watches one build morph into another.
 setAtomicBoot(true)
 pcall(function()
     local player = game:GetService("Players").LocalPlayer
@@ -28,13 +27,11 @@ pcall(function()
 end)
 
 local VELORA_REF = "1ee440357b0448a01badba9b37df24e227c03d2c"
+local VISUAL_REF = "41ff131a44c22e6225ffd8114dfabe416f59bab1"
 
--- Runtime stays live on main so newly added songs are picked up immediately.
--- The version token is bumped whenever runtime boot behavior changes so CDN
--- fallback cannot resurrect an older startup sequence.
 local RUNTIME_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-atomic-20260827-2",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-atomic-20260827-2",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-fast-20260827-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-fast-20260827-1",
 }
 
 local UPGRADE_URLS = {
@@ -67,14 +64,16 @@ local WAVE2_URLS = {
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VELORA_REF .. "/upgrade_wave2.lua",
 }
 
+-- Skip the public wrapper files here. They are useful clean repository names,
+-- but the loader can go directly to their pinned proven implementations.
 local VISUAL_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/visuals.lua?v=velora-visuals-20260827-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/visuals.lua?v=velora-visuals-20260827-1",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. VISUAL_REF .. "/glassmorphism.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VISUAL_REF .. "/glassmorphism.lua",
 }
 
 local POLISH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/polish.lua?v=velora-polish-20260827-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/polish.lua?v=velora-polish-20260827-1",
+    "https://raw.githubusercontent.com/MrRos3/Velora/" .. VISUAL_REF .. "/glass_border_tune.lua",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VISUAL_REF .. "/glass_border_tune.lua",
 }
 
 local function fail(reason)
@@ -95,7 +94,7 @@ if type(loadstring) ~= "function" then
     fail("this executor does not provide loadstring")
 end
 
-local function download(urls, label)
+local function tryDownload(urls)
     local lastError
     for _, url in ipairs(urls) do
         local ok, result = pcall(function()
@@ -106,7 +105,43 @@ local function download(urls, label)
         end
         lastError = result
     end
-    fail(label .. " download failed - " .. tostring(lastError))
+    return nil, lastError
+end
+
+-- Start every independent network request immediately. Runtime can begin as soon
+-- as its own source arrives; by the time it finishes building the core UI, the
+-- upgrade layers are normally already sitting in memory ready to install.
+local prefetchSpecs = {
+    runtime = RUNTIME_URLS,
+    upgrade = UPGRADE_URLS,
+    fix = FIX_URLS,
+    cleanup = CLEANUP_URLS,
+    glow = GLOW_TRIM_URLS,
+    compact = COMPACT_FIX_URLS,
+    wave2 = WAVE2_URLS,
+    visuals = VISUAL_URLS,
+    polish = POLISH_URLS,
+}
+
+local prefetched = {}
+local finished = {}
+for key, urls in pairs(prefetchSpecs) do
+    task.spawn(function()
+        local source, err = tryDownload(urls)
+        prefetched[key] = {Source = source, Error = err}
+        finished[key] = true
+    end)
+end
+
+local function takeSource(key, label)
+    while not finished[key] do
+        task.wait()
+    end
+    local item = prefetched[key]
+    if not item or not item.Source then
+        fail(label .. " download failed - " .. tostring(item and item.Error))
+    end
+    return item.Source
 end
 
 local function replaceOncePlain(source, oldText, newText)
@@ -115,8 +150,7 @@ local function replaceOncePlain(source, oldText, newText)
     return source:sub(1, first - 1) .. newText .. source:sub(last + 1)
 end
 
-local function installModule(urls, label, api, transform)
-    local source = download(urls, label)
+local function installSource(source, label, api, transform)
     if transform then source = transform(source) end
     local chunk, compileError = loadstring(source)
     if type(chunk) ~= "function" then
@@ -135,7 +169,7 @@ local function installModule(urls, label, api, transform)
     end
 end
 
-local runtimeSource = download(RUNTIME_URLS, "runtime")
+local runtimeSource = takeSource("runtime", "runtime")
 local runtimeChunk, runtimeCompileError = loadstring(runtimeSource)
 if type(runtimeChunk) ~= "function" then
     fail("runtime compile failed - " .. tostring(runtimeCompileError))
@@ -146,8 +180,7 @@ if not runtimeStarted or type(api) ~= "table" then
     fail("runtime failed - " .. tostring(api))
 end
 
-installModule(UPGRADE_URLS, "upgrade pack", api, function(source)
-    -- Keyboard shortcuts stay removed from the public build.
+installSource(takeSource("upgrade", "upgrade pack"), "upgrade pack", api, function(source)
     source = replaceOncePlain(source, "local shortcutsEnabled = true", "local shortcutsEnabled = false")
     source = replaceOncePlain(source,
 [[        local ctrl = UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) or UserInputService:IsKeyDown(Enum.KeyCode.RightControl)
@@ -160,15 +193,12 @@ installModule(UPGRADE_URLS, "upgrade pack", api, function(source)
     return source
 end)
 
-installModule(FIX_URLS, "upgrade polish", api, function(source)
-    -- Keep the clean UI click for the action-specific sound layer too.
+installSource(takeSource("fix", "upgrade polish"), "upgrade polish", api, function(source)
     return string.gsub(source, "17582213219", "113397864512278")
 end)
 
-installModule(CLEANUP_URLS, "upgrade cleanup", api, function(source)
-    -- The legacy Lab trigger sits at X = windowWidth - 190. That is correct in
-    -- full mode, but overlaps VELORA once the shell shrinks. Hide it before the
-    -- compact width reaches the title and restore it only in the full header.
+installSource(takeSource("cleanup", "upgrade cleanup"), "upgrade cleanup", api, function(source)
+    -- Hide the Lab trigger whenever compact width would make it collide with VELORA.
     source = replaceOncePlain(source,
         "        labButton.Parent = header\n",
 [[        labButton.Parent = header
@@ -188,9 +218,7 @@ installModule(CLEANUP_URLS, "upgrade cleanup", api, function(source)
     return source
 end)
 
-installModule(GLOW_TRIM_URLS, "glow trim", api, function(source)
-    -- Strong-but-classy Now Playing bloom. Keep the rim crisp while allowing
-    -- the softer outer stroke to read as a real glow instead of a faint border.
+installSource(takeSource("glow", "glow trim"), "glow trim", api, function(source)
     source = replaceOncePlain(source,
         "            inner.Thickness = 1.35 + breath * 0.25 + noteKick * 0.25",
         "            inner.Thickness = 1.70 + breath * 0.25 + noteKick * 0.20"
@@ -218,9 +246,8 @@ installModule(GLOW_TRIM_URLS, "glow trim", api, function(source)
     return source
 end)
 
-installModule(COMPACT_FIX_URLS, "compact fix", api)
-installModule(WAVE2_URLS, "wave 2", api, function(source)
-    -- Capture Play varargs before the optional countdown coroutine.
+installSource(takeSource("compact", "compact fix"), "compact fix", api)
+installSource(takeSource("wave2", "wave 2"), "wave 2", api, function(source)
     source = replaceOncePlain(source,
         "            local startId = pickedId(snap)\n            countdownActive = true",
         "            local packedArgs = table.pack(...)\n            local startId = pickedId(snap)\n            countdownActive = true"
@@ -232,11 +259,10 @@ installModule(WAVE2_URLS, "wave 2", api, function(source)
     return source
 end)
 
--- Build the final appearance while ScreenGui.Enabled is still false.
-installModule(VISUAL_URLS, "visual layer", api)
-installModule(POLISH_URLS, "polish layer", api)
+-- These sources were already prefetched while runtime was constructing the core UI.
+installSource(takeSource("visuals", "visual layer"), "visual layer", api)
+installSource(takeSource("polish", "polish layer"), "polish layer", api)
 
--- Allow deferred styling/layout work to settle off-screen, then reveal exactly once.
 local gui = api.UI and api.UI.Gui
 if not gui then
     local player = game:GetService("Players").LocalPlayer
@@ -247,11 +273,9 @@ if not gui or not gui:IsA("ScreenGui") then
     fail("final Velora ScreenGui was not created")
 end
 
+-- One render boundary is enough now that the visual work is already complete.
 pcall(function()
-    task.wait(0.10)
-    local runService = game:GetService("RunService")
-    runService.RenderStepped:Wait()
-    runService.RenderStepped:Wait()
+    game:GetService("RunService").RenderStepped:Wait()
 end)
 
 if gui.Parent then
