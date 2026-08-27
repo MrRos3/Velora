@@ -190,6 +190,19 @@ installSource(takeSource("upgrade", "upgrade pack"), "upgrade pack", api, functi
         end
 ]],
 "")
+
+    -- Loop is session-only. Keep per-song memory for BPM/speed/progress, but do
+    -- not write Loop into memory and ignore any stale Loop value already on disk.
+    source = replaceOncePlain(source,
+[[            Progress = tonumber(snap.Progress),
+            Loop = snap.Loop == true,
+]],
+[[            Progress = tonumber(snap.Progress),
+]])
+    source = replaceOncePlain(source,
+[[        if data.Loop ~= nil then pcall(API.SetLoop, API, data.Loop == true) end
+]],
+"")
     return source
 end)
 
