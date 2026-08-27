@@ -6,6 +6,7 @@ return {
     {Id="once-upon-a-dream-lana-del-rey",Name="Once Upon a Dream",Artist="Lana Del Rey",BPM=123,Categories={"Famous","Lana Del Rey","Soundtrack","Pop","Piano","Dark","Dreamy","Complete"},File="songs/OnceUponADream.lua"},
     {Id="idea-22",Name="Idea 22",Artist="Gibran Alcocer",BPM=120,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Gibran Alcocer","Complete"},File="songs/Idea22.lua"},
     {Id="idea-10",Name="Idea 10",Artist="Gibran Alcocer",BPM=170,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Gibran Alcocer","Complete"},File="songs/Idea10.lua"},
+    {Id="rain-tony-ann",Name="Rain",Artist="Tony Ann",BPM=77,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Tony Ann","Complete"},File="songs/RainTonyAnn.lua"},
     {Id="great-fairy-fountain",Name="Great Fairy Fountain",Artist="The Legend of Zelda: Breath of the Wild",BPM=90,Categories={"Famous","Soundtrack","The Legend of Zelda","Nintendo","Fantasy","Piano","Dreamy","Complete"},File="songs/GreatFairyFountain.lua"},
     {Id="tourner-dans-le-vide-indila",Name="Tourner dans le vide",Artist="Indila",BPM=120,Categories={"Famous","French","Pop","Piano","Dramatic","Complete"},File="songs/TournerDansLeVide.lua"},
     {Id="derniere-danse-indila",Name="Dernière Danse",Artist="Indila",BPM=120,Categories={"Famous","French","Pop","Piano","Dramatic","Complete"},File="songs/DerniereDanse.lua"},
