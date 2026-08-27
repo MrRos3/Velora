@@ -2,9 +2,12 @@
 -- Permanent public entrypoint for the upgraded smooth Velora workstation.
 local VELORA_REF = "1ee440357b0448a01badba9b37df24e227c03d2c"
 
+-- The UI shell/modules stay pinned for stability, but smooth.lua must come from main.
+-- smooth.lua owns the public song-library route, so pinning it trapped Velora on
+-- the old velora-upgrades-test branch and hid newly added songs.
 local SMOOTH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. VELORA_REF .. "/smooth.lua",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VELORA_REF .. "/smooth.lua",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/smooth.lua?v=live-library-20260827-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/smooth.lua?v=live-library-20260827-1",
 }
 
 local UPGRADE_URLS = {
