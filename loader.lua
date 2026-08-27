@@ -1,13 +1,11 @@
 -- Velora main loader.
--- Permanent public entrypoint for the upgraded smooth Velora workstation.
+-- Permanent public entrypoint for the upgraded Velora workstation.
 local VELORA_REF = "1ee440357b0448a01badba9b37df24e227c03d2c"
 
--- The UI shell/modules stay pinned for stability, but smooth.lua must come from main.
--- smooth.lua owns the public song-library route, so pinning it trapped Velora on
--- the old velora-upgrades-test branch and hid newly added songs.
-local SMOOTH_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/smooth.lua?v=live-library-20260827-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/smooth.lua?v=live-library-20260827-1",
+-- Runtime stays live on main so newly added songs are picked up immediately.
+local RUNTIME_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-runtime-20260827-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-runtime-20260827-1",
 }
 
 local UPGRADE_URLS = {
@@ -40,17 +38,14 @@ local WAVE2_URLS = {
     "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. VELORA_REF .. "/upgrade_wave2.lua",
 }
 
--- Approved production glass theme. Pin both visual modules so the public
--- loader always receives the exact manually tested build.
-local GLASS_REF = "9ab80ff40b3f2cdd7608dbc8324ca1653ceaeaec"
-local GLASS_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_REF .. "/glassmorphism.lua?v=velora-main-glass-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_REF .. "/glassmorphism.lua?v=velora-main-glass-1",
+local VISUAL_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/visuals.lua?v=velora-visuals-20260827-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/visuals.lua?v=velora-visuals-20260827-1",
 }
-local GLASS_TUNE_REF = "e601528d90373a12e9fefde9428d08c701421e16"
-local GLASS_TUNE_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/" .. GLASS_TUNE_REF .. "/glass_border_tune.lua?v=velora-main-ruby-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@" .. GLASS_TUNE_REF .. "/glass_border_tune.lua?v=velora-main-ruby-1",
+
+local POLISH_URLS = {
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/polish.lua?v=velora-polish-20260827-1",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/polish.lua?v=velora-polish-20260827-1",
 }
 
 local function fail(reason)
@@ -110,15 +105,15 @@ local function installModule(urls, label, api, transform)
     end
 end
 
-local smoothSource = download(SMOOTH_URLS, "smooth build")
-local smoothChunk, smoothCompileError = loadstring(smoothSource)
-if type(smoothChunk) ~= "function" then
-    fail("smooth build compile failed - " .. tostring(smoothCompileError))
+local runtimeSource = download(RUNTIME_URLS, "runtime")
+local runtimeChunk, runtimeCompileError = loadstring(runtimeSource)
+if type(runtimeChunk) ~= "function" then
+    fail("runtime compile failed - " .. tostring(runtimeCompileError))
 end
 
-local smoothStarted, api = pcall(smoothChunk)
-if not smoothStarted or type(api) ~= "table" then
-    fail("smooth build runtime failed - " .. tostring(api))
+local runtimeStarted, api = pcall(runtimeChunk)
+if not runtimeStarted or type(api) ~= "table" then
+    fail("runtime failed - " .. tostring(api))
 end
 
 installModule(UPGRADE_URLS, "upgrade pack", api, function(source)
@@ -186,9 +181,8 @@ installModule(WAVE2_URLS, "wave 2", api, function(source)
     return source
 end)
 
--- Load the glass treatment last, then apply a small ruby-edge visibility pass.
--- This keeps the approved dark default while making every control boundary readable.
-installModule(GLASS_URLS, "premium glass visual layer", api)
-installModule(GLASS_TUNE_URLS, "premium ruby border tune", api)
+-- Load the visual treatment last, then apply the ruby-edge readability pass.
+installModule(VISUAL_URLS, "visual layer", api)
+installModule(POLISH_URLS, "polish layer", api)
 
 return api
