@@ -34,6 +34,7 @@ return {
     {Id="anlatamam-kara-sevda",Name="Anlatamam (Kara Sevda OST)",Artist="Toygar Işıklı",BPM=50,Categories={"Famous","Soundtrack","Turkish","Emotional","Complete"},File="songs/AnlatamamKaraSevda.lua"},
     {Id="love-story-indila",Name="Love Story",Artist="Indila",BPM=190,Categories={"Famous","French","Pop","Romantic","Piano","Complete"},File="songs/LoveStoryIndila.lua"},
     {Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=119,Categories={"Famous","TikTok","Folk","Upbeat","Piano","Complete"},File="songs/IevanPolkka.lua"},
+    {Id="un-owen-was-her-death-waltz",Name="U.N. Owen Was Her? / Death Waltz",Artist="ZUN",BPM=210,Categories={"Famous","Touhou","Game OST","Black MIDI","Piano","Dramatic","Virtuoso","Complete"},File="songs/UNOWenWasHerDeathWaltz.lua"},
     {Id="kamado-tanjiro-no-uta",Name="Kamado Tanjiro no Uta",Artist="Go Shiina feat. Nami Nakagawa",BPM=151,Categories={"Famous","Anime","Demon Slayer","Emotional","Complete"},File="songs/KamadoTanjiroNoUta.lua"},
     {Id="erika",Name="Erika",Artist="Herms Niel",BPM=112,Categories={"Famous","Historical","German","March","Complete"},File="songs/Erika.lua"},
     {Id="mountain-king",Name="In the Hall of the Mountain King",Artist="Edvard Grieg",BPM=138,Categories={"Famous","TikTok Classics","Classical","Dramatic","Complete"},File="songs/MountainKing.lua"},
