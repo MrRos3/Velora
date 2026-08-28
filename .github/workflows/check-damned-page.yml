@@ -1,0 +1,18 @@
+name: Inspect COD Damned sequence page
+
+on:
+  push:
+    paths:
+      - '.github/workflows/check-damned-page.yml'
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect sequence page
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --fail -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36' 'https://onlinesequencer.net/3941504' -o /tmp/page.html
+          echo "bytes=$(wc -c < /tmp/page.html)"
+          grep -Eoi '.{0,160}(midi|\.mid|sequenceData|sequence_data|export).{0,240}' /tmp/page.html | head -n 120 || true
