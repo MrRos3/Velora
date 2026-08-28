@@ -6,6 +6,7 @@ return {
     {Id="once-upon-a-dream-lana-del-rey",Name="Once Upon a Dream",Artist="Lana Del Rey",BPM=123,Categories={"Famous","Lana Del Rey","Soundtrack","Pop","Piano","Dark","Dreamy","Complete"},File="songs/OnceUponADream.lua"},
     {Id="idea-22",Name="Idea 22",Artist="Gibran Alcocer",BPM=120,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Gibran Alcocer","Complete"},File="songs/Idea22.lua"},
     {Id="idea-10",Name="Idea 10",Artist="Gibran Alcocer",BPM=170,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Gibran Alcocer","Complete"},File="songs/Idea10.lua"},
+    {Id="hotline-bling-gibran-alcocer",Name="Hotline Bling",Artist="Gibran Alcocer",BPM=106,Categories={"Famous","Piano","Cover","Gibran Alcocer","Emotional","Complete"},File="songs/HotlineBling.lua"},
     {Id="rain-tony-ann",Name="Rain",Artist="Tony Ann",BPM=77,Categories={"Famous","Piano","Instrumental","Emotional","Modern Classical","Tony Ann","Complete"},File="songs/RainTonyAnn.lua"},
     {Id="fluxxwave-clovis-reyes",Name="Fluxxwave",Artist="Clovis Reyes",BPM=150,Categories={"Famous","TikTok","Electronic","Dark","Piano","Clovis Reyes","Complete"},File="songs/Fluxxwave.lua"},
     {Id="super-mario-bros-main-theme",Name="Super Mario Bros. Main Theme",Artist="Koji Kondo",BPM=180,Categories={"Famous","Game OST","Super Mario","Nintendo","Upbeat","Piano","Complete"},File="songs/SuperMarioBrosMainTheme.lua"},
