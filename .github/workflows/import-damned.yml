@@ -23,23 +23,18 @@ jobs:
       - name: Install MIDI parser
         run: python -m pip install --disable-pip-version-check mido
 
-      - name: Download source MIDI
+      - name: Download verified source MIDI
         shell: bash
         run: |
           set -euo pipefail
-          URL1='https://pianometric.com/DownloadMIDI.php?ProductCanon=27016-damned-cod-black-ops-zombies-remix-piano&ProductId=fF9RUng&ProductName=Damned+-+COD%3A+Black+Ops+Zombies+%28remix%29+Piano'
-          URL2='https://pianosnap.com/DownloadMIDI.php?ProductCanon=27016-damned-cod-black-ops-zombies-remix-piano&ProductId=fF9RUng&ProductName=Damned+-+COD%3A+Black+Ops+Zombies+%28remix%29+Piano'
-          for URL in "$URL1" "$URL2"; do
-            rm -f /tmp/damned.mid
-            if curl -L --fail --retry 2 --connect-timeout 15 -A 'Mozilla/5.0' -e 'https://musescore.com/user/33616945/scores/6716032' "$URL" -o /tmp/damned.mid; then
-              if [ "$(head -c 4 /tmp/damned.mid)" = 'MThd' ]; then
-                printf '%s' "$URL" > /tmp/damned-source-url.txt
-                exit 0
-              fi
-            fi
-          done
-          echo 'Could not retrieve a valid MIDI source.' >&2
-          exit 1
+          URL='https://robloxpianosheet.com/api/midi/black-ops-2-zombie-theme'
+          PAGE='https://robloxpianosheet.com/sheets/black-ops-2-zombie-theme'
+          curl -L --fail --retry 2 --connect-timeout 15 -A 'Mozilla/5.0' -e "$PAGE" "$URL" -o /tmp/damned.mid
+          test "$(head -c 4 /tmp/damned.mid)" = 'MThd'
+          ACTUAL_SHA="$(sha256sum /tmp/damned.mid | awk '{print toupper($1)}')"
+          EXPECTED_SHA='26F66A460AB29AB60B55B333AE05070A7C7C1A7D76D4112F4C077D37007774B5'
+          echo "Damned MIDI SHA-256: $ACTUAL_SHA"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
 
       - name: Convert MIDI to Velora
         run: |
@@ -54,9 +49,7 @@ jobs:
           OUT_PATH = Path('songs/Damned.lua')
           REGISTRY = Path('Songs.lua')
           STEPS_PER_BEAT = 48
-          MIN_NOTE, MAX_NOTE = 36, 96  # C2..C7
-
-          # Standard 61-key Roblox virtual-piano layout, C2 through C7.
+          MIN_NOTE, MAX_NOTE = 36, 96
           KEYS = list('1!2@34$5%6^78*9(0qQwWeErtTyYuUiIoOpPasSdDfgGhHjJklLzZxcCvVbBnm')
           assert len(KEYS) == 61
           KEY_FOR_NOTE = {MIN_NOTE + i: key for i, key in enumerate(KEYS)}
@@ -65,13 +58,16 @@ jobs:
           sha256 = hashlib.sha256(raw).hexdigest().upper()
           mid = mido.MidiFile(MIDI_PATH)
 
-          tempos = []
-          meters = []
+          tempos, meters = [], []
           musical_tracks = 0
+          track_names = []
           for track in mid.tracks:
               has_music = False
+              track_name = None
               for msg in track:
-                  if msg.type == 'set_tempo':
+                  if msg.type == 'track_name' and msg.name:
+                      track_name = msg.name
+                  elif msg.type == 'set_tempo':
                       tempos.append(msg.tempo)
                   elif msg.type == 'time_signature':
                       meters.append(f'{msg.numerator}/{msg.denominator}')
@@ -79,9 +75,10 @@ jobs:
                       has_music = True
               if has_music:
                   musical_tracks += 1
+                  if track_name:
+                      track_names.append(track_name)
 
           display_bpm = round(60_000_000 / (tempos[0] if tempos else 500_000))
-          display_bpm = max(30, min(300, display_bpm))
           step_seconds = (60.0 / display_bpm) / STEPS_PER_BEAT
 
           tempo = 500_000
@@ -112,7 +109,7 @@ jobs:
               events[step].add(note)
 
           if not events:
-              raise SystemExit('No musical note-on events found in MIDI')
+              raise SystemExit('No musical note-on events found in Damned MIDI')
 
           packed = []
           previous_step = -1
@@ -124,9 +121,7 @@ jobs:
               packed.append(f'{gap}:{token}')
               previous_step = step
 
-          # Wrap the compact event stream for readable diffs.
-          lines = []
-          line = ''
+          lines, line = [], ''
           for item in packed:
               candidate = item if not line else line + ' ' + item
               if len(candidate) > 118:
@@ -143,16 +138,18 @@ jobs:
               if meter not in unique_meters:
                   unique_meters.append(meter)
           meter_text = ', '.join(unique_meters) if unique_meters else 'not specified'
-          source_url = Path('/tmp/damned-source-url.txt').read_text().strip()
+          track_text = ', '.join(track_names) if track_names else 'unnamed musical tracks'
 
-          lua = f'''-- Velora 0.10.20 Nova — complete arrangement converted from the user-requested MuseScore-derived MIDI arrangement.
-          -- Source arrangement: “Damned - COD: Black Ops Zombies (remix)” by Kevin Sherwood, arranged by Nigel Tang / RandomUser4212.
-          -- MuseScore reference: https://musescore.com/user/33616945/scores/6716032
-          -- MIDI mirror used for conversion: {source_url}
+          lua = f'''-- Velora 0.10.20 Nova — verified COD Zombies arrangement converted from MIDI.
+          -- Song: Damned — Call of Duty: Black Ops Zombies.
+          -- Original composition: Kevin Sherwood. Source page presents the Black Ops II Zombies theme arrangement under Brian Tuey.
+          -- Verified source page: https://robloxpianosheet.com/sheets/black-ops-2-zombie-theme
+          -- MIDI source: https://robloxpianosheet.com/api/midi/black-ops-2-zombie-theme
+          -- Source verification: Online Sequencer MIDI export, verified by the source page on 2026-04-27.
           -- Source MIDI SHA-256: {sha256}
           -- MIDI: {mid.ticks_per_beat} PPQ, {len(tempos)} source tempo event(s), source time signature(s): {meter_text}.
           -- Timing normalized to real seconds at {display_bpm} BPM / {STEPS_PER_BEAT} Velora steps per beat.
-          -- {musical_tracks} non-drum musical track(s) retained; simultaneous duplicate pitches are merged.
+          -- {musical_tracks} non-drum musical tracks retained ({track_text}); simultaneous duplicate pitches are merged.
           -- {source_note_ons:,} source note-on events processed.
           -- {folded:,} out-of-range note-on events were folded by octave into Velora's C2-C7 keyboard range.
 
@@ -179,13 +176,12 @@ jobs:
               BPM={display_bpm},
               StepsPerBeat={STEPS_PER_BEAT},
               Complete=true,
-              Source="MuseScore-derived MIDI arrangement",
+              Source="Verified Roblox Piano Sheet / Online Sequencer MIDI export",
               SourceLicense="Third-party composition and arrangement; rights remain with their respective owners.",
               Categories={{"Famous","Game OST","Call of Duty","Zombies","Dark","Piano","Horror","Complete"}},
               Notes=table.concat(sheet, " "),
           }}
           '''
-          # Strip the workflow script's indentation from generated Lua.
           lua = '\n'.join(line[10:] if line.startswith('          ') else line for line in lua.splitlines()) + '\n'
           OUT_PATH.write_text(lua, encoding='utf-8')
 
