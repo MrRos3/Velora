@@ -50,7 +50,7 @@ jobs:
           REGISTRY = Path('Songs.lua')
           STEPS_PER_BEAT = 48
           MIN_NOTE, MAX_NOTE = 36, 96
-          KEYS = list('1!2@34$5%6^78*9(0qQwWeErtTyYuUiIoOpPasSdDfgGhHjJklLzZxcCvVbBnm')
+          KEYS = list('1!2@34$5%6^78*9(0qQwWeErtTyYuUiIoOpPasSdDfgGhHjJklLzZxcCvVbBn')
           assert len(KEYS) == 61
           KEY_FOR_NOTE = {MIN_NOTE + i: key for i, key in enumerate(KEYS)}
 
