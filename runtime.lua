@@ -102,6 +102,14 @@ releaseSource = replaceOnce(
     "public song base"
 )
 
+-- Bust the public song registry/module cache whenever the live library changes.
+releaseSource = replaceOnce(
+    releaseSource,
+    'AssetRevision = "0.10.21-seekfix1"',
+    'AssetRevision = "0.10.21-around-world-1"',
+    "song library revision"
+)
+
 -- Remove the protected-client startup from the public build.
 releaseSource = replaceBetween(
     releaseSource,
