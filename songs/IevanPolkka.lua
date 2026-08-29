@@ -18,35 +18,20 @@ return {
     SourceLicense="Traditional melody; source transcription available under CC BY-SA unless otherwise noted.",
     Categories={"Famous","TikTok","Folk","Polka","Upbeat","Piano","Complete"},
     Notes=[=[
--- A1
 a - - a a - S - | d - a - a - d - | S - p - p - S - | d S a p a - I -
 a - - a a - S - | d - a - a - - - | f - G f d - S - | a - - - a - - -
-
--- A2
 a - - a a - S - | d - a - a - d - | S - p - p - S - | d S a p a - I -
 a - - a a - S - | d - a - a - - - | f - G f d - S - | a - - - a - - -
-
--- B1
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - S - d - f -
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - - - a - - -
-
--- B2
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - S - d - f -
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - - - a - - -
-
--- A1 repeat
 a - - a a - S - | d - a - a - d - | S - p - p - S - | d S a p a - I -
 a - - a a - S - | d - a - a - - - | f - G f d - S - | a - - - a - - -
-
--- A2 repeat
 a - - a a - S - | d - a - a - d - | S - p - p - S - | d S a p a - I -
 a - - a a - S - | d - a - a - - - | f - G f d - S - | a - - - a - - -
-
--- B1 repeat
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - S - d - f -
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - - - a - - -
-
--- B2 repeat
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - S - d - f -
 G - - d d - G - | f - S - S - d - | f - G f d - S - | a - - - a - - -
 ]=],
