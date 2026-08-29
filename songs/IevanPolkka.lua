@@ -1,125 +1,42 @@
--- Velora song adapter for TALENTLESS's historical LEVAN_POLKKA arrangement.
--- TALENTLESS used the filename LEVAN_POLKKA; this converts its keypress/rest
--- event stream into Velora's native high-resolution sheet format at runtime.
-
-local BPM = 119
-local STEPS_PER_BEAT = 64
-
-local SOURCES = {
-    "https://hellohellohell0.com/talentless-raw/SONGS/LEVAN_POLKKA",
-    "https://raw.githubusercontent.com/hellohellohell012321/TALENTLESS/c101dcd8ed43f868ad70a1bcd32281954e87ca70/LEVAN_POLKKA",
-}
-
-local function fetchArrangement()
-    local lastError
-
-    for _, url in ipairs(SOURCES) do
-        local ok, body = pcall(function()
-            return game:HttpGet(url, true)
-        end)
-
-        if ok
-            and type(body) == "string"
-            and #body > 64
-            and body:find("keypress", 1, true)
-            and body:find("rest", 1, true) then
-            return body, url
-        end
-
-        lastError = body
-    end
-
-    error("Velora could not fetch the Ievan Polkka arrangement: " .. tostring(lastError), 0)
-end
-
-local source, sourceUrl = fetchArrangement()
-local sheet = {}
-local pendingKeys = {}
-local pendingGap = 0
-local restBuffer = 0
-local emitted = false
-
-local function appendDashes(count)
-    for _ = 1, math.max(0, count) do
-        sheet[#sheet + 1] = "-"
-    end
-end
-
-local function gapToDashes(beats, isFirst)
-    local steps = math.max(0, math.floor((tonumber(beats) or 0) * STEPS_PER_BEAT + 0.5))
-    if isFirst then
-        return steps
-    end
-    return math.max(steps - 1, 0)
-end
-
-local function appendKeys(keys)
-    for index = 1, #keys do
-        pendingKeys[#pendingKeys + 1] = keys:sub(index, index)
-    end
-end
-
-local function flushPending()
-    if #pendingKeys == 0 then
-        return
-    end
-
-    appendDashes(gapToDashes(pendingGap, not emitted))
-
-    if #pendingKeys == 1 then
-        sheet[#sheet + 1] = pendingKeys[1]
-    else
-        sheet[#sheet + 1] = "[" .. table.concat(pendingKeys) .. "]"
-    end
-
-    table.clear(pendingKeys)
-    emitted = true
-end
-
-for line in source:gmatch("[^\r\n]+") do
-    local keys = line:match('^%s*keypress%(%s*"([^"]+)"')
-
-    if keys then
-        if #pendingKeys == 0 then
-            pendingGap = restBuffer
-            restBuffer = 0
-            appendKeys(keys)
-        elseif restBuffer > 0 then
-            flushPending()
-            pendingGap = restBuffer
-            restBuffer = 0
-            appendKeys(keys)
-        else
-            -- Consecutive TALENTLESS keypress calls with no rest are one chord.
-            appendKeys(keys)
-        end
-    else
-        local restValue = line:match("^%s*rest%(%s*([%d%.]+)")
-        if restValue then
-            restBuffer += tonumber(restValue) or 0
-        end
-    end
-end
-
-flushPending()
-
-if emitted and restBuffer > 0 then
-    appendDashes(gapToDashes(restBuffer, false))
-end
-
-if #sheet == 0 then
-    error("Velora parsed zero notes from the Ievan Polkka arrangement.", 0)
-end
+-- Velora native arrangement of the traditional Finnish folk tune "Ievan Polkka".
+-- Self-contained: no runtime song fetches or external arrangement dependency.
+-- Arrangement created for Velora's Roblox piano mapping.
 
 return {
-    Id = "ievan-polkka",
-    Name = "Ievan Polkka",
-    Artist = "Traditional Finnish",
-    BPM = BPM,
-    StepsPerBeat = STEPS_PER_BEAT,
-    Complete = true,
-    Source = sourceUrl,
-    SourceLicense = "Upstream TALENTLESS arrangement; see the source repository/license for terms.",
-    Categories = {"Famous", "TikTok", "Folk", "Upbeat", "Piano", "Complete"},
-    Notes = table.concat(sheet, " "),
+    Id="ievan-polkka",
+    Name="Ievan Polkka",
+    Artist="Traditional Finnish",
+    BPM=119,
+    StepsPerBeat=8,
+    Complete=true,
+    Source="Traditional Finnish folk melody; original Velora arrangement",
+    SourceLicense="Public-domain traditional melody; Velora arrangement released with this repository.",
+    Categories={"Famous","TikTok","Folk","Upbeat","Piano","Complete"},
+    Notes=[=[
+[7r] - - - Q - - - [7y] - - - Q - - - [7r] - - - Q - - - [7y] - - - Q - - - [a7] - - - a - - - [aQ] - - - S - - - [d7] - - - a - - - [aQ] - - - d - - -
+[S6] - - - p - - - [p0] - - - S - - - [d7] - - - S - - - [aQ] - - - [pI] - - - [a7] - - - a - - - [aQ] - - - S - - - [d7] - - - a - - - [aQ] - - - - - - -
+[f6] - - - G - - - [f0] - - - d - - - [S7] - - - a - - - Q - - - - - - - [a7] - - - a - - - [aQ] - - - S - - - [d7] - - - a - - - [aQ] - - - d - - -
+[S6] - - - p - - - [p0] - - - S - - - [d7] - - - S - - - [aQ] - - - [pI] - - - [a7] - - - a - - - [aQ] - - - S - - - [d7] - - - a - - - [aQ] - - - - - - -
+[f6] - - - G - - - [f0] - - - d - - - [S7] - - - a - - - Q - - - - - - - [G7] - - - d - - - [dQ] - - - G - - - [f6] - - - S - - - [S0] - - - d - - -
+[f6] - - - G - - - [f0] - - - d - - - [a7] - - - S - - - [dQ] - - - f - - - [G7] - - - d - - - [dQ] - - - G - - - [f6] - - - S - - - [S0] - - - d - - -
+[f6] - - - G - - - [f0] - - - d - - - [S7] - - - a - - - Q - - - - - - - [G7] - - - d - - - [dQ] - - - G - - - [f6] - - - S - - - [S0] - - - d - - -
+[f6] - - - G - - - [f0] - - - d - - - [a7] - - - S - - - [dQ] - - - f - - - [G7] - - - d - - - [dQ] - - - G - - - [f6] - - - S - - - [S0] - - - d - - -
+[f6] - - - G - - - [f0] - - - d - - - [S7] - - - a - - - Q - - - - - - - [a7r] - - - a - - - [aQy] - - - S - - - [d7r] - - - a - - - [aQy] - - - d - - -
+[S6e] - - - p - - - [p0T] - - - S - - - [d7r] - - - S - - - [aQy] - - - [pI] - - - [a7r] - - - a - - - [aQy] - - - S - - - [d7r] - - - a - - - [aQy] - - - - - - -
+[f6e] - - - G - - - [f0T] - - - d - - - [S7r] - - - a - - - [Qy] - - - - - - - [a7r] - - - a - - - [aQy] - - - S - - - [d7r] - - - a - - - [aQy] - - - d - - -
+[S6e] - - - p - - - [p0T] - - - S - - - [d7r] - - - S - - - [aQy] - - - [pI] - - - [a7r] - - - a - - - [aQy] - - - S - - - [d7r] - - - a - - - [aQy] - - - - - - -
+[f6e] - - - G - - - [f0T] - - - d - - - [S7r] - - - a - - - [Qy] - - - - - - - [G7r] - - - d - - - [dQy] - - - G - - - [f6e] - - - S - - - [S0T] - - - d - - -
+[f6e] - - - G - - - [f0T] - - - d - - - [a7r] - - - S - - - [dQy] - - - f - - - [G7r] - - - d - - - [dQy] - - - G - - - [f6e] - - - S - - - [S0T] - - - d - - -
+[f6e] - - - G - - - [f0T] - - - d - - - [S7r] - - - a - - - [Qy] - - - - - - - [G7r] - - - d - - - [dQy] - - - G - - - [f6e] - - - S - - - [S0T] - - - d - - -
+[f6e] - - - G - - - [f0T] - - - d - - - [a7r] - - - S - - - [dQy] - - - f - - - [G7r] - - - d - - - [dQy] - - - G - - - [f6e] - - - S - - - [S0T] - - - d - - -
+[f6e] - - - G - - - [f0T] - - - d - - - [S7r] - - - a - - - [Qy] - - - - - - - [a7r] - - - [aQ] - - - [aQy] - - - [Sr] - - - [d7r] - - - [aQ] - - - [aQy] - - - [dr] - - -
+[S6e] - - - [p0] - - - [p0T] - - - [Se] - - - [d7r] - - - [SQ] - - - [aQy] - - - [prI] - - - [a7r] - - - [aQ] - - - [aQy] - - - [Sr] - - - [d7r] - - - [aQ] - - - [aQy] - - - r - - -
+[f6e] - - - [G0] - - - [f0T] - - - [de] - - - [S7r] - - - [aQ] - - - [Qy] - - - r - - - [a7r] - - - [aQ] - - - [aQy] - - - [Sr] - - - [d7r] - - - [aQ] - - - [aQy] - - - [dr] - - -
+[S6e] - - - [p0] - - - [p0T] - - - [Se] - - - [d7r] - - - [SQ] - - - [aQy] - - - [prI] - - - [a7r] - - - [aQ] - - - [aQy] - - - [Sr] - - - [d7r] - - - [aQ] - - - [aQy] - - - r - - -
+[f6e] - - - [G0] - - - [f0T] - - - [de] - - - [S7r] - - - [aQ] - - - [Qy] - - - r - - - [G7r] - - - [dQ] - - - [dQy] - - - [Gr] - - - [f6e] - - - [S0] - - - [S0T] - - - [de] - - -
+[f6e] - - - [G0] - - - [f0T] - - - [de] - - - [a7r] - - - [SQ] - - - [dQy] - - - [fr] - - - [G7r] - - - [dQ] - - - [dQy] - - - [Gr] - - - [f6e] - - - [S0] - - - [S0T] - - - [de] - - -
+[f6e] - - - [G0] - - - [f0T] - - - [de] - - - [S7r] - - - [aQ] - - - [Qy] - - - r - - - [G7r] - - - [dQ] - - - [dQy] - - - [Gr] - - - [f6e] - - - [S0] - - - [S0T] - - - [de] - - -
+[f6e] - - - [G0] - - - [f0T] - - - [de] - - - [a7r] - - - [SQ] - - - [dQy] - - - [fr] - - - [G7r] - - - [dQ] - - - [dQy] - - - [Gr] - - - [f6e] - - - [S0] - - - [S0T] - - - [de] - - -
+[f6e] - - - [G0] - - - [f0T] - - - [de] - - - [S7r] - - - [aQ] - - - [Qy] - - - r - - - [7Qrad] - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+]=],
 }
