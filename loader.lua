@@ -30,8 +30,8 @@ local VELORA_REF = "1ee440357b0448a01badba9b37df24e227c03d2c"
 local VISUAL_REF = "41ff131a44c22e6225ffd8114dfabe416f59bab1"
 
 local RUNTIME_URLS = {
-    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-fast-20260829-native-ievan-1",
-    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-fast-20260829-native-ievan-1",
+    "https://raw.githubusercontent.com/MrRos3/Velora/main/runtime.lua?v=velora-fast-20260829-native-ievan-2",
+    "https://cdn.jsdelivr.net/gh/MrRos3/Velora@main/runtime.lua?v=velora-fast-20260829-native-ievan-2",
 }
 
 local UPGRADE_URLS = {
