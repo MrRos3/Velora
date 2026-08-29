@@ -1,7 +1,3 @@
--- Velora song adapter for TALENTLESS's historical AROUND_THE_WORLD arrangement.
--- The arrangement stays at its upstream source; this module converts its
--- keypress/rest event stream into Velora's native sheet format at runtime.
-
 local BPM = 132
 local STEPS_PER_BEAT = 64
 
@@ -115,7 +111,7 @@ end
 
 return {
     Id = "around-the-world-atc",
-    Name = "Around the World (La La La La La)",
+    Name = "Around the World",
     Artist = "ATC",
     BPM = BPM,
     StepsPerBeat = STEPS_PER_BEAT,
