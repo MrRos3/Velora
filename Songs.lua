@@ -16,6 +16,7 @@ return {
     {Id="bad-piggies-theme",Name="Bad Piggies Theme",Artist="Ilmari Hakkola",BPM=155,Categories={"Famous","Game OST","Bad Piggies","Fun","Meme","Piano","Complete"},File="songs/BadPiggiesTheme.lua"},
     {Id="megalovania-undertale",Name="MEGALOVANIA",Artist="Toby Fox",BPM=120,Categories={"Famous","Game OST","Undertale","Meme","Upbeat","Piano","Complete"},File="songs/Megalovania.lua"},
     {Id="apt-rose-bruno-mars",Name="APT.",Artist="ROSÉ & Bruno Mars",BPM=165,Categories={"Famous","Pop","TikTok","K-pop","Fun","Piano","Complete"},File="songs/APT.lua"},
+    {Id="around-the-world-atc",Name="Around the World (La La La La La)",Artist="ATC",BPM=132,Categories={"Famous","Pop","Eurodance","2000s","ATC","Piano","Complete"},File="songs/AroundTheWorld.lua"},
     {Id="pedro-jaxomy-agatino-romero",Name="Pedro",Artist="Jaxomy, Agatino Romero & Raffaella Carrà",BPM=151,Categories={"Famous","TikTok","Meme","Dance","Fun","Piano","Complete"},File="songs/Pedro.lua"},
     {Id="great-fairy-fountain",Name="Great Fairy Fountain",Artist="The Legend of Zelda: Breath of the Wild",BPM=90,Categories={"Famous","Soundtrack","The Legend of Zelda","Nintendo","Fantasy","Piano","Dreamy","Complete"},File="songs/GreatFairyFountain.lua"},
     {Id="tourner-dans-le-vide-indila",Name="Tourner dans le vide",Artist="Indila",BPM=120,Categories={"Famous","French","Pop","Piano","Dramatic","Complete"},File="songs/TournerDansLeVide.lua"},
