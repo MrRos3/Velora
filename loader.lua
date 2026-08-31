@@ -191,8 +191,20 @@ installSource(takeSource("upgrade", "upgrade pack"), "upgrade pack", api, functi
 ]],
 "")
 
-    -- Loop is session-only. Keep per-song memory for BPM/speed/progress, but do
-    -- not write Loop into memory and ignore any stale Loop value already on disk.
+    -- BPM and Loop are session-only. Keep per-song memory for speed/progress,
+    -- but always start each song at its own default BPM after a loader reload.
+    source = replaceOncePlain(source,
+[[            BPM = tonumber(snap.BPM),
+            Speed = tonumber(snap.Speed),
+]],
+[[            Speed = tonumber(snap.Speed),
+]])
+    source = replaceOncePlain(source,
+[[        if tonumber(data.Speed) then pcall(API.SetSpeed, API, data.Speed) end
+        if tonumber(data.BPM) then pcall(API.SetBPM, API, data.BPM) end
+]],
+[[        if tonumber(data.Speed) then pcall(API.SetSpeed, API, data.Speed) end
+]])
     source = replaceOncePlain(source,
 [[            Progress = tonumber(snap.Progress),
             Loop = snap.Loop == true,
