@@ -1,5 +1,11 @@
--- Velora 0.10.20 Nova — contrast and continuous compact reveal.
+-- Velora 0.10.22 Nova — expanded MIDI song library.
 return {
+    {Id="any-last-words-hu-tao",Name="Any Last Words? — Hu Tao Theme",Artist="HOYO-MiX",BPM=120,Categories={"Famous","Game OST","Genshin Impact","Hu Tao","Piano","Dramatic","Complete"},File="songs/AnyLastWordsHuTao.lua"},
+    {Id="bella-ciao",Name="Bella Ciao",Artist="Traditional Italian",BPM=120,Categories={"Famous","Folk","Italian","Traditional","Piano","Complete"},File="songs/BellaCiao.lua"},
+    {Id="blue-da-ba-dee",Name="Blue (Da Ba Dee)",Artist="Eiffel 65",BPM=130,Categories={"Famous","Pop","Eurodance","1990s","Eiffel 65","Piano","Complete"},File="songs/BlueDaBaDee.lua"},
+    {Id="fly-me-to-the-moon",Name="Fly Me to the Moon",Artist="Bart Howard",BPM=140,Categories={"Famous","Jazz","Standard","Romantic","Piano","Complete"},File="songs/FlyMeToTheMoon.lua"},
+    {Id="game-of-thrones-main-theme",Name="Game of Thrones — Main Theme",Artist="Ramin Djawadi",BPM=86,Categories={"Famous","Soundtrack","TV","Game of Thrones","Piano","Dramatic","Complete"},File="songs/GameOfThronesMainTheme.lua"},
+    {Id="interstellar-suite",Name="Interstellar Suite",Artist="Hans Zimmer",BPM=80,Categories={"Famous","Soundtrack","Film","Interstellar","Hans Zimmer","Piano","Cinematic","Complete"},File="songs/InterstellarSuite.lua"},
     {Id="mariage-damour",Name="Mariage d'Amour",Artist="Paul de Senneville",BPM=85,Categories={"Famous","Piano","Romantic","Complete"},File="songs/MariageDAmour.lua"},
     {Id="la-petite-fille-de-la-mer",Name="La petite fille de la mer",Artist="Vangelis",BPM=80,Categories={"Famous","Soundtrack","Ambient","Piano","Emotional","Complete"},File="songs/LaPetiteFilleDeLaMer.lua"},
     {Id="salvatore-lana-del-rey",Name="Salvatore",Artist="Lana Del Rey",BPM=58,Categories={"Famous","Lana Del Rey","Pop","Piano","Cinematic","Emotional","Complete"},File="songs/Salvatore.lua"},
