@@ -106,7 +106,7 @@ releaseSource = replaceOnce(
 releaseSource = replaceOnce(
     releaseSource,
     'AssetRevision = "0.10.21-seekfix1"',
-    'AssetRevision = "0.10.21-native-ievan-3"',
+    'AssetRevision = "0.10.22-midi-pack-1"',
     "song library revision"
 )
 
@@ -153,7 +153,7 @@ end
 
 local started, result = pcall(chunk)
 if not started then
-    fail("runtime error - " .. tostring(result))
+    fail("runtime error - " .. tostring(result), 0)
 end
 
 -- Preserve the proven smooth-build click audio behavior.
