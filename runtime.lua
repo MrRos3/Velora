@@ -153,7 +153,7 @@ end
 
 local started, result = pcall(chunk)
 if not started then
-    fail("runtime error - " .. tostring(result), 0)
+    fail("runtime error - " .. tostring(result))
 end
 
 -- Preserve the proven smooth-build click audio behavior.
