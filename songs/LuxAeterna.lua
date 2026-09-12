@@ -1,241 +1,60 @@
--- Velora 0.10.23 conversion from a MIDI supplied by the repository owner.
--- Source file: Requiem for a Dream - Lux Aeterna [MIDIfind.com].mid
--- Source SHA-256: 23174109C8DF2EF977E805E72BD540FC9CE6EDD8E8CDDB747044F92EA9FD9232
--- Corrected 61-key mapping; all non-percussion musical layers are retained.
--- Tempo changes are baked into the timing grid; simultaneous duplicate pitches are merged.
+-- Velora 0.10.24 conversion from a MIDI supplied by the repository owner.
+-- Source file: Requiem for a dream ( Lux Aeterna).mid
+-- Source SHA-256: BA28D1864E61957B7C8425B3AF98BAFA788E549823351CCD5C37C11F1D35512E
+-- Exact 61-key mapping; all five non-percussion musical layers are retained.
+-- The source uses a constant tempo and an exact 1/8-beat timing grid; simultaneous duplicate pitches are merged.
 return {
     Id="requiem-for-a-dream-lux-aeterna",
     Name="Requiem for a Dream — Lux Aeterna (Piano Version)",
     Artist="Clint Mansell",
-    BPM=68,
-    StepsPerBeat=12,
+    BPM=41,
+    StepsPerBeat=8,
     Complete=true,
-    DurationSeconds=256.176,
-    OriginalDurationSeconds=256.206,
-    TempoEvents=48,
+    DurationSeconds=106.463,
+    OriginalDurationSeconds=106.463,
+    TempoEvents=1,
     TimeSignatures={"4/4"},
-    Source="User-supplied MIDI downloaded from MIDIfind.com",
-    SourceFile="Requiem for a Dream - Lux Aeterna [MIDIfind.com].mid",
+    Source="User-supplied MIDI file",
+    SourceFile="Requiem for a dream ( Lux Aeterna).mid",
     SourceLicense="User-provided source file; converted for Velora at the repository owner's request.",
     Categories={"Famous","Soundtrack","Film","Requiem for a Dream","Clint Mansell","Piano","Dark","Cinematic","Complete"},
     Notes=[=[
-5 - - - | - - - - | - - - - | 5 - - -
-- - - - | - - - - | 5 - - - | - - - -
-- - - - | 5 - - - | - - - - | - - - -
-5 - - - | - - - - | - - - - | 5 - - -
-- - - - | - - - - | 5 - - - | - - - -
-- - - - | 5 - - - | - - - - | - - - -
-5 - - - | - - - - | - - - - | 5 - - -
-- - - - | - - - - | 5 - - - | - - - -
-- - - - | 5 - - - | - - - - | - - - -
-5 - - - | - - - - | - - - - | 5 - - -
-- - - - | - - - - | 5 - - - | - - - -
-- - - - | 5 - - - | - - - - | - - - -
-[5p] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[5p] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[5p] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[5p] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[5wp] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[@5(p] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [259p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[5wp] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[@5(p] - - - | P - - - | p - - - | [5P] - - -
-p - - - | P - - - | [259p] - - - | P - - -
-p - - - | [5P] - - - | p - - - | P - - -
-[5wopP] - - - | P - p - | p - - - | [5oP] - - -
-p - y - | P - - - | [5pP] - - - | P - p -
-p - - - | [5oP] - - - | p - y - | P - - -
-[@5(pP] - - - | P - p - | p - - - | [5oP] - - -
-p - y - | P - - - | [259pPs] - - - | P - P -
-p - - - | [5pP] - - - | p - o - | P - - -
-[5wopP] - - - | P - p - | p - - - | [5oP] - - -
-p - y - | P - - - | [5pP] - - - | P - p -
-p - - - | [5oP] - - - | p - y - | P - - -
-[@5(iP] - - - | - - p - | - - - - | [5o] - - -
-- - y - | - - - - | [259Ys] - - - | - - P -
-- - - - | [5p] - - - | - - o - | - - - -
-[5woP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [5oP] - - - | - - p -
-- - - - | [5oP] - - - | - - y - | - - - -
-[@5(opP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [259oPs] - - - | - - P -
-- - - - | [5opP] - - - | - - o - | - - - -
-[5wopP] - - - | - - p - | - - - - | [5op] - - -
-- - y - | - - - - | [5opP] - - - | - - p -
-- - - - | [5op] - - - | - - y - | - - - -
-[@5(ioPs] - - - | - - p - | - - - - | [5os] - - -
-- - y - | - - - - | [259Yos] - - - | - - P -
-- - - - | [5TopS] - - - | - - o - | - - - -
-[5woP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [5oP] - - - | - - p -
-- - - - | [5oP] - - - | - - y - | - - - -
-[@5(opP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [259oPs] - - - | - - P -
-- - - - | [5opP] - - - | - - o - | - - - -
-[5wopP] - - - | - - p - | - - - - | [5op] - - -
-- - y - | - - - - | [5opP] - - - | - - p -
-- - - - | [5op] - - - | - - y - | - - - -
-[@5(ioPs] - - - | - - p - | - - - - | [5os] - - -
-- - y - | - - - - | [259Yos] - - - | - - P -
-- - - - | [5opS] - - - | - - o - | - - - -
-[5woPJ] - - - | - - [ph] - | - - - - | [5oP] - - -
-- - [yJ] - | - h - - | [5oPJ] - - h | - - p -
-- - - - | [5oP] - - - | - - [yJ] - | - h - -
-[@5(opPJ] - - h | - - p - | - - - - | [5oP] - - -
-- - [yJ] - | - h - - | [259oPsJ] - - h | - - [PJ] -
-- h - - | [5opPJ] - - h | - - [oJ] - | - h - -
-[5wopPJ] - - j | - - p - | - - - - | [5op] - - -
-- - [yJ] - | - j - - | [5opPJ] - - j | - - p -
-- - - - | [5op] - - - | - - [yJ] - | - j - -
-[@5(ioPsJ] - - j | - - p - | - - - - | [5os] - - -
-- - [yJ] - | - j - - | [259YosJ] - - j | - - [PJ] -
-- j - - | [5opSJ] - - j | - - [oJ] - | - j - -
-[5woPJ] - - - | - - [ph] - | - - - - | [5oP] - - -
-- - [yJ] - | - h - - | [5oPJ] - - h | - - p -
-- - - - | [5oP] - - - | - - [yJ] - | - h - -
-[@5(opPJ] - - h | - - p - | - - - - | [5oP] - - -
-- - [yJ] - | - h - - | [259oPsJ] - - h | - - [PJ] -
-- h - - | [5opPJ] - - h | - - [oJ] - | - h - -
-[5wopPJ] - - j | - - p - | - - - - | [5op] - - -
-- - [yJ] - | - j - - | [5opPJ] - - j | - - p -
-- - - - | [5op] - - - | - - [yJ] - | - j - -
-[@5(ioPsJ] - - j | - - p - | - - - - | [5os] - - -
-- - [yJ] - | - j - - | [259YosJ] - - j | - - [PJ] -
-- j - - | [5opSJ] - - j | - - [oJ] - | - j - -
-[5woPJ] - - J | - - [pj] - | - j - - | [5oPh] - - -
-- - [yJ] - | - J - - | [5oPJ] - - j | - - [pj] -
-- j - - | [5oPh] - - - | - - [yJ] - | - J - -
-[@5(opPJ] - - j | - - [pj] - | - j - - | [5oPh] - - -
-- - [yh] - | - h - - | [259oPsh] - - j | - - [Pj] -
-- j - - | [5opPj] - - J | - - [oJ] - | - J - -
-[5wopPJ] - - j | - - [pj] - | - j - - | [5oph] - - -
-- - [yJ] - | - J - - | [5opPJ] - - j | - - [pj] -
-- j - - | [5oph] - - - | - - [yJ] - | - J - -
-[@5(YiPsJ] - - j | - - [pj] - | - j - - | [5Yosh] - - -
-- - [yh] - | - h - - | [259Ysh] - - j | - - [Pj] -
-- j - - | [5pj] - - J | - - [oJ] - | - J - -
-[58qwoPh] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [5oP] - - - | - - p -
-- - - - | [5oP] - - - | - - y - | - - - -
-[@5(opP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [259oPs] - - - | - - P -
-- - - - | [5opP] - - - | - - o - | - - - -
-[5wopP] - - - | - - p - | - - - - | [5op] - - -
-- - y - | - - - - | [5opP] - - - | - - p -
-- - - - | [5op] - - - | - - y - | - - - -
-[@5(ioPs] - - - | - - p - | - - - - | [5os] - - -
-- - y - | - - - - | [259Yos] - - - | - - P -
-- - - - | [5opS] - - - | - - o - | - - - -
-[5woP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [5oP] - - - | - - p -
-- - - - | [5oP] - - - | - - y - | - - - -
-[@5(opP] - - - | - - p - | - - - - | [5oP] - - -
-- - y - | - - - - | [259oPs] - - - | - - P -
-- - - - | [5opP] - - - | - - o - | - - - -
-[5wopP] - - - | - - p - | - - - - | [5op] - - -
-- - y - | - - - - | [5opP] - - - | - - p -
-- - - - | [5op] - - - | - - y - | - - - -
-[@5(ioPs] - - - | - - p - | - - - - | [5os] - - -
-- - y - | - - - - | [259Yos] - - - | - - P -
-- - - - | [5opS] - - - | - - o - | - - - -
-[58qwoPJ] - - - | - - [ph] - | - - - - | [5oP] - - -
-- - [yJ] - | - h - - | [5oPJ] - - h | - - p -
-- - - - | [5oP] - - - | - - [yJ] - | - h - -
-[@5(opPJ] - - h | - - p - | - - - - | [5oP] - - -
-- - [yJ] - | - h - - | [259oPsJ] - - h | - - [PJ] -
-- h - - | [5opPJ] - - h | - - [oJ] - | - h - -
-[5wopPJ] - - j | - - p - | - - - - | [5op] - - -
-- - [yJ] - | - j - - | [5opPJ] - - j | - - p -
-- - - - | [5op] - - - | - - [yJ] - | - j - -
-[@5(ioPsJ] - - j | - - p - | - - - - | [5os] - - -
-- - [yJ] - | - j - - | [259YosJ] - - j | - - [PJ] -
-- j - - | [5opSJ] - - j | - - [oJ] - | - j - -
-[5pJ] - - - | P - h - | p - - - | [5P] - - -
-p - - - | P - - - | [5p] - - - | P - - -
-p - - - | [5P] - - p | - - - P | - - - [5p]
-- P P - | p - p P | - - [5pP] - | - P p -
-p - P P | - - [5p] - | - P P - | p - p P
-- - [5pP] - | - P p - | p - P P | - - [5p] -
-P P - p | - p P - | - [5pP] - - | P p - p
-- P P - | - [5p] - - | P P - p | - p P -
-- [5pP] - - | P p - p | - P P - | - [5p] - -
-P - p - | p P - - | [5pP] - - P | p - p -
-P P - - | [5p] - - P | P - p - | p P - -
-[5pP] - P p | - p - P | P - - [5p] | - - - P
-- - - p | - - - [5P] | - - - p | - - - P
-- - - [5p] | - - - P | - - - p | - - - [5P]
-- - - p | - - - P | - - - [5wpP] | - - - P
-- p - p | - - - [5oP] | - - - p | - y - P
-- - - [5pP] | - - - P | - p - p | - - - [5oP]
-- - - p | - y - P | - - - [@5(pP] | - - - P
-- p - p | - - - [5oP] | - - - p | - y - P
-- - - [259ps] | - - - P | - P - p | - - - [5pP]
-- - - p | - o - P | - - - [5wpP] | - - - P
-- p - p | - - - [5oP] | - - - p | - y - P
-- - - [5pP] | - - - P | - p - p | - - - [5oP]
-- - - p | - y - P | - - - [@5(P] | - - - -
-- p - - | - - - [5o] | - - - - | - y - -
-- - - [259s] | - - - - | - P - - | - - - [5p]
-- - - - | - o - - | - - - [5woP] | - - - -
-- p - - | - - - [5o] | - - - - | - y - -
-- - - [5P] | - - - - | - p - - | - - - [5o]
-- - - - | - y - - | - - - [@5(pP] | - - - -
-- p - - | - - - [5o] | - - - - | - y - -
-- - - [259Ps] | - - - - | - P - - | - - - [5p]
-- - - - | - o - - | - - - [5woP] | - - - -
-- p - - | - - - [5o] | - - - - | - y - -
-- - - [5P] | - - - - | - p - - | - - - [5o]
-- - - - | - y - - | - - - [@5(iP] | - - - -
-- p - - | - - - [5o] | - - - - | - y - -
-- - - [259Ys] | - - - - | - P - - | - - - [5p]
-- - - - | - o - - | - - - [5woP] | - - - -
-- p - - | - - - [5oP] | - - - - | - y - -
-- - - [5oP] | - - - - | - p - - | - - - [5oP]
-- - - - | - y - - | - - - [@5(opP] | - - - -
-- p - - | - - - [5oP] | - - - - | - y - -
-- - - [259oPs] | - - - - | - P - - | - - - [5opP]
-- - - - | - o - - | - - - [5wopP] | - - - -
-- p - - | - - - [5op] | - - - - | - y - -
-- - - [5opP] | - - - - | - p - - | - - - [5op]
-- - - - | - y - - | - - - [@5(ioPs] | - - - -
-- p - - | - - - [5os] | - - - - | - y - -
-- - - [259Yos] | - - - - | - P - - | - - - [5opS]
-- - - - | - o - - | - - - [5woPJ] | - - - -
-- [ph] - - | - - - [5oP] | - - - - | - [yJ] - -
-h - - [5oPJ] | - - h - | - p - - | - - - [5oP]
-- - - - | - [yJ] - - | h - - [@5(opPJ] | - - h -
-- p - - | - - - [5oP] | - - - - | - [yJ] - -
-h - - [259oPsJ] | - - h - | - [PJ] - - | h - - [5opPJ]
-- - h - | - [oJ] - - | h - - [5wopPJ] | - - j -
-- p - - | - - - [5op] | - - - - | - [yJ] - -
-j - - [5opPJ] | - - j - | - p - - | - - - [5op]
-- - - - | - [yJ] - - | j - - [@5(ioPsJ] | - - j -
-- p - - | - - - [5os] | - - - - | - [yJ] - -
-j - - [259YosJ] | - - j - | - [PJ] - - | j - - [5opSJ]
-- - j - | - [oJ] - - | j - - [5wPJ] | - - - -
-- [ph] - - | - - - o | - - - - | - - y -
-- - - - | P - - - | - - - p | - - - -
-- o - - | - - - - | y - - - | - - - P
-- - - - | - - p - | - - - - | - o - -
-- - - - | y - - - | - - - - | s - - -
-- - - P | - - - - | - - - p | - - - -
-- - - P | - - - - | - - - o | - - - -
-- - - - | - - - - | - - - - | - - - -
-- - - - | - - - - | - - - - | - - - -
-- - - - | - - - - | - - - - | - - - -
-- - - - | - - - - | - - - -
+[5wEP] - [ep] - | [5wo] - [9y] - | [5wEPj] J [epj] J | [5woj] J [9yj] J
+[@(EPj] J [epj] J | [@(woj] J [9yj] J | [29tsj] J [EPj] J | [29epj] J [EPj] J
+[5wEPj] J [epj] J | [5woj] J [9yj] J | [5wEPj] J [epj] J | [5woj] J [9yj] J
+[@(EPj] J [epj] J | [@(woj] J [9yj] J | [29tsj] J [EPj] J | [29epj] J [woj] J
+[5woh] - p - | [5wo] - y - | [5woP] - p - | [5wo] - y -
+[@(pj] - p - | [@(op] - y - | [29PJ] - P - | [29pP] - P -
+[5woh] - p - | [5wo] - y - | [5woP] - p - | [5wo] - y -
+[@(ig] - p - | [@(io] - y - | [29YD] - P - | [29Yp] - o -
+[5woPJ] - p - | [5woPJ] - y - | [5woPJ] - p - | [5woPJ] - y -
+[@(pj] - [pj] - | [@(opj] - y - | [29PJ] - [PJ] - | [29pPj] - [PJ] -
+[5wopj] - [pj] - | [5wopj] - y - | [5wopj] - [pj] - | [5wopj] - y -
+[@(isl] - p - | [@(iosl] - y - | [29Ysl] - P - | [29Ypj] - o -
+[5woPJ] - [pdz] - | [5woPJ] - y - | [5woPJ] - [pdz] - | [5woPJ] - y -
+[@(pPj] - [pdz] - | [@(opPJ] - y - | [29PsJ] - [Pdz] - | [29pPJ] - [PJ] -
+[5wopPj] - [pdz] - | [wopj] - [wy] - | [wopPj] - [pdz] - | [wopj] - [wy] -
+[(YiPsl] - [pdz] - | [(Yiosl] - Y - | [9yYsl] - [Pdz] - | [9yYpj] - [yo] -
+[5EoPJ] - [eoh] - | [wyoPJ] - [9oPJ] h | [5EoPJ] [oh] [epdz] - | [wyoPJ] - [9oPJ] h
+[@EpPJ] [oh] [edz] - | [(wEYpPJ] - [9PJ] [oh] | [2tPJ] [oh] [EPJ] [oh] | [9eyPJ] [oh] [EPJ] [oh]
+[5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj] | [5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj]
+[@EiPJ] [pj] [edz] - | [(wEYisl] - [9PJ] [pj] | [2tYPJ] [pj] [EPJ] [pj] | [9eyYPJ] [pj] [wPJ] [pj]
+[5EoPJ] - [eoh] - | [wyoPJ] - [9oPJ] h | [5EoPJ] h [edz] - | [wyoPJ] - [9oPJ] h
+[6EpPJ] [oh] [edz] - | [weupPJ] - [9PJ] [oh] | [^tPJ] [oh] [EPJ] [oh] | [eEiPJ] [oh] [EJ] [oh]
+[5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj] | [5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj]
+[4EiPJ] [pj] [edz] - | [qwtisl] - [9PJ] [pj] | [@tYPJ] [pj] [EPJ] [pj] | [(eEYPJ] [pj] [wPJ] [pj]
+[5EPJ] [5PJ] [5epj] [5pj] | [wyoh] [wyo] [9PJ] [PJ] | [5EPJ] [5pj] [5epj] [5pj] | [wyoh] [wyo] [9PJ] [PJ]
+[@EPJ] [@pj] [@epj] [@pj] | [(wEYoh] [(EY] [9oh] [oh] | [2toh] [2pj] [2Epj] [2pj] | [9eypj] [9eyPJ] [EPJ] [PJ]
+[5EPJ] 5 [5epj] 5 | [wyoh] [wyo] [9PJ] [PJ] | [5EPJ] [5pj] [5epj] [5pj] | [wyoh] [wyo] [9PJ] [PJ]
+[@EPJ] [@pj] [@epj] [@pj] | [(wEYoh] [(EY] [9oh] [oh] | [2toh] [2pj] [2Epj] [2pj] | [9eypj] [9eyPJ] [wPJ] [PJ]
+[579wPJ] - [579w] - | [PJ] - w - | [PJ] - w - | [PJ] - w -
+[@5^(PJ] - [@5^(] - | [PJ] - ( - | [24^9sl] - [24^9] - | [sl] - 9 -
+[579wpj] - [dz] - | [wpj] - w - | [wpj] - [dz] - | [wpj] - w -
+[(Ysl] - [dz] - | [Ysl] - Y - | [9ysl] - [dz] - | [ypj] - y -
+[PJ] - [oh] - | [PJ] - [PJ] [oh] | [PJ] [oh] [dz] - | [PJ] - [PJ] [oh]
+[PJ] [oh] [dz] - | [PJ] - [PJ] [oh] | [PJ] [oh] [PJ] [oh] | [PJ] [oh] [PJ] [oh]
+[PJ] [pj] [dz] - | [pj] - [PJ] [pj] | [PJ] [pj] [dz] - | [pj] - [PJ] [pj]
+[PJ] [pj] [dz] - | [sl] - [PJ] [pj] | [PJ] [pj] [PJ] [pj] | [YPJ] [pj] [PJ] [pj]
+J - h - | J -
 ]=],
 }
