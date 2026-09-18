@@ -1,5 +1,8 @@
--- Velora 0.10.25 Nova — expanded MIDI song library.
+-- Velora 0.10.28 Nova — expanded MIDI song library.
 return {
+    {Id="kalimat-majida-el-roumi",Name="Kalimat",Artist="Majida El Roumi",BPM=100,Categories={"Famous","Arabic","Lebanese","Majida El Roumi","Classic","Romantic","Piano","Complete"},File="songs/Kalimat.lua"},
+    {Id="nassini-el-donya",Name="Nassini El Donya",Artist="Ragheb Alama",BPM=83,Categories={"Famous","Arabic","Lebanese","Ragheb Alama","Pop","Romantic","Piano","Complete"},File="songs/NassiniElDonya.lua"},
+    {Id="sahar-el-layali",Name="Sahar El Layali (Kan Enna Tahoun)",Artist="Fairuz",BPM=120,Categories={"Famous","Arabic","Lebanese","Fairuz","Classic","Piano","Four Hands","Complete"},File="songs/SaharElLayali.lua"},
     {Id="nassam-alayna-el-hawa",Name="Nassam Alayna El Hawa",Artist="Fairuz",BPM=120,Categories={"Famous","Arabic","Lebanese","Fairuz","Classic","Piano","Complete"},File="songs/NassamAlaynaElHawa.lua"},
     {Id="requiem-for-a-dream-lux-aeterna",Name="Requiem for a Dream — Lux Aeterna (Piano Version)",Artist="Clint Mansell",BPM=41,Categories={"Famous","Soundtrack","Film","Requiem for a Dream","Clint Mansell","Piano","Dark","Cinematic","Complete"},File="songs/LuxAeterna.lua"},
     {Id="any-last-words-hu-tao",Name="Any Last Words? — Hu Tao Theme",Artist="HOYO-MiX",BPM=120,Categories={"Famous","Game OST","Genshin Impact","Hu Tao","Piano","Dramatic","Complete"},File="songs/AnyLastWordsHuTao.lua"},
