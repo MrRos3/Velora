@@ -1,60 +1,60 @@
--- Velora 0.10.24 conversion from a MIDI supplied by the repository owner.
--- Source file: Requiem for a dream ( Lux Aeterna).mid
--- Source SHA-256: BA28D1864E61957B7C8425B3AF98BAFA788E549823351CCD5C37C11F1D35512E
--- Exact 61-key mapping; all five non-percussion musical layers are retained.
--- The source uses a constant tempo and an exact 1/8-beat timing grid; simultaneous duplicate pitches are merged.
+-- Velora 0.10.31 Nova — replacement arrangement converted from a MIDI supplied by the repository owner.
+-- Supplied file: requiem-for-a-dream.mid
+-- Supplied file SHA-256: B013BA94393D7DC3E0051562F5F398C7684B3B20C5B534F07962834C3BAA195B
+-- MIDI: 480 PPQ, 2 source tempo events, source time signature(s): 4/4.
+-- The MIDI begins at the standard 120 BPM default, then changes to 68 BPM at beat 8; real-time timing is preserved.
+-- Timing normalized to real seconds at 68 BPM / 48 Velora steps per beat.
+-- 2 source piano tracks retained; simultaneous duplicate pitches are merged.
+-- 46 out-of-range note-on events were folded up one octave into Velora's C2-C7 keyboard range.
+-- 1055 source note-ons became 1009 mapped notes after same-step duplicate merging.
+
+local DATA = [=[
+0:5 217:[5w] 191:[@(] 95:[29] 95:[5w] 191:[@(] 95:[29] 95:[5wJ] 23:j 23:h 23:d 23:J 23:j 23:h 23:d 23:[@^(J] 23:j 23:h 23:d 23:[269l] 23:J 23:j 23:J 23:[5wJ] 23:j 23:h 23:d 23:J 23:j 23:h 23:d 23:[@^(J]
+23:j 23:h 23:d 23:[269l] 23:J 23:j 23:h 23:[5wJ] 23:j 23:h 23:d 23:J 23:j 23:h 23:d 23:[@^(J] 23:j 23:h 23:d 23:[269l] 23:J 23:j 23:J 23:[5wJ] 23:j 23:h 23:d 23:J 23:j 23:h 23:d 23:[@^(J]
+23:j 23:h 23:d 23:[269l] 23:J 23:j 23:h 23:[5^wJ] 23:j 23:[^h] 23:d 23:[^J] 23:j 23:[^h] 23:d 23:[@^(J] 23:j 23:[^h] 23:d 23:[2^9l] 23:J 23:[^j] 23:J 23:[5^9wJ] 23:j 23:[5^9h] 23:d 23:[5^9J] 23:j 23:[5^9h] 23:d 23:[@5^(J]
+23:j 23:[@5^h] 23:d 23:[2$69l] 23:J 23:[@$^9j] 23:h 23:[59wyP] 23:o 23:[5w] 23:P 11:o 11:[5wyP] 11:o 35:[5w] 23:P 11:o 11:[@^(yP] 11:o 35:[@^] 23:P 11:o 11:[269yP] 11:o 11:P 11:o 11:[26P] 11:o 11:P 11:o 11:[59wyP] 11:p
+35:[59] 23:P 11:p 11:[59yP] 11:p 35:[59] 23:P 11:p 11:[@^(yP] 11:p 35:[@^] 23:P 11:p 11:[2$69yP] 11:p 11:[$69QP] 11:p 11:[69QeP] 11:p 11:[9QeyP] 11:p 11:[5PJ] 23:[oh] 23:[9wE] 23:[PJ] 11:[oh] 11:[5PJ] 11:[oh] 11:[oh] 23:[9wE] 23:[PJ] 11:[oh]
+11:[@PJ] 11:[oh] 11:[oh] 23:[(wEY] 23:[PJ] 11:[oh] 11:[2PJ] 11:[oh] 11:[PJ] 11:[oh] 11:[9QeyPJ] 11:[oh] 11:[PJ] 11:[oh] 11:[5PJ] 11:[pj] 11:[pj] 23:[9wE] 23:[PJ] 11:[pj] 11:[5PJ] 11:[pj] 11:[pj] 23:[9wE] 23:[PJ] 11:[pj] 11:[@PJ] 11:[pj] 11:[pj] 23:[(wEY] 23:[PJ] 11:[pj]
+11:[2PJ] 11:[pj] 11:[PJ] 11:[pj] 11:[9QeyPJ] 11:[pj] 11:[PJ] 11:[pj] 11:[5PdhJ] 11:5 11:[pdhj] 23:[59woPdh] 11:[59w] 11:[PJ] 11:[PJ] 11:[5PdhJ] 11:[5pdhj] 11:[5pdhj] 11:[5pdhj] 11:[59woPdh] 11:[59w] 11:[PJ] 11:[PJ] 11:[@PDhJ] 11:[@pDhj] 11:[@pDhj] 11:[@pDhj] 11:[@^(oPDh] 11:[@^(] 11:[oh] 11:[oh] 11:[2oDh]
+11:[2pdj] 11:[2pdj] 11:[2pdj] 11:[269pdGj] 11:[269PdGJ] 11:[PdGJ] 11:[PdGJ] 11:[5^wJ] 23:j 23:[^h] 23:d 23:[^J] 23:j 23:[^h] 23:d 23:[@^(J] 23:j 23:[^h] 23:d 23:[2^9l] 23:J 23:[^j] 23:J 23:[5^9wJ] 23:j 23:[5^9h] 23:d 23:[5^9J] 23:j 23:[5^9h] 23:d 23:[@5^(J]
+23:j 23:[@5^h] 23:d 23:[2$69l] 23:J 23:[@$^9j] 23:h 23:[59wyP] 23:o 23:[5w] 23:P 11:o 11:[5wyP] 11:o 35:[5w] 23:P 11:o 11:[@^(yP] 11:o 35:[@^] 23:P 11:o 11:[269yP] 11:o 11:P 11:o 11:[26P] 11:o 11:P 11:o 11:[59wyP] 11:p
+35:[59] 23:P 11:p 11:[59yP] 11:p 35:[59] 23:P 11:p 11:[@^(yP] 11:p 35:[@^] 23:P 11:p 11:[2$69yP] 11:p 11:[$69QP] 11:p 11:[69QeP] 11:p 11:[9QeyP] 11:p 11:[5PJ] 23:[oh] 23:[9wE] 23:[PJ] 11:[oh] 11:[5PJ] 11:[oh] 11:[oh] 23:[9wE] 23:[PJ] 11:[oh]
+11:[@PJ] 11:[oh] 11:[oh] 23:[(wEY] 23:[PJ] 11:[oh] 11:[2PJ] 11:[oh] 11:[PJ] 11:[oh] 11:[9QeyPJ] 11:[oh] 11:[PJ] 11:[oh] 11:[5PJ] 11:[pj] 11:[pj] 23:[9wE] 23:[PJ] 11:[pj] 11:[5PJ] 11:[pj] 11:[pj] 23:[9wE] 23:[PJ] 11:[pj] 11:[@PJ] 11:[pj] 11:[pj] 23:[(wEY] 23:[PJ] 11:[pj]
+11:[2PJ] 11:[pj] 11:[PJ] 11:[pj] 11:[9QeyPJ] 11:[pj] 11:[PJ] 11:[pj] 11:[5PdhJ] 11:5 11:[pdhj] 23:[59woPdh] 11:[59w] 11:[PJ] 11:[PJ] 11:[5PdhJ] 11:[5pdhj] 11:[5pdhj] 11:[5pdhj] 11:[59woPdh] 11:[59w] 11:[PJ] 11:[PJ] 11:[@PDhJ] 11:[@pDhj] 11:[@pDhj] 11:[@pDhj] 11:[@^(oPDh] 11:[@^(] 11:[oh] 11:[oh] 11:[2oDh]
+11:[2pdj] 11:[2pdj] 11:[2pdj] 11:[269pdGj] 11:[269PdGJ] 11:[PdGJ] 11:[PdGJ] 11:[5wP] 23:p 23:o 23:y 23:P 23:p 23:o 23:y 23:[@(P] 23:p 23:o 23:y 23:[29s] 23:P 23:p 23:P 23:[5wP] 23:p 23:o 23:y 23:P 23:p 23:o 23:y 23:[@(P]
+23:p 23:o 23:y 23:[29s] 23:P 23:p 23:P 23:[5o]
+]=]
+local TRAILING_RESTS = 191
+
+local sheet = {}
+for encoded in DATA:gmatch("%S+") do
+    local gap, token = encoded:match("^(%d+):(.+)$")
+    gap = tonumber(gap)
+    if gap and token then
+        for _ = 1, gap do
+            sheet[#sheet + 1] = "-"
+        end
+        sheet[#sheet + 1] = token
+    end
+end
+for _ = 1, TRAILING_RESTS do
+    sheet[#sheet + 1] = "-"
+end
+
 return {
     Id="requiem-for-a-dream-lux-aeterna",
     Name="Requiem for a Dream — Lux Aeterna (Piano Version)",
     Artist="Clint Mansell",
-    BPM=41,
-    StepsPerBeat=8,
+    BPM=68,
+    StepsPerBeat=48,
     Complete=true,
-    DurationSeconds=106.463,
-    OriginalDurationSeconds=106.463,
-    TempoEvents=1,
+    DurationSeconds=162.824,
+    OriginalDurationSeconds=162.824,
+    TempoEvents=2,
     TimeSignatures={"4/4"},
-    Source="User-supplied MIDI file",
-    SourceFile="Requiem for a dream ( Lux Aeterna).mid",
+    Source="User-supplied replacement MIDI file",
+    SourceFile="requiem-for-a-dream.mid",
     SourceLicense="User-provided source file; converted for Velora at the repository owner's request.",
     Categories={"Famous","Soundtrack","Film","Requiem for a Dream","Clint Mansell","Piano","Dark","Cinematic","Complete"},
-    Notes=[=[
-[5wEP] - [ep] - | [5wo] - [9y] - | [5wEPj] J [epj] J | [5woj] J [9yj] J
-[@(EPj] J [epj] J | [@(woj] J [9yj] J | [29tsj] J [EPj] J | [29epj] J [EPj] J
-[5wEPj] J [epj] J | [5woj] J [9yj] J | [5wEPj] J [epj] J | [5woj] J [9yj] J
-[@(EPj] J [epj] J | [@(woj] J [9yj] J | [29tsj] J [EPj] J | [29epj] J [woj] J
-[5woh] - p - | [5wo] - y - | [5woP] - p - | [5wo] - y -
-[@(pj] - p - | [@(op] - y - | [29PJ] - P - | [29pP] - P -
-[5woh] - p - | [5wo] - y - | [5woP] - p - | [5wo] - y -
-[@(ig] - p - | [@(io] - y - | [29YD] - P - | [29Yp] - o -
-[5woPJ] - p - | [5woPJ] - y - | [5woPJ] - p - | [5woPJ] - y -
-[@(pj] - [pj] - | [@(opj] - y - | [29PJ] - [PJ] - | [29pPj] - [PJ] -
-[5wopj] - [pj] - | [5wopj] - y - | [5wopj] - [pj] - | [5wopj] - y -
-[@(isl] - p - | [@(iosl] - y - | [29Ysl] - P - | [29Ypj] - o -
-[5woPJ] - [pdz] - | [5woPJ] - y - | [5woPJ] - [pdz] - | [5woPJ] - y -
-[@(pPj] - [pdz] - | [@(opPJ] - y - | [29PsJ] - [Pdz] - | [29pPJ] - [PJ] -
-[5wopPj] - [pdz] - | [wopj] - [wy] - | [wopPj] - [pdz] - | [wopj] - [wy] -
-[(YiPsl] - [pdz] - | [(Yiosl] - Y - | [9yYsl] - [Pdz] - | [9yYpj] - [yo] -
-[5EoPJ] - [eoh] - | [wyoPJ] - [9oPJ] h | [5EoPJ] [oh] [epdz] - | [wyoPJ] - [9oPJ] h
-[@EpPJ] [oh] [edz] - | [(wEYpPJ] - [9PJ] [oh] | [2tPJ] [oh] [EPJ] [oh] | [9eyPJ] [oh] [EPJ] [oh]
-[5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj] | [5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj]
-[@EiPJ] [pj] [edz] - | [(wEYisl] - [9PJ] [pj] | [2tYPJ] [pj] [EPJ] [pj] | [9eyYPJ] [pj] [wPJ] [pj]
-[5EoPJ] - [eoh] - | [wyoPJ] - [9oPJ] h | [5EoPJ] h [edz] - | [wyoPJ] - [9oPJ] h
-[6EpPJ] [oh] [edz] - | [weupPJ] - [9PJ] [oh] | [^tPJ] [oh] [EPJ] [oh] | [eEiPJ] [oh] [EJ] [oh]
-[5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj] | [5EoPJ] [pj] [edz] - | [wyopj] - [9PJ] [pj]
-[4EiPJ] [pj] [edz] - | [qwtisl] - [9PJ] [pj] | [@tYPJ] [pj] [EPJ] [pj] | [(eEYPJ] [pj] [wPJ] [pj]
-[5EPJ] [5PJ] [5epj] [5pj] | [wyoh] [wyo] [9PJ] [PJ] | [5EPJ] [5pj] [5epj] [5pj] | [wyoh] [wyo] [9PJ] [PJ]
-[@EPJ] [@pj] [@epj] [@pj] | [(wEYoh] [(EY] [9oh] [oh] | [2toh] [2pj] [2Epj] [2pj] | [9eypj] [9eyPJ] [EPJ] [PJ]
-[5EPJ] 5 [5epj] 5 | [wyoh] [wyo] [9PJ] [PJ] | [5EPJ] [5pj] [5epj] [5pj] | [wyoh] [wyo] [9PJ] [PJ]
-[@EPJ] [@pj] [@epj] [@pj] | [(wEYoh] [(EY] [9oh] [oh] | [2toh] [2pj] [2Epj] [2pj] | [9eypj] [9eyPJ] [wPJ] [PJ]
-[579wPJ] - [579w] - | [PJ] - w - | [PJ] - w - | [PJ] - w -
-[@5^(PJ] - [@5^(] - | [PJ] - ( - | [24^9sl] - [24^9] - | [sl] - 9 -
-[579wpj] - [dz] - | [wpj] - w - | [wpj] - [dz] - | [wpj] - w -
-[(Ysl] - [dz] - | [Ysl] - Y - | [9ysl] - [dz] - | [ypj] - y -
-[PJ] - [oh] - | [PJ] - [PJ] [oh] | [PJ] [oh] [dz] - | [PJ] - [PJ] [oh]
-[PJ] [oh] [dz] - | [PJ] - [PJ] [oh] | [PJ] [oh] [PJ] [oh] | [PJ] [oh] [PJ] [oh]
-[PJ] [pj] [dz] - | [pj] - [PJ] [pj] | [PJ] [pj] [dz] - | [pj] - [PJ] [pj]
-[PJ] [pj] [dz] - | [sl] - [PJ] [pj] | [PJ] [pj] [PJ] [pj] | [YPJ] [pj] [PJ] [pj]
-J - h - | J -
-]=],
+    Notes=table.concat(sheet, " "),
 }
