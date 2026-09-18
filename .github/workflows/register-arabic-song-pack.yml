@@ -1,0 +1,76 @@
+name: Register Velora Arabic Song Pack
+
+on:
+  push:
+    paths:
+      - ".github/workflows/register-arabic-song-pack.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Register songs and refresh caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          songs_path = Path("Songs.lua")
+          songs = songs_path.read_text(encoding="utf-8")
+          songs = songs.replace(
+              "-- Velora 0.10.25 Nova — expanded MIDI song library.",
+              "-- Velora 0.10.28 Nova — expanded MIDI song library.",
+              1,
+          )
+          entries = (
+              '    {Id="kalimat-majida-el-roumi",Name="Kalimat",Artist="Majida El Roumi",BPM=100,Categories={"Famous","Arabic","Lebanese","Majida El Roumi","Classic","Romantic","Piano","Complete"},File="songs/Kalimat.lua"},\n'
+              '    {Id="nassini-el-donya",Name="Nassini El Donya",Artist="Ragheb Alama",BPM=83,Categories={"Famous","Arabic","Lebanese","Ragheb Alama","Pop","Romantic","Piano","Complete"},File="songs/NassiniElDonya.lua"},\n'
+              '    {Id="sahar-el-layali",Name="Sahar El Layali (Kan Enna Tahoun)",Artist="Fairuz",BPM=120,Categories={"Famous","Arabic","Lebanese","Fairuz","Classic","Piano","Four Hands","Complete"},File="songs/SaharElLayali.lua"},\n'
+          )
+          if 'Id="kalimat-majida-el-roumi"' not in songs:
+              songs = songs.replace("return {\n", "return {\n" + entries, 1)
+          songs_path.write_text(songs, encoding="utf-8")
+
+          runtime_path = Path("runtime.lua")
+          runtime = runtime_path.read_text(encoding="utf-8")
+          runtime = runtime.replace(
+              'AssetRevision = "0.10.22-midi-pack-1"',
+              'AssetRevision = "0.10.28-arabic-classics-1"',
+              1,
+          )
+          runtime_path.write_text(runtime, encoding="utf-8")
+
+          loader_path = Path("loader.lua")
+          loader = loader_path.read_text(encoding="utf-8")
+          loader = loader.replace(
+              "velora-fast-20260901-native-ievan-3",
+              "velora-fast-20260918-arabic-classics-1",
+          )
+          loader_path.write_text(loader, encoding="utf-8")
+
+          required = [
+              Path("songs/Kalimat.lua"),
+              Path("songs/NassiniElDonya.lua"),
+              Path("songs/SaharElLayali.lua"),
+          ]
+          for path in required:
+              if not path.is_file() or path.stat().st_size < 1000:
+                  raise SystemExit(f"Missing or incomplete song file: {path}")
+          PY
+
+          rm -f .github/workflows/register-arabic-song-pack.yml
+
+      - name: Commit catalog update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Register Kalimat, Nassini El Donya, and Sahar El Layali"
+          git push
