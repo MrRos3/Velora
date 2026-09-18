@@ -1,5 +1,6 @@
--- Velora 0.10.24 Nova — expanded MIDI song library.
+-- Velora 0.10.25 Nova — expanded MIDI song library.
 return {
+    {Id="nassam-alayna-el-hawa",Name="Nassam Alayna El Hawa",Artist="Fairuz",BPM=120,Categories={"Famous","Arabic","Lebanese","Fairuz","Classic","Piano","Complete"},File="songs/NassamAlaynaElHawa.lua"},
     {Id="requiem-for-a-dream-lux-aeterna",Name="Requiem for a Dream — Lux Aeterna (Piano Version)",Artist="Clint Mansell",BPM=41,Categories={"Famous","Soundtrack","Film","Requiem for a Dream","Clint Mansell","Piano","Dark","Cinematic","Complete"},File="songs/LuxAeterna.lua"},
     {Id="any-last-words-hu-tao",Name="Any Last Words? — Hu Tao Theme",Artist="HOYO-MiX",BPM=120,Categories={"Famous","Game OST","Genshin Impact","Hu Tao","Piano","Dramatic","Complete"},File="songs/AnyLastWordsHuTao.lua"},
     {Id="bella-ciao",Name="Bella Ciao",Artist="Traditional Italian",BPM=120,Categories={"Famous","Folk","Italian","Traditional","Piano","Complete"},File="songs/BellaCiao.lua"},
