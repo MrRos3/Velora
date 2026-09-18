@@ -1,0 +1,59 @@
+name: Register exact Ievan Polkka
+
+on:
+  push:
+    paths:
+      - '.github/workflows/register-ievan-exact.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update catalog and cache revisions
+        shell: python
+        run: |
+          from pathlib import Path
+
+          songs = Path('Songs.lua')
+          text = songs.read_text(encoding='utf-8')
+          text = text.replace(
+              '-- Velora 0.10.31 Nova — expanded MIDI song library.',
+              '-- Velora 0.10.32 Nova — expanded MIDI song library.'
+          )
+          old = '{Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=119,Categories={"Famous","TikTok","Folk","Upbeat","Piano","Complete"},File="songs/IevanPolkka.lua"},'
+          new = '{Id="ievan-polkka",Name="Ievan Polkka",Artist="Traditional Finnish",BPM=120,Categories={"Famous","TikTok","Folk","Polka","Upbeat","Piano","Complete"},File="songs/IevanPolkka.lua"},'
+          if old not in text:
+              raise SystemExit('Ievan catalog entry not found')
+          songs.write_text(text.replace(old, new), encoding='utf-8')
+
+          runtime = Path('runtime.lua')
+          text = runtime.read_text(encoding='utf-8')
+          old = 'AssetRevision = "0.10.31-requiem-replace-1"'
+          new = 'AssetRevision = "0.10.32-ievan-exact-1"'
+          if old not in text:
+              raise SystemExit('runtime cache revision not found')
+          runtime.write_text(text.replace(old, new), encoding='utf-8')
+
+          loader = Path('loader.lua')
+          text = loader.read_text(encoding='utf-8')
+          old = 'velora-fast-20260918-requiem-replace-1'
+          new = 'velora-fast-20260918-ievan-exact-1'
+          if old not in text:
+              raise SystemExit('loader cache revision not found')
+          loader.write_text(text.replace(old, new), encoding='utf-8')
+
+      - name: Commit catalog update and remove one-shot workflow
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/register-ievan-exact.yml
+          git add Songs.lua runtime.lua loader.lua
+          git commit -m "Register exact Ievan Polkka arrangement"
+          git push
