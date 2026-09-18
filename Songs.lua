@@ -1,5 +1,6 @@
--- Velora 0.10.29 Nova — expanded MIDI song library.
+-- Velora 0.10.30 Nova — expanded MIDI song library.
 return {
+    {Id="hedwigs-theme-john-williams",Name="Hedwig's Theme",Artist="John Williams",BPM=66,Categories={"Famous","Soundtrack","Film","Harry Potter","John Williams","Piano","Complete"},File="songs/HedwigsTheme.lua"},
     {Id="kefik-3ala-fraqe",Name="Kefik 3ala Fraqe",Artist="Fadel Chaker",BPM=80,Categories={"Famous","Arabic","Lebanese","Fadel Chaker","Pop","Romantic","Piano","Complete"},File="songs/Kefik3alaFraqe.lua"},
     {Id="kalimat-majida-el-roumi",Name="Kalimat",Artist="Majida El Roumi",BPM=100,Categories={"Famous","Arabic","Lebanese","Majida El Roumi","Classic","Romantic","Piano","Complete"},File="songs/Kalimat.lua"},
     {Id="nassini-el-donya",Name="Nassini El Donya",Artist="Ragheb Alama",BPM=83,Categories={"Famous","Arabic","Lebanese","Ragheb Alama","Pop","Romantic","Piano","Complete"},File="songs/NassiniElDonya.lua"},
