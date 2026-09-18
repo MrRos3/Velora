@@ -1,4 +1,4 @@
--- Velora 0.10.30 Nova — expanded MIDI song library.
+-- Velora 0.10.31 Nova — expanded MIDI song library.
 return {
     {Id="hedwigs-theme-john-williams",Name="Hedwig's Theme",Artist="John Williams",BPM=66,Categories={"Famous","Soundtrack","Film","Harry Potter","John Williams","Piano","Complete"},File="songs/HedwigsTheme.lua"},
     {Id="kefik-3ala-fraqe",Name="Kefik 3ala Fraqe",Artist="Fadel Chaker",BPM=80,Categories={"Famous","Arabic","Lebanese","Fadel Chaker","Pop","Romantic","Piano","Complete"},File="songs/Kefik3alaFraqe.lua"},
@@ -6,7 +6,7 @@ return {
     {Id="nassini-el-donya",Name="Nassini El Donya",Artist="Ragheb Alama",BPM=83,Categories={"Famous","Arabic","Lebanese","Ragheb Alama","Pop","Romantic","Piano","Complete"},File="songs/NassiniElDonya.lua"},
     {Id="sahar-el-layali",Name="Sahar El Layali (Kan Enna Tahoun)",Artist="Fairuz",BPM=120,Categories={"Famous","Arabic","Lebanese","Fairuz","Classic","Piano","Four Hands","Complete"},File="songs/SaharElLayali.lua"},
     {Id="nassam-alayna-el-hawa",Name="Nassam Alayna El Hawa",Artist="Fairuz",BPM=120,Categories={"Famous","Arabic","Lebanese","Fairuz","Classic","Piano","Complete"},File="songs/NassamAlaynaElHawa.lua"},
-    {Id="requiem-for-a-dream-lux-aeterna",Name="Requiem for a Dream — Lux Aeterna (Piano Version)",Artist="Clint Mansell",BPM=41,Categories={"Famous","Soundtrack","Film","Requiem for a Dream","Clint Mansell","Piano","Dark","Cinematic","Complete"},File="songs/LuxAeterna.lua"},
+    {Id="requiem-for-a-dream-lux-aeterna",Name="Requiem for a Dream — Lux Aeterna (Piano Version)",Artist="Clint Mansell",BPM=68,Categories={"Famous","Soundtrack","Film","Requiem for a Dream","Clint Mansell","Piano","Dark","Cinematic","Complete"},File="songs/LuxAeterna.lua"},
     {Id="any-last-words-hu-tao",Name="Any Last Words? — Hu Tao Theme",Artist="HOYO-MiX",BPM=120,Categories={"Famous","Game OST","Genshin Impact","Hu Tao","Piano","Dramatic","Complete"},File="songs/AnyLastWordsHuTao.lua"},
     {Id="bella-ciao",Name="Bella Ciao",Artist="Traditional Italian",BPM=120,Categories={"Famous","Folk","Italian","Traditional","Piano","Complete"},File="songs/BellaCiao.lua"},
     {Id="blue-da-ba-dee",Name="Blue (Da Ba Dee)",Artist="Eiffel 65",BPM=130,Categories={"Famous","Pop","Eurodance","1990s","Eiffel 65","Piano","Complete"},File="songs/BlueDaBaDee.lua"},
