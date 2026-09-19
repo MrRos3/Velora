@@ -1,5 +1,8 @@
--- Velora 0.10.33 Nova — expanded MIDI song library.
+-- Velora 0.10.34 Nova — expanded MIDI song library.
 return {
+    {Id="conquest-of-paradise-vangelis",Name="Conquest of Paradise",Artist="Vangelis",BPM=70,Categories={"Famous","Soundtrack","Film","Vangelis","Cinematic","Epic","Piano","Patrik Pietschmann","Complete"},File="songs/ConquestOfParadise.lua"},
+    {Id="lambada-kaoma",Name="Lambada",Artist="Kaoma",BPM=120,Categories={"Famous","Latin","Dance","Kaoma","Piano","Upbeat","Complete"},File="songs/Lambada.lua"},
+    {Id="la-maritza-sylvie-vartan",Name="La Maritza",Artist="Sylvie Vartan",BPM=76,Categories={"Famous","French","Chanson","Sylvie Vartan","Piano","Emotional","Complete"},File="songs/LaMaritza.lua"},
     {Id="hedwigs-theme-john-williams",Name="Hedwig's Theme",Artist="John Williams",BPM=66,Categories={"Famous","Soundtrack","Film","Harry Potter","John Williams","Piano","Complete"},File="songs/HedwigsTheme.lua"},
     {Id="kefik-3ala-fraqe",Name="Kefik 3ala Fraqe",Artist="Fadel Chaker",BPM=80,Categories={"Famous","Arabic","Lebanese","Fadel Chaker","Pop","Romantic","Piano","Complete"},File="songs/Kefik3alaFraqe.lua"},
     {Id="kalimat-majida-el-roumi",Name="Kalimat",Artist="Majida El Roumi",BPM=100,Categories={"Famous","Arabic","Lebanese","Majida El Roumi","Classic","Romantic","Piano","Complete"},File="songs/Kalimat.lua"},
