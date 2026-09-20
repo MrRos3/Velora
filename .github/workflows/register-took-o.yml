@@ -1,0 +1,64 @@
+name: Register Took Her to the O
+
+on:
+  push:
+    paths:
+      - "songs/TookHerToTheO.lua"
+      - ".github/workflows/register-took-o.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update Velora catalog and cache
+        shell: python
+        run: |
+          from pathlib import Path
+
+          songs_path = Path("Songs.lua")
+          songs = songs_path.read_text(encoding="utf-8")
+          songs = songs.replace(
+              "-- Velora 0.10.35 Nova — expanded MIDI song library.",
+              "-- Velora 0.10.36 Nova — expanded MIDI song library.",
+              1,
+          )
+          entry = '    {Id="took-her-to-the-o-king-von",Name="Took Her to the O",Artist="King Von",BPM=80,Categories={"Famous","Hip-Hop","Rap","King Von","Piano","Complete"},File="songs/TookHerToTheO.lua"},\n'
+          if 'Id="took-her-to-the-o-king-von"' not in songs:
+              songs = songs.replace("return {\n", "return {\n" + entry, 1)
+          songs_path.write_text(songs, encoding="utf-8")
+
+          runtime_path = Path("runtime.lua")
+          runtime = runtime_path.read_text(encoding="utf-8")
+          runtime = runtime.replace(
+              'AssetRevision = "0.10.35-golden-love-1"',
+              'AssetRevision = "0.10.36-took-o-1"',
+              1,
+          )
+          runtime_path.write_text(runtime, encoding="utf-8")
+
+          loader_path = Path("loader.lua")
+          loader = loader_path.read_text(encoding="utf-8")
+          loader = loader.replace(
+              "runtime.lua?v=velora-fast-20260920-golden-love-1",
+              "runtime.lua?v=velora-fast-20260920-took-o-1",
+          )
+          loader_path.write_text(loader, encoding="utf-8")
+
+      - name: Commit catalog refresh
+        shell: bash
+        run: |
+          git config user.name "MrRos3"
+          git config user.email "114161345+MrRos3@users.noreply.github.com"
+          git add Songs.lua runtime.lua loader.lua
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Register Took Her to the O in Velora"
+          git push
