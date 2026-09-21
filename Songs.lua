@@ -1,5 +1,6 @@
--- Velora 0.10.36 Nova — expanded MIDI song library.
+-- Velora 0.10.37 Nova — expanded MIDI song library.
 return {
+    {Id="in-the-end-linkin-park",Name="In the End",Artist="Linkin Park",BPM=106,Categories={"Famous","Rock","Alternative","Linkin Park","Piano","2000s","Complete"},File="songs/InTheEndLinkinPark.lua"},
     {Id="took-her-to-the-o-king-von",Name="Took Her to the O",Artist="King Von",BPM=80,Categories={"Famous","Hip-Hop","Rap","King Von","Piano","Complete"},File="songs/TookHerToTheO.lua"},
     {Id="golden-brown-x-love-story",Name="Golden Brown × Love Story",Artist="The Stranglers × Indila",BPM=183,Categories={"Famous","Mashup","TikTok","The Stranglers","Indila","Piano","Complete"},File="songs/GoldenBrownXLoveStory.lua"},
     {Id="conquest-of-paradise-vangelis",Name="Conquest of Paradise",Artist="Vangelis",BPM=70,Categories={"Famous","Soundtrack","Film","Vangelis","Cinematic","Epic","Piano","Patrik Pietschmann","Complete"},File="songs/ConquestOfParadise.lua"},
