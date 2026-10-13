@@ -1,5 +1,7 @@
--- Velora 0.10.42 Nova — expanded MIDI song library.
+-- Velora 0.10.43 Nova — expanded MIDI song library.
 return {
+    {Id="love-story-x-golden-brown-indila-stranglers",Name="Love Story × Golden Brown (Indila × The Stranglers)",Artist="Indila × The Stranglers",BPM=96,Categories={"Famous","Mashup","Indila","The Stranglers","Piano","Complete"},File="songs/LoveStoryXGoldenBrownIndila.lua"},
+    {Id="love-story-x-golden-brown-gary-jamieson",Name="Love Story × Golden Brown (Gary Jamieson)",Artist="Indila × The Stranglers",BPM=184,Categories={"Famous","Mashup","Indila","The Stranglers","Gary Jamieson","Piano","Complete"},File="songs/LoveStoryXGoldenBrownGaryJamieson.lua"},
     {Id="let-it-go-frozen",Name="Let It Go",Artist="Kristen Anderson-Lopez & Robert Lopez",BPM=74,Categories={"Famous","Soundtrack","Film","Disney","Frozen","Piano","Complete"},File="songs/LetItGo.lua"},
     {Id="sadness-and-sorrow-naruto",Name="Sadness and Sorrow",Artist="Toshio Masuda",BPM=75,Categories={"Famous","Anime","Naruto","Soundtrack","Piano","Emotional","Complete"},File="songs/SadnessAndSorrow.lua"},
     {Id="schindlers-list-theme",Name="Theme from Schindler's List",Artist="John Williams",BPM=68,Categories={"Famous","Soundtrack","Film","Schindler's List","John Williams","Piano","Emotional","Complete"},File="songs/SchindlersList.lua"},
