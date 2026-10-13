@@ -1,4 +1,4 @@
--- Velora 0.10.41 Nova — expanded MIDI song library.
+-- Velora 0.10.42 Nova — expanded MIDI song library.
 return {
     {Id="let-it-go-frozen",Name="Let It Go",Artist="Kristen Anderson-Lopez & Robert Lopez",BPM=74,Categories={"Famous","Soundtrack","Film","Disney","Frozen","Piano","Complete"},File="songs/LetItGo.lua"},
     {Id="sadness-and-sorrow-naruto",Name="Sadness and Sorrow",Artist="Toshio Masuda",BPM=75,Categories={"Famous","Anime","Naruto","Soundtrack","Piano","Emotional","Complete"},File="songs/SadnessAndSorrow.lua"},
@@ -11,7 +11,7 @@ return {
     {Id="next-to-you-parasyte-theishter",Name="Next to You",Artist="Ken Arai",BPM=120,Categories={"Famous","Anime","Parasyte","Soundtrack","Ken Arai","Theishter","Piano","Emotional","Complete"},File="songs/NextToYou.lua"},
     {Id="in-the-end-linkin-park",Name="In the End",Artist="Linkin Park",BPM=106,Categories={"Famous","Rock","Alternative","Linkin Park","Piano","2000s","Complete"},File="songs/InTheEndLinkinPark.lua"},
     {Id="took-her-to-the-o-king-von",Name="Took Her to the O",Artist="King Von",BPM=80,Categories={"Famous","Hip-Hop","Rap","King Von","Piano","Complete"},File="songs/TookHerToTheO.lua"},
-    {Id="golden-brown-x-love-story",Name="Golden Brown × Love Story",Artist="The Stranglers × Indila",BPM=183,Categories={"Famous","Mashup","TikTok","The Stranglers","Indila","Piano","Complete"},File="songs/GoldenBrownXLoveStory.lua"},
+    {Id="golden-brown-x-love-story",Name="Golden Brown × Love Story",Artist="The Stranglers × Indila",BPM=200,Categories={"Famous","Mashup","TikTok","The Stranglers","Indila","Piano","Complete"},File="songs/GoldenBrownXLoveStory.lua"},
     {Id="conquest-of-paradise-vangelis",Name="Conquest of Paradise",Artist="Vangelis",BPM=70,Categories={"Famous","Soundtrack","Film","Vangelis","Cinematic","Epic","Piano","Patrik Pietschmann","Complete"},File="songs/ConquestOfParadise.lua"},
     {Id="lambada-kaoma",Name="Lambada",Artist="Kaoma",BPM=120,Categories={"Famous","Latin","Dance","Kaoma","Piano","Upbeat","Complete"},File="songs/Lambada.lua"},
     {Id="la-maritza-sylvie-vartan",Name="La Maritza",Artist="Sylvie Vartan",BPM=76,Categories={"Famous","French","Chanson","Sylvie Vartan","Piano","Emotional","Complete"},File="songs/LaMaritza.lua"},
