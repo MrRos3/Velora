@@ -1,5 +1,9 @@
--- Velora 0.10.39 Nova — expanded MIDI song library.
+-- Velora 0.10.40 Nova — expanded MIDI song library.
 return {
+    {Id="mockingbird-eminem",Name="Mockingbird",Artist="Eminem",BPM=85,Categories={"Famous","Rap","Hip-Hop","Eminem","Piano","Complete"},File="songs/Mockingbird.lua"},
+    {Id="mockingbird-eminem-beginner",Name="Mockingbird (Beginner Solo Piano)",Artist="Eminem",BPM=85,Categories={"Famous","Rap","Hip-Hop","Eminem","Piano","Beginner","Complete"},File="songs/MockingbirdBeginner.lua"},
+    {Id="variations-on-a-theme-toby-fox",Name="Variations on a Theme by Toby Fox",Artist="Toby Fox",BPM=114,Categories={"Famous","Game OST","Toby Fox","Piano","Virtuoso","Complete"},File="songs/VariationsOnATheme.lua"},
+    {Id="my-war-attack-on-titan",Name="My War (Attack on Titan)",Artist="Shinsei Kamattechan",BPM=144,Categories={"Famous","Anime","Attack on Titan","Soundtrack","Piano","Dramatic","Complete"},File="songs/MyWar.lua"},
     {Id="asturias-leyenda",Name="Asturias (Leyenda)",Artist="Isaac Albéniz",BPM=264,Categories={"Famous","Classical","Spanish","Isaac Albéniz","Piano","Virtuoso","Complete"},File="songs/AsturiasLeyenda.lua"},
     {Id="next-to-you-parasyte-theishter",Name="Next to You",Artist="Ken Arai",BPM=120,Categories={"Famous","Anime","Parasyte","Soundtrack","Ken Arai","Theishter","Piano","Emotional","Complete"},File="songs/NextToYou.lua"},
     {Id="in-the-end-linkin-park",Name="In the End",Artist="Linkin Park",BPM=106,Categories={"Famous","Rock","Alternative","Linkin Park","Piano","2000s","Complete"},File="songs/InTheEndLinkinPark.lua"},
