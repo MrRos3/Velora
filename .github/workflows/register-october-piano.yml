@@ -38,8 +38,8 @@ jobs:
           for e in entries:
               sid = e.split('Id="', 1)[1].split('"', 1)[0]
               assert ('Id="' + sid + '"') not in reg
-          assert reg.count("return {\\n") == 1
-          reg = reg.replace("return {\\n", "return {\\n" + "\\n".join(entries) + "\\n", 1)
+          assert reg.count("return {\n") == 1
+          reg = reg.replace("return {\n", "return {\n" + "\n".join(entries) + "\n", 1)
           regpath.write_text(reg, encoding="utf-8")
           rtpath = Path("runtime.lua")
           rt = rtpath.read_text(encoding="utf-8")
