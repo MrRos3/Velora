@@ -1,5 +1,8 @@
--- Velora 0.10.40 Nova — expanded MIDI song library.
+-- Velora 0.10.41 Nova — expanded MIDI song library.
 return {
+    {Id="let-it-go-frozen",Name="Let It Go",Artist="Kristen Anderson-Lopez & Robert Lopez",BPM=74,Categories={"Famous","Soundtrack","Film","Disney","Frozen","Piano","Complete"},File="songs/LetItGo.lua"},
+    {Id="sadness-and-sorrow-naruto",Name="Sadness and Sorrow",Artist="Toshio Masuda",BPM=75,Categories={"Famous","Anime","Naruto","Soundtrack","Piano","Emotional","Complete"},File="songs/SadnessAndSorrow.lua"},
+    {Id="schindlers-list-theme",Name="Theme from Schindler's List",Artist="John Williams",BPM=68,Categories={"Famous","Soundtrack","Film","Schindler's List","John Williams","Piano","Emotional","Complete"},File="songs/SchindlersList.lua"},
     {Id="mockingbird-eminem",Name="Mockingbird",Artist="Eminem",BPM=85,Categories={"Famous","Rap","Hip-Hop","Eminem","Piano","Complete"},File="songs/Mockingbird.lua"},
     {Id="mockingbird-eminem-beginner",Name="Mockingbird (Beginner Solo Piano)",Artist="Eminem",BPM=85,Categories={"Famous","Rap","Hip-Hop","Eminem","Piano","Beginner","Complete"},File="songs/MockingbirdBeginner.lua"},
     {Id="variations-on-a-theme-toby-fox",Name="Variations on a Theme by Toby Fox",Artist="Toby Fox",BPM=114,Categories={"Famous","Game OST","Toby Fox","Piano","Virtuoso","Complete"},File="songs/VariationsOnATheme.lua"},
