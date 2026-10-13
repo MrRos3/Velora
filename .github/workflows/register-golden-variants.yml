@@ -1,0 +1,63 @@
+name: Register Golden Brown variants
+
+on:
+  push:
+    paths:
+      - ".github/workflows/register-golden-variants.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Add both MIDI arrangements without replacing existing songs
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64, zlib
+          from pathlib import Path
+          modules = {
+              "songs/LoveStoryXGoldenBrownIndila.lua": "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",
+              "songs/LoveStoryXGoldenBrownGaryJamieson.lua": "eNrdWO9O40YQ/+6nGLlETUScxo4DwZU/4Jg/oQHShnIqkakWezG+s72+3XV6CPEcfaC+WHc3TiAoBO7ak+6IFHlmPb/5zexYI80YBpzjlFAE7ZbZbtkdOCFTBAagKEp4QnKUQkiyIsUcQ5GgnACiFOUxznDO4ZqSDBCUDFOjoGSaRDiC44E/aGmGAWNS0hDDdZJiB1IyxQbjhN4an4yYpBHOjStK/sqNGImz9yhLMCN5K0uiR9jx4a5hdbcc8G2z2+n6lm/vbG91Lc/ydvq+tdXve9uWte97dmen22v7O3anvbe/vd/2PK+3tb+9a3Y6O71+e1v6lIE5YHasDrCZ+5xwzJpgWqYJRYpu0VWKIUNFIdJQ7wCFlDAGVpU8pyj8wFR2FnCcFQTwVNyEdGJbQEKOpiJjkR5rwW8YpQZPshkPkJxhzqCgWFzXFEfKyzH6lGRlNidVNkBJmUdJHjuiKm0TMkGYklCUwt8923Un7kRrO5dgms5k7ywJlgRbaR/f8WBJ2FDar3tnwZJQU9o7/kewJHxN35PLUQA9Z8LiAKzKd88ZVfI4DrRKs9WLySlTdoqs5wwqWZ5KZxsDZTQaKyNFXRkJWZ5WWu10RuorOxVLzzmtZHlaaS8FB4+Cq+5gHsrKqLT/KaqjYHVJJjZLg9VlmWyMh8Hq0kxqB/1FVeJwIc4Bl4fnC5q5pRDnli9was9wzlGrPolxvCbD+HAN38HRmizTF9JMwxcS/WJq5h8+pCs+i47jax3nUDzlQSoPLqQib1o8Lo+GoffsDYgws2fDGPa9Z6Poz3GC8yH/efrD8wfKh+TD/0qaXjxifVppmabWdY6gq8hU1qtVW/F3nVQqgnmNOgun6wylIgJZo9b6CnYuZXkpS9pwoVw+iDKs/pIWKk37ejFePMKJsNaon9Ov1jVT7Xtopq+NSntDzRS+sJlqb7yZwuubqfammym8vplq324z/YyGr33zzfTVbUv7Dprp81FpgRtUcwm7wZi7d/faNaGA85DIOTDJ1bzixBni4U1dr4039QZERAPxm+FiVDQ5+YBztwI5le1lvRZtNpx6a7OxoTcUIrmW5oDyCBQE+A3O1Rv5k8R/uqbwlpfZFaZ1YSvJZqFNflCPTTNwdUMXEUYL4NP3yrd6K63kf+7atLfWOaSYlzSHO4UdRK7+yolXbyrECcqwqw8FBsYSA//8DQcKBJ4EQf1AoOCoQjUq2C7lCeOuPhADY4ok6OxGepAzeoopq8y80bFr9uzmmOOCjTD1MOKuaTX71WzvclrimalfUiQn/zEOSR4xd2e71bO2mqc0iZMcpc+8VtAzORDvqXnYtZpnYvIdJ3GOxL1g5t7pnZ9s/b75C75dOvWvxGGVy2Kz4OpL2VZZzJYCrv673DewsijSpNo3qCXDktW+OHh1DeTWYQk9TEIsRvGKarHaYA8bjZ9B5D/FlItj+YVUaxTE5XcJFBeEJaqOggzTH5k4+lhixlsVTx9xHBOaqDvYRxkpRa30Y8RuykIIs3oK4Wk5n16MPpKLCfGcl3J+mydyf+FyudJoiVBDxOvqm23qoDea2r32L0GMNF4=",
+          }
+          for filename, encoded in modules.items():
+              p = Path(filename)
+              if p.exists():
+                  raise RuntimeError("Refusing to overwrite an existing song: " + filename)
+              decoded = zlib.decompress(base64.b64decode(encoded))
+              p.write_bytes(decoded)
+
+          catalog = Path("Songs.lua")
+          src = catalog.read_text(encoding="utf-8")
+          assert "-- Velora 0.10.42 Nova" in src
+          assert "love-story-x-golden-brown-indila-stranglers" not in src
+          assert "love-story-x-golden-brown-gary-jamieson" not in src
+          src = src.replace("-- Velora 0.10.42 Nova", "-- Velora 0.10.43 Nova", 1)
+          entries = (
+              '    {Id="love-story-x-golden-brown-indila-stranglers",Name="Love Story × Golden Brown (Indila × The Stranglers)",Artist="Indila × The Stranglers",BPM=96,Categories={"Famous","Mashup","Indila","The Stranglers","Piano","Complete"},File="songs/LoveStoryXGoldenBrownIndila.lua"},\n'
+              '    {Id="love-story-x-golden-brown-gary-jamieson",Name="Love Story × Golden Brown (Gary Jamieson)",Artist="Indila × The Stranglers",BPM=184,Categories={"Famous","Mashup","Indila","The Stranglers","Gary Jamieson","Piano","Complete"},File="songs/LoveStoryXGoldenBrownGaryJamieson.lua"},\n'
+          )
+          src = src.replace("return {\n", "return {\n" + entries, 1)
+          catalog.write_text(src, encoding="utf-8")
+
+          for filename, old, new in [
+              ("runtime.lua", 'AssetRevision = "0.10.42-golden-ilblu-1"', 'AssetRevision = "0.10.43-golden-variants-1"'),
+              ("loader.lua", "velora-fast-20261013-golden-ilblu-1", "velora-fast-20261013-golden-variants-1"),
+          ]:
+              path = Path(filename)
+              txt = path.read_text(encoding="utf-8")
+              assert old in txt, "Expected cache key missing: " + filename
+              path.write_text(txt.replace(old, new), encoding="utf-8")
+          assert "golden-brown-x-love-story" in catalog.read_text(encoding="utf-8")
+          print("Two new separate variants added. Previous mashup preserved.")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add songs/LoveStoryXGoldenBrownIndila.lua songs/LoveStoryXGoldenBrownGaryJamieson.lua Songs.lua runtime.lua loader.lua
+          git commit -m "Add two Golden Brown Love Story variants without replacements"
+          git push
