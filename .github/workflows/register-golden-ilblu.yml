@@ -23,7 +23,7 @@ jobs:
           def change(path,old,new):
               p=Path(path)
               text=p.read_text(encoding="utf-8")
-              assert text.count(old)==1,(path,old,text.count(old))
+              assert text.count(old)==(2 if path=="loader.lua" else 1),(path,old,text.count(old))
               p.write_text(text.replace(old,new),encoding="utf-8")
           change("Songs.lua","0.10.41 Nova","0.10.42 Nova")
           change("Songs.lua",'Id="golden-brown-x-love-story",Name="Golden Brown × Love Story",Artist="The Stranglers × Indila",BPM=183,','Id="golden-brown-x-love-story",Name="Golden Brown × Love Story",Artist="The Stranglers × Indila",BPM=200,')
