@@ -106,7 +106,7 @@ releaseSource = replaceOnce(
 releaseSource = replaceOnce(
     releaseSource,
     'AssetRevision = "0.10.21-seekfix1"',
-    'AssetRevision = "0.10.43-golden-variants-1"',
+    'AssetRevision = "0.10.44-floating-reverie-1"',
     "song library revision"
 )
 
